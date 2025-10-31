@@ -34,6 +34,9 @@ const Home = () => {
           onSuccess: (data) => {
             navigate(`/room/${data.slug}`);
           },
+          onError: () => {
+            alert("Ошибка при создании комнаты. Попробуйте позже.");
+          },
         }
       );
     }
