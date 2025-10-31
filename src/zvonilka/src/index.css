@@ -5,6 +5,7 @@
   --default-black: #0e0b10;
   --font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
+  --y-padding: 84px;
 }
 
 html,
