@@ -1,0 +1,20 @@
+export type ApiLiveKit = {
+  url: string;
+  room: string;
+  token: string;
+};
+
+export type ApiAccessLevel = "public" | "trusted" | "restricted";
+
+export type ApiRoom = {
+  id: string;
+  name: string;
+  slug: string;
+  pin_code: string;
+  is_administrable: boolean;
+  access_level: ApiAccessLevel;
+  livekit?: ApiLiveKit;
+  configuration?: {
+    [key: string]: string | number | boolean | string[];
+  };
+};

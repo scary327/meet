@@ -1,9 +1,12 @@
 import { useMemo, useState } from "react";
+import purpleCurve from "@shared/icons/purpleCurve.svg";
+import { z } from "zod";
 import { Logo } from "@components/Logo/Logo";
 import { CreateName } from "@components/CreateName/CreateName";
 import Button from "@shared/ui/Button/Button";
-import purpleCurve from "@shared/icons/purpleCurve.svg";
-import { z } from "zod";
+import { useCreateRoom } from "@shared/api/requests/createRoom";
+import { generateRoomId } from "@shared/utils/generateRoomId";
+import { useNavigate } from "react-router-dom";
 
 const nameSchema = z
   .string()
@@ -18,6 +21,23 @@ const Home = () => {
   const isValid = useMemo(() => parsed.success, [parsed]);
   const errorMessage =
     !isValid && name !== "" ? parsed.error?.issues?.[0]?.message ?? null : null;
+
+  const createRoom = useCreateRoom();
+  const navigate = useNavigate();
+
+  const onSubmit = async () => {
+    if (isValid) {
+      const slug = generateRoomId();
+      createRoom.mutateAsync(
+        { slug, username: name },
+        {
+          onSuccess: (data) => {
+            navigate(`/room/${data.slug}`);
+          },
+        }
+      );
+    }
+  };
 
   return (
     <>
@@ -38,7 +58,7 @@ const Home = () => {
               className="font-extrabold text-[24px]"
               disabled={!isValid}
               aria-disabled={!isValid}
-              onClick={() => console.log(parsed)}
+              onClick={onSubmit}
             >
               Создать конференцию
             </Button>
