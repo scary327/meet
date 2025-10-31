@@ -1,5 +1,11 @@
+import { Logo } from "@components/Logo/Logo";
+
 const Room = () => {
-  return <div>Room Page</div>;
+  return (
+    <>
+      <Logo />
+    </>
+  );
 };
 
 export default Room;
