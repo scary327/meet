@@ -8,11 +8,15 @@ type CreateNameProps = {
   error?: string | null;
 };
 
-export const CreateName: React.FC<CreateNameProps> = ({ value = "", onChange, error }) => {
+export const CreateName: React.FC<CreateNameProps> = ({
+  value = "",
+  onChange,
+  error,
+}) => {
   return (
     <div className="flex flex-col">
       <div className="flex items-center gap-x-[12px]">
-        <div className="py-[15px] px-[19px] border-[1px] border-default-black rounded-full">
+        <div className="py-[15px] px-[19px] border-[1px] border-[var(--default-black)] rounded-full">
           <img src={Avatar} alt="Avatar" />
         </div>
         <Input
@@ -20,7 +24,9 @@ export const CreateName: React.FC<CreateNameProps> = ({ value = "", onChange, er
           variant="default"
           className="min-w-[45vw]"
           value={value}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange && onChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onChange && onChange(e.target.value)
+          }
         />
       </div>
       {error ? <div className="text-red-500 text-sm mt-2">{error}</div> : null}
