@@ -7,6 +7,7 @@ import Button from "@shared/ui/Button/Button";
 import { useCreateRoom } from "@shared/api/requests/createRoom";
 import { generateRoomId } from "@shared/utils/generateRoomId";
 import { useNavigate } from "react-router-dom";
+import { authUrl } from "@shared/api/authUrl";
 
 const nameSchema = z
   .string()
@@ -35,7 +36,7 @@ const Home = () => {
             navigate(`/room/${data.slug}`);
           },
           onError: () => {
-            alert("Ошибка при создании комнаты. Попробуйте позже.");
+            window.location.assign(authUrl());
           },
         }
       );
