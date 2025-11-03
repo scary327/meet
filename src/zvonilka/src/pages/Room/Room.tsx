@@ -34,19 +34,19 @@ export const Room: React.FC = () => {
   return (
     <>
       <Logo />
-      <Controls />
-      <div className="centered-container pt-[72px] px-[12px] w-full">
-        <LiveKitRoom
-          serverUrl={room.serverUrl}
-          token={room.livekitToken}
-          connect={room.readyToConnect}
-        >
+      <LiveKitRoom
+        serverUrl={room.serverUrl}
+        token={room.livekitToken}
+        connect={room.readyToConnect}
+      >
+        <Controls />
+        <div className="centered-container pt-[72px] px-[12px] w-full">
           <div className="w-full grid grid-cols-[2fr_1fr] gap-x-3">
             <CallGrid participants={[]} />
             <Chat roomId={room.roomId} />
           </div>
-        </LiveKitRoom>
-      </div>
+        </div>
+      </LiveKitRoom>
     </>
   );
 };
