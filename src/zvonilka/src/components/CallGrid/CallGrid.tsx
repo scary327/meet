@@ -1,21 +1,28 @@
+import React from "react";
 import UserCard from "./UserCard";
 
-// Моковые данные пользователей
-const users = [
-  { id: 1, name: "User1" },
-  { id: 2, name: "User2" },
-  { id: 3, name: "User3" },
-  { id: 4, name: "User4" },
-  { id: 5, name: "User5" },
-  { id: 6, name: "User6" },
-];
+interface Participant {
+  id: string;
+  name: string;
+}
 
-export default function CallGrid() {
+interface CallGridProps {
+  participants: Participant[];
+}
+
+export const CallGrid: React.FC<CallGridProps> = ({ participants }) => {
+  const list =
+    participants && participants.length
+      ? participants
+      : [{ id: "u1", name: "Guest" }];
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-[var(--default-black)] h-full p-6 rounded-xl items-stretch justify-items-center min-h-[400px]">
-      {users.map((user) => (
-        <UserCard key={user.id} name={user.name} />
+      {list.map((p) => (
+        <UserCard key={p.id} name={p.name} />
       ))}
     </div>
   );
-}
+};
+
+export default CallGrid;

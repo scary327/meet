@@ -4,7 +4,12 @@ import { memo } from "react";
 import SendMessage from "@shared/icons/sendMessage.svg";
 import Button from "@shared/ui/Button/Button";
 
-export const Chat = memo(() => {
+interface ChatProps {
+  roomId: string;
+}
+
+export const Chat = memo(({ roomId }: ChatProps) => {
+  console.log("Chat roomId:", roomId);
   return (
     <div className="h-[calc(100vh-var(--y-padding))] flex flex-col items-center border-[1px] border-[var(--default-black)] rounded-xl">
       <Typography.H1 className="!text-[32px] !font-medium !py-[12px] w-full border-b-[1px] border-b-[var(--default-black)] text-center rounded-xl">

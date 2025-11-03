@@ -1,32 +1,51 @@
-import { URLS } from "@app/routes/urls";
-import CallGrid from "@components/CallGrid/CallGrid";
+import React, { useEffect } from "react";
+import { Logo } from "@components/Logo/Logo";
 import { Chat } from "@components/Chat/Chat";
 import { Controls } from "@components/Controls/Controls";
-import { Logo } from "@components/Logo/Logo";
 import { isRoomValid } from "@shared/utils/isRoomValid";
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useUnifiedRoom } from "@shared/hooks/useUnifiedRoom";
+import { URLS } from "@app/routes/urls";
+import CallGrid from "@components/CallGrid/CallGrid";
+import { LiveKitRoom } from "@livekit/components-react";
 
-const Room = () => {
-  const { roomId } = useParams();
-  const navigate = useNavigate();
+export const Room: React.FC = () => {
+  const room = useUnifiedRoom("join");
+  const roomId =
+    (typeof window !== "undefined"
+      ? new URL(window.location.href).pathname.split("/").pop()
+      : "") ?? "";
+
+  // const participants = useListWaitingParticipants(roomId);
 
   useEffect(() => {
     if (roomId && !isRoomValid(roomId)) {
       console.warn("Invalid room ID:", roomId);
-      navigate(URLS.home);
+      window.location.href = URLS.home;
     }
   }, [roomId]);
+
+  // Запрос разрешений (мгновенный запуск после монтирования)
+  useEffect(() => {
+    (async () => {
+      await room.requestPermissions();
+    })();
+  }, [room.roomId]);
 
   return (
     <>
       <Logo />
       <Controls />
       <div className="centered-container pt-[72px] px-[12px] w-full">
-        <div className="w-full grid grid-cols-[2fr_1fr] gap-x-3">
-          <CallGrid />
-          <Chat />
-        </div>
+        <LiveKitRoom
+          serverUrl={room.serverUrl}
+          token={room.livekitToken}
+          connect={room.readyToConnect}
+        >
+          <div className="w-full grid grid-cols-[2fr_1fr] gap-x-3">
+            <CallGrid participants={[]} />
+            <Chat roomId={room.roomId} />
+          </div>
+        </LiveKitRoom>
       </div>
     </>
   );
