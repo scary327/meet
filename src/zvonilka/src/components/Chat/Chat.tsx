@@ -14,7 +14,7 @@ interface ChatProps {
 export const Chat = memo(({ roomId, isOpen = false, onClose }: ChatProps) => {
   return (
     <div
-      className={`fixed right-0 top-0 h-screen w-80 bg-white border-l-[1px] border-l-[var(--default-black)] rounded-l-xl flex flex-col transition-transform duration-300 ease-in-out ${
+      className={`fixed right-0 top-0 h-screen w-100 bg-white border-l-[1px] border-l-[var(--default-black)] rounded-l-xl flex flex-col transition-transform duration-300 ease-in-out ${
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >

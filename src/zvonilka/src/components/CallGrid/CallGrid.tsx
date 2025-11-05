@@ -27,6 +27,7 @@ export const CallGrid: React.FC<CallGridProps> = ({ participants, onChatToggle }
       </div>
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
         <Controls onChatToggle={onChatToggle} />
+      </div>
     </div>
   );
 };
