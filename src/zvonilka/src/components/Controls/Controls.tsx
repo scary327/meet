@@ -3,11 +3,16 @@ import Microphone from "@shared/icons/mic.svg";
 import Camera from "@shared/icons/camera.svg";
 import AddUser from "@shared/icons/addUser.svg";
 import ChangeBack from "@shared/icons/changeBack.svg";
+import Chat from "@shared/icons/chat.svg";
 import { memo } from "react";
 
-export const Controls = memo(() => {
+interface ControlsProps {
+  onChatToggle?: () => void;
+}
+
+export const Controls = memo(({ onChatToggle }: ControlsProps) => {
   return (
-    <div className="absolute top-3 left-1/2 -translate-x-1/2 transform flex rounded-[28px] items-center bg-[var(--default-black)]">
+    <div className="flex rounded-[28px] items-center bg-[var(--default-black)]">
       <Button variant="secondary" shape="circle">
         <img src={Microphone} alt="Microphone" draggable={false} />
       </Button>
@@ -19,6 +24,9 @@ export const Controls = memo(() => {
       </Button>
       <Button variant="secondary" shape="circle">
         <img src={ChangeBack} alt="Change Background" draggable={false} />
+      </Button>
+      <Button variant="secondary" shape="circle" onClick={onChatToggle}>
+        <img src={Chat} alt="Chat" draggable={false} />
       </Button>
     </div>
   );

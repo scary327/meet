@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Logo } from "@components/Logo/Logo";
 import { Chat } from "@components/Chat/Chat";
 import { Controls } from "@components/Controls/Controls";
@@ -10,6 +10,7 @@ import { LiveKitRoom } from "@livekit/components-react";
 
 export const Room: React.FC = () => {
   const room = useUnifiedRoom("join");
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const roomId =
     (typeof window !== "undefined"
       ? new URL(window.location.href).pathname.split("/").pop()
@@ -29,7 +30,7 @@ export const Room: React.FC = () => {
     (async () => {
       await room.requestPermissions();
     })();
-  }, [room.roomId]);
+  }, [room]);
 
   return (
     <>
@@ -39,11 +40,10 @@ export const Room: React.FC = () => {
         token={room.livekitToken}
         connect={room.readyToConnect}
       >
-        <Controls />
         <div className="centered-container pt-[72px] px-[12px] w-full">
-          <div className="w-full grid grid-cols-[2fr_1fr] gap-x-3">
-            <CallGrid participants={[]} />
-            <Chat roomId={room.roomId} />
+          <div className="w-full flex gap-x-3 h-[calc(100vh-var(--y-padding))]">
+            <CallGrid participants={[]} onChatToggle={() => setIsChatOpen(!isChatOpen)} />
+            <Chat roomId={room.roomId} isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
           </div>
         </div>
       </LiveKitRoom>
