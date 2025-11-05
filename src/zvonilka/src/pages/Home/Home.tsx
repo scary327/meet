@@ -8,6 +8,7 @@ import { useCreateRoom } from "@shared/api/requests/createRoom";
 import { generateRoomId } from "@shared/utils/generateRoomId";
 import { useNavigate } from "react-router-dom";
 import { authUrl } from "@shared/api/authUrl";
+import { userPreferencesStore } from "@shared/stores/userPreferences";
 
 const nameSchema = z
   .string()
@@ -28,6 +29,9 @@ const Home = () => {
 
   const onSubmit = async () => {
     if (isValid) {
+      // Сохраняем имя пользователя перед созданием комнаты
+      userPreferencesStore.setUsername(name);
+
       const slug = generateRoomId();
       createRoom.mutateAsync(
         { slug, username: name },
