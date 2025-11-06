@@ -6,7 +6,7 @@ import { URLS } from "@app/routes/urls";
 import { LiveKitRoom } from "@livekit/components-react";
 import { RoomContent } from "./RoomContent";
 import { useNavigate, useParams } from "react-router-dom";
-import Typography from "@shared/ui/Typography/Typography";
+import { Loader } from "@shared/ui/Loader/Loader";
 
 export const Room: React.FC = () => {
   const room = useUnifiedRoom("join");
@@ -43,7 +43,7 @@ export const Room: React.FC = () => {
         </LiveKitRoom>
       ) : (
         <div className="flex items-center justify-center w-full h-screen">
-          <Typography.H2>Подключение к комнате...</Typography.H2>
+          <Loader />
         </div>
       )}
     </>
