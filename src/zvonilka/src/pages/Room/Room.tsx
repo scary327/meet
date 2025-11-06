@@ -5,36 +5,28 @@ import { useUnifiedRoom } from "@shared/hooks/useUnifiedRoom";
 import { URLS } from "@app/routes/urls";
 import { LiveKitRoom } from "@livekit/components-react";
 import { RoomContent } from "./RoomContent";
+import { useNavigate, useParams } from "react-router-dom";
+import Typography from "@shared/ui/Typography/Typography";
 
 export const Room: React.FC = () => {
   const room = useUnifiedRoom("join");
-  const roomId =
-    (typeof window !== "undefined"
-      ? new URL(window.location.href).pathname.split("/").pop()
-      : "") ?? "";
+  const navigate = useNavigate();
+  const roomId = useParams().id;
 
   useEffect(() => {
-    if (roomId && !isRoomValid(roomId)) {
-      console.warn("Invalid room ID:", roomId);
-      window.location.href = URLS.home;
+    if (
+      room.userProfile?.username === "guest" ||
+      (roomId && !isRoomValid(roomId))
+    ) {
+      navigate(URLS.home);
     }
-  }, [roomId]);
+  }, [room.userProfile?.username, roomId, navigate]);
 
   useEffect(() => {
     (async () => {
       await room.requestPermissions();
     })();
   }, [room]);
-
-  useEffect(() => {
-    console.log("Room state updated:", {
-      roomId: room.roomId,
-      readyToConnect: room.readyToConnect,
-      serverUrl: room.serverUrl,
-      hasToken: !!room.livekitToken,
-      username: room.userProfile?.username,
-    });
-  }, [room.roomId, room.readyToConnect, room.serverUrl, room.livekitToken, room.userProfile?.username]);
 
   return (
     <>
@@ -51,7 +43,7 @@ export const Room: React.FC = () => {
         </LiveKitRoom>
       ) : (
         <div className="flex items-center justify-center w-full h-screen">
-          <div className="text-white text-lg">Подключение к комнате...</div>
+          <Typography.H2>Подключение к комнате...</Typography.H2>
         </div>
       )}
     </>

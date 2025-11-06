@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import purpleCurve from "@shared/icons/purpleCurve.svg";
 import { z } from "zod";
 import { Logo } from "@components/Logo/Logo";
@@ -18,6 +18,7 @@ const nameSchema = z
 
 const Home = () => {
   const [name, setName] = useState("");
+  const [pendingRoomId, setPendingRoomId] = useState<string | null>(null);
 
   const parsed = nameSchema.safeParse(name);
   const isValid = useMemo(() => parsed.success, [parsed]);
@@ -27,10 +28,23 @@ const Home = () => {
   const createRoom = useCreateRoom();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const roomId = localStorage.getItem("pendingRoomId");
+    if (roomId) {
+      setPendingRoomId(roomId);
+    }
+  }, []);
+
   const onSubmit = async () => {
     if (isValid) {
-      // Сохраняем имя пользователя перед созданием комнаты
       userPreferencesStore.setUsername(name);
+
+      if (pendingRoomId) {
+        localStorage.removeItem("pendingRoomId");
+        setPendingRoomId(null);
+        navigate(`/room/${pendingRoomId}`);
+        return;
+      }
 
       const slug = generateRoomId();
       createRoom.mutateAsync(
@@ -46,6 +60,8 @@ const Home = () => {
       );
     }
   };
+
+  const buttonText = pendingRoomId ? "Подключиться к звонку" : "Создать конференцию";
 
   return (
     <>
@@ -68,7 +84,7 @@ const Home = () => {
               aria-disabled={!isValid}
               onClick={onSubmit}
             >
-              Создать конференцию
+              {buttonText}
             </Button>
           </div>
         </div>

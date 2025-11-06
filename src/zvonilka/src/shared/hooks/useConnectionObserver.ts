@@ -1,6 +1,9 @@
-import { useRemoteParticipants, useRoomContext } from "@livekit/components-react";
+import {
+  useRemoteParticipants,
+  useRoomContext,
+} from "@livekit/components-react";
 import { useEffect, useRef } from "react";
-import { RoomEvent } from "livekit-client";
+import { DisconnectReason, RoomEvent } from "livekit-client";
 
 export const useConnectionObserver = () => {
   const room = useRoomContext();
@@ -17,43 +20,60 @@ export const useConnectionObserver = () => {
     if (!room) return;
 
     const handleConnection = () => {
+      // Preserve original connection timestamp across reconnections to measure
+      // total session duration from first connect to final disconnect.
       if (connectionStartTimeRef.current != null) return;
       connectionStartTimeRef.current = Date.now();
       console.log("Connected to room");
     };
 
-    const handleDisconnect = () => {
+    const handleReconnect = () => {
+      console.log("Reconnecting to room");
+    };
+
+    const handleReconnected = () => {
+      console.log("Reconnected to room");
+    };
+
+    const handleSignalingConnect = () => {
+      console.log("Signaling connected");
+    };
+
+    const handleSignalingReconnect = () => {
+      console.log("Signaling reconnecting");
+    };
+
+    const handleDisconnect = (
+      disconnectReason: DisconnectReason | undefined
+    ) => {
       const connectionEndTime = Date.now();
-      const duration = connectionStartTimeRef.current
-        ? connectionEndTime - connectionStartTimeRef.current
-        : -1;
-      console.log("Disconnected from room", { sessionDuration: duration });
-    };
 
-    const handleParticipantConnected = () => {
-      console.log(
-        "Participant connected. Total remote participants:",
-        remoteParticipants.length
-      );
-    };
-
-    const handleParticipantDisconnected = () => {
-      console.log(
-        "Participant disconnected. Total remote participants:",
-        remoteParticipants.length
-      );
+      console.log("Disconnected from room", {
+        // Calculate total session duration from first connection to final disconnect
+        // This duration is sensitive to refreshing the page.
+        sessionDuration: connectionStartTimeRef.current
+          ? connectionEndTime - connectionStartTimeRef.current
+          : -1,
+        reason: disconnectReason
+          ? DisconnectReason[disconnectReason]
+          : "UNKNOWN",
+      });
     };
 
     room.on(RoomEvent.Connected, handleConnection);
+    room.on(RoomEvent.SignalConnected, handleSignalingConnect);
     room.on(RoomEvent.Disconnected, handleDisconnect);
-    room.on(RoomEvent.ParticipantConnected, handleParticipantConnected);
-    room.on(RoomEvent.ParticipantDisconnected, handleParticipantDisconnected);
+    room.on(RoomEvent.Reconnecting, handleReconnect);
+    room.on(RoomEvent.Reconnected, handleReconnected);
+    room.on(RoomEvent.SignalReconnecting, handleSignalingReconnect);
 
     return () => {
       room.off(RoomEvent.Connected, handleConnection);
+      room.off(RoomEvent.SignalConnected, handleSignalingConnect);
       room.off(RoomEvent.Disconnected, handleDisconnect);
-      room.off(RoomEvent.ParticipantConnected, handleParticipantConnected);
-      room.off(RoomEvent.ParticipantDisconnected, handleParticipantDisconnected);
+      room.off(RoomEvent.Reconnecting, handleReconnect);
+      room.off(RoomEvent.Reconnected, handleReconnected);
+      room.off(RoomEvent.SignalReconnecting, handleSignalingReconnect);
     };
   }, [room, remoteParticipants.length]);
 
@@ -63,4 +83,3 @@ export const useConnectionObserver = () => {
     };
   }, []);
 };
-

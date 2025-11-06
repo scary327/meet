@@ -1,4 +1,3 @@
-// src/hooks/useUnifiedRoom.ts
 import { useCreateRoom } from "@shared/api/requests/createRoom";
 import { fetchRoom } from "@shared/api/requests/fetchRoom";
 import { useConfig } from "@shared/api/requests/useConfig";
@@ -40,17 +39,17 @@ export const useUnifiedRoom = (
   const [readyToConnect, setReadyToConnect] = useState(false);
   const { mutateAsync: createRoom } = useCreateRoom();
 
-  // Получаем имя пользователя из хранилища
-  const savedUsername = userPreferencesStore.getUsername();
-
-  const [userProfile] = useState<UserProfile>({
-    username: savedUsername || "guest",
-    displayName: savedUsername || "Guest",
-    avatar: undefined,
-    videoDeviceId: undefined,
-    audioDeviceId: undefined,
-    audioEnabled: true,
-    videoEnabled: true,
+  const [userProfile, setUserProfile] = useState<UserProfile>(() => {
+    const savedUsername = localStorage.getItem("username") || "";
+    return {
+      username: savedUsername || "guest",
+      displayName: savedUsername || "Guest",
+      avatar: undefined,
+      videoDeviceId: undefined,
+      audioDeviceId: undefined,
+      audioEnabled: true,
+      videoEnabled: true,
+    };
   });
 
   const [roomData, setRoomData] = useState<ApiRoom | undefined>(undefined);
@@ -62,12 +61,10 @@ export const useUnifiedRoom = (
 
   const fetchOrCreate = async () => {
     if (!roomId) {
-      console.log("No roomId, skipping fetch");
       return;
     }
 
     const username = userProfile.username || "guest";
-    console.log("Fetching or creating room:", { roomId, username });
 
     try {
       const data = await fetchRoom({
@@ -75,35 +72,28 @@ export const useUnifiedRoom = (
         username,
       });
 
-      console.log("Room fetched successfully:", data);
       setRoomData(data);
       setServerUrl(data?.livekit?.url ?? apiConfig?.livekit?.url);
       setLivekitToken(data?.livekit?.token ?? "");
       setReadyToConnect(true);
       return data;
     } catch (e: any) {
-      console.log("Fetch failed, trying to create:", e?.statusCode);
-
       if (e?.statusCode === "404") {
         try {
           const created = await createRoom({
             slug: roomId,
             username,
           });
-
-          console.log("Room created successfully:", created);
           setRoomData(created);
           setServerUrl(created?.livekit?.url ?? apiConfig?.livekit?.url);
           setLivekitToken(created?.livekit?.token ?? "");
           setReadyToConnect(true);
           return created;
         } catch (createError) {
-          console.error("Failed to create room:", createError);
           setError("Failed to create room");
           throw createError;
         }
       } else {
-        console.error("Failed to fetch room:", e);
         setError("Failed to fetch room");
         throw e;
       }
@@ -111,12 +101,10 @@ export const useUnifiedRoom = (
   };
 
   const initialize = async () => {
-    console.log("Initialize called");
     await fetchOrCreate();
   };
 
   const refresh = async () => {
-    console.log("Refresh called");
     await fetchOrCreate();
   };
 
@@ -131,33 +119,57 @@ export const useUnifiedRoom = (
       localStorage.setItem("devicesAuthorized", JSON.stringify(perms));
       localStorage.setItem("cameraPermissionGranted", "true");
       localStorage.setItem("micPermissionGranted", "true");
-      console.log("Permissions granted");
       return true;
     } catch (e) {
+      console.log("Permission denied for camera/microphone", e);
       const perms = { camera: false, mic: false };
       localStorage.setItem("devicesAuthorized", JSON.stringify(perms));
       localStorage.setItem("cameraPermissionGranted", "false");
       localStorage.setItem("micPermissionGranted", "false");
-      console.error("Permissions denied:", e);
       return false;
     }
   };
 
-  // Инициализация при монтировании и при изменении roomId или username
   useEffect(() => {
     if (!roomId) {
-      console.log("Skipping init: no roomId");
       return;
     }
 
     if (!userProfile.username || userProfile.username === "guest") {
-      console.log("Skipping init: no username set");
       return;
     }
 
-    console.log("Triggering initialize effect");
     initialize();
   }, [roomId, userProfile.username]);
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const newUsername = userPreferencesStore.getUsername();
+
+      if (newUsername && newUsername !== "guest") {
+        setUserProfile((prev) => ({
+          ...prev,
+          username: newUsername,
+          displayName: newUsername,
+        }));
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    const newUsername = userPreferencesStore.getUsername();
+    if (newUsername && newUsername !== userProfile.username) {
+      setUserProfile((prev) => ({
+        ...prev,
+        username: newUsername,
+        displayName: newUsername,
+      }));
+    }
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   return {
     roomId: roomId ?? "",
