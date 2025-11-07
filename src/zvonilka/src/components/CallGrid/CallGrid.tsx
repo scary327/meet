@@ -1,15 +1,21 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import UserCard from "./UserCard";
 import { Controls } from "@components/Controls/Controls";
 import { useToast } from "@shared/hooks/useToast";
 import { usePersistentUserChoices } from "@shared/hooks/usePersistentUserChoices";
 import type { LocalParticipant, RemoteParticipant } from "livekit-client";
 import {
-  useLocalParticipant,
   useTrackToggle,
   useRoomContext,
+  useLocalParticipant,
 } from "@livekit/components-react";
 import { Track } from "livekit-client";
+
+interface IDevices {
+  audioInput?: string;
+  audioOutput?: string;
+  videoInput?: string;
+}
 
 interface CallGridProps {
   participants: (RemoteParticipant | LocalParticipant)[];
@@ -22,17 +28,11 @@ export const CallGrid: React.FC<CallGridProps> = ({
   onChatToggle,
   isControlsVisible = false,
 }) => {
-  const { localParticipant } = useLocalParticipant();
   const room = useRoomContext();
+  const { localParticipant } = useLocalParticipant();
   const { showToast } = useToast();
-  const {
-    userChoices,
-    saveAudioInputDeviceId,
-    saveAudioInputEnabled,
-    saveVideoInputDeviceId,
-    saveVideoInputEnabled,
-    saveAudioOutputDeviceId,
-  } = usePersistentUserChoices();
+  const { saveAudioInputEnabled, saveVideoInputEnabled } =
+    usePersistentUserChoices();
 
   const onMicrophoneChange = useCallback(
     (enabled: boolean, isUserInitiated: boolean) =>
@@ -69,22 +69,15 @@ export const CallGrid: React.FC<CallGridProps> = ({
     try {
       await navigator.clipboard.writeText(meetLink);
       showToast("Ссылка на комнату скопирована");
-      console.log("Meet link copied to clipboard:", meetLink);
     } catch (error) {
-      showToast("Ошибка при копировании ссылки");
       console.error("Failed to copy meet link:", error);
+      showToast("Ошибка при копировании ссылки");
     }
   };
 
   const handleSelectAudioInput = async (deviceId: string) => {
-    if (!localParticipant) return;
     try {
-      const currentlyEnabled = micTrackProps.enabled;
-      if (currentlyEnabled) {
-        await localParticipant.setMicrophoneEnabled(false);
-      }
-      await localParticipant.setMicrophoneEnabled(true, { deviceId });
-      saveAudioInputDeviceId(deviceId);
+      await room.switchActiveDevice("audioinput", deviceId);
       showToast("Микрофон изменён");
     } catch (error) {
       console.error("Failed to change audio input:", error);
@@ -95,7 +88,6 @@ export const CallGrid: React.FC<CallGridProps> = ({
   const handleSelectAudioOutput = async (deviceId: string) => {
     try {
       await room.switchActiveDevice("audiooutput", deviceId);
-      saveAudioOutputDeviceId(deviceId);
       showToast("Динамик изменён");
     } catch (error) {
       console.error("Failed to change audio output:", error);
@@ -104,20 +96,29 @@ export const CallGrid: React.FC<CallGridProps> = ({
   };
 
   const handleSelectVideoInput = async (deviceId: string) => {
-    if (!localParticipant) return;
     try {
-      const currentlyEnabled = cameraTrackProps.enabled;
-      if (currentlyEnabled) {
-        await localParticipant.setCameraEnabled(false);
-      }
-      await localParticipant.setCameraEnabled(true, { deviceId });
-      saveVideoInputDeviceId(deviceId);
+      await room.switchActiveDevice("videoinput", deviceId);
       showToast("Камера изменена");
     } catch (error) {
       console.error("Failed to change video input:", error);
       showToast("Ошибка при смене камеры");
     }
   };
+
+  const currentDevices: IDevices = useMemo(
+    () => ({
+      audioInput:
+        localParticipant
+          ?.getTrackPublication(Track.Source.Microphone)
+          ?.track?.mediaStreamTrack?.getSettings().deviceId || undefined,
+      audioOutput:
+        localParticipant
+          ?.getTrackPublication(Track.Source.Camera)
+          ?.track?.mediaStreamTrack?.getSettings().deviceId || undefined,
+      videoInput: room.getActiveDevice("videoinput") || undefined,
+    }),
+    [localParticipant, room]
+  );
 
   return (
     <div className="flex-1 relative bg-[var(--default-black)] rounded-xl overflow-hidden flex flex-col">
@@ -144,11 +145,9 @@ export const CallGrid: React.FC<CallGridProps> = ({
           onSelectAudioInput={handleSelectAudioInput}
           onSelectAudioOutput={handleSelectAudioOutput}
           onSelectVideoInput={handleSelectVideoInput}
-          selectedAudioInputId={userChoices.audioDeviceId}
-          selectedAudioOutputId={
-            localStorage.getItem("audioOutputDeviceId") || undefined
-          }
-          selectedVideoInputId={userChoices.videoDeviceId}
+          selectedAudioInputId={currentDevices.audioInput}
+          selectedAudioOutputId={currentDevices.audioOutput}
+          selectedVideoInputId={currentDevices.videoInput}
         />
       </div>
     </div>

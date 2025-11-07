@@ -6,27 +6,21 @@ import {
   isTrackReference,
   type TrackReferenceOrPlaceholder,
 } from "@livekit/components-core";
-
-import img1 from "@shared/icons/users/img1.svg";
-import img2 from "@shared/icons/users/img2.svg";
-import img3 from "@shared/icons/users/img3.svg";
-import img4 from "@shared/icons/users/img4.svg";
-import img5 from "@shared/icons/users/img5.svg";
-import img6 from "@shared/icons/users/img6.svg";
+import { getAvatarByUserName } from "@shared/utils/getAvatarByUserName";
 
 interface UserCardProps {
   participant: RemoteParticipant | LocalParticipant;
 }
 
 function UserCard({ participant }: UserCardProps) {
-  const imgSrc = useMemo(() => {
-    const images = [img1, img2, img3, img4, img5, img6];
-    const rand = Math.floor(Math.random() * images.length);
-    return images[rand];
-  }, []);
+  const name = participant.name || participant.identity || "Guest";
+
+  const imgSrc = useMemo(
+    () => getAvatarByUserName(participant.identity),
+    [participant.identity]
+  );
 
   const isCameraActive = participant.isCameraEnabled;
-  const name = participant.name || participant.identity || "Guest";
 
   const videoPublication = [...participant.videoTrackPublications.values()][0];
   const audioPublication = [...participant.audioTrackPublications.values()][0];

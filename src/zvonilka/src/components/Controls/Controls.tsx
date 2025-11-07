@@ -49,7 +49,6 @@ export const Controls = memo(
 
     return (
       <div className="flex rounded-[28px] items-center bg-[var(--default-black)] gap-1">
-        {/* Microphone with dropdown */}
         <div className="relative flex">
           <Button
             variant="secondary"

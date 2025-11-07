@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import purpleCurve from "@shared/icons/purpleCurve.svg";
 import { z } from "zod";
 import { Logo } from "@components/Logo/Logo";
@@ -20,6 +20,7 @@ const Home = () => {
   const { saveUsername, userChoices } = usePersistentUserChoices();
   const [name, setName] = useState(userChoices.username || "");
   const [pendingRoomId, setPendingRoomId] = useState<string | null>(null);
+  const saveTimeoutRef = useRef<number | null>(null);
 
   const parsed = nameSchema.safeParse(name);
   const isValid = useMemo(() => parsed.success, [parsed]);
@@ -28,6 +29,29 @@ const Home = () => {
 
   const createRoom = useCreateRoom();
   const navigate = useNavigate();
+
+  const handleNameChange = useCallback(
+    (newName: string) => {
+      setName(newName);
+
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      saveTimeoutRef.current = setTimeout(() => {
+        saveUsername(newName);
+      }, 500);
+    },
+    [saveUsername]
+  );
+
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const roomId = localStorage.getItem("pendingRoomId");
@@ -38,8 +62,6 @@ const Home = () => {
 
   const onSubmit = async () => {
     if (isValid) {
-      saveUsername(name);
-
       if (pendingRoomId) {
         localStorage.removeItem("pendingRoomId");
         setPendingRoomId(null);
@@ -70,7 +92,11 @@ const Home = () => {
     <>
       <Logo />
       <div className="centered-container h-screen items-center gap-y-20">
-        <CreateName value={name} onChange={setName} error={errorMessage} />
+        <CreateName
+          value={name}
+          onChange={handleNameChange}
+          error={errorMessage}
+        />
         <div className="group relative w-[286px] h-[235px] mt-[60px] transform transition-transform duration-300 ease-in-out group-hover:rotate-75">
           <img
             src={purpleCurve}
