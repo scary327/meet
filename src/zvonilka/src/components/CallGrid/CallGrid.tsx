@@ -4,11 +4,7 @@ import { Controls } from "@components/Controls/Controls";
 import { useToast } from "@shared/hooks/useToast";
 import { usePersistentUserChoices } from "@shared/hooks/usePersistentUserChoices";
 import type { LocalParticipant, RemoteParticipant } from "livekit-client";
-import {
-  useTrackToggle,
-  useRoomContext,
-  useLocalParticipant,
-} from "@livekit/components-react";
+import { useTrackToggle, useRoomContext } from "@livekit/components-react";
 import { Track } from "livekit-client";
 
 interface IDevices {
@@ -29,7 +25,6 @@ export const CallGrid: React.FC<CallGridProps> = ({
   isControlsVisible = false,
 }) => {
   const room = useRoomContext();
-  const { localParticipant } = useLocalParticipant();
   const { showToast } = useToast();
   const { saveAudioInputEnabled, saveVideoInputEnabled } =
     usePersistentUserChoices();
@@ -107,17 +102,11 @@ export const CallGrid: React.FC<CallGridProps> = ({
 
   const currentDevices: IDevices = useMemo(
     () => ({
-      audioInput:
-        localParticipant
-          ?.getTrackPublication(Track.Source.Microphone)
-          ?.track?.mediaStreamTrack?.getSettings().deviceId || undefined,
-      audioOutput:
-        localParticipant
-          ?.getTrackPublication(Track.Source.Camera)
-          ?.track?.mediaStreamTrack?.getSettings().deviceId || undefined,
+      audioInput: room.getActiveDevice("audioinput") || undefined,
+      audioOutput: room.getActiveDevice("audiooutput") || undefined,
       videoInput: room.getActiveDevice("videoinput") || undefined,
     }),
-    [localParticipant, room]
+    [room]
   );
 
   return (

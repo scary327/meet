@@ -5,11 +5,7 @@ import { Chat } from "@components/Chat/Chat";
 import { RoomAudioRenderer, useParticipants } from "@livekit/components-react";
 import type { LocalParticipant, RemoteParticipant } from "livekit-client";
 
-interface RoomContentProps {
-  roomId: string;
-}
-
-export const RoomContent: React.FC<RoomContentProps> = ({ roomId }) => {
+export const RoomContent = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isControlsVisible, setIsControlsVisible] = useState(false);
   const [hideControlsTimeout, setHideControlsTimeout] = useState<ReturnType<
@@ -63,11 +59,7 @@ export const RoomContent: React.FC<RoomContentProps> = ({ roomId }) => {
           onChatToggle={() => setIsChatOpen(!isChatOpen)}
           isControlsVisible={isControlsVisible}
         />
-        <Chat
-          roomId={roomId}
-          isOpen={isChatOpen}
-          onClose={() => setIsChatOpen(false)}
-        />
+        <Chat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
       </div>
       <RoomAudioRenderer muted={false} />
     </div>
