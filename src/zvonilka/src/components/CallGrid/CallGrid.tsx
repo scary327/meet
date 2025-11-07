@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import UserCard from "./UserCard";
 import { Controls } from "@components/Controls/Controls";
-import { Toast } from "@components/Toast/Toast";
+import { useToast } from "@shared/hooks/useToast";
 import type { LocalParticipant, RemoteParticipant } from "livekit-client";
 import { useLocalParticipant } from "@livekit/components-react";
 
@@ -19,11 +19,10 @@ export const CallGrid: React.FC<CallGridProps> = ({
   const { localParticipant } = useLocalParticipant();
   const [isMicEnabled, setIsMicEnabled] = useState(true);
   const [isCameraEnabled, setIsCameraEnabled] = useState(true);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (!localParticipant) return;
-
     setIsMicEnabled(localParticipant.isMicrophoneEnabled);
     setIsCameraEnabled(localParticipant.isCameraEnabled);
   }, [localParticipant]);
@@ -60,19 +59,16 @@ export const CallGrid: React.FC<CallGridProps> = ({
     const meetLink = window.location.href;
     try {
       await navigator.clipboard.writeText(meetLink);
-      setToastMessage("Ссылка на комнату скопирована");
+      showToast("Ссылка на комнату скопирована");
       console.log("Meet link copied to clipboard:", meetLink);
     } catch (error) {
-      setToastMessage("Ошибка при копировании ссылки");
+      showToast("Ошибка при копировании ссылки");
       console.error("Failed to copy meet link:", error);
     }
   };
 
   return (
     <div className="flex-1 relative bg-[var(--default-black)] rounded-xl overflow-hidden flex flex-col">
-      {toastMessage && (
-        <Toast message={toastMessage} onClose={() => setToastMessage(null)} />
-      )}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 p-6 items-stretch justify-items-center flex-1 overflow-auto">
         {participants.map((p) => (
           <UserCard key={p.identity} participant={p} />

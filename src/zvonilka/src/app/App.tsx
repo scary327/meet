@@ -5,6 +5,7 @@ import { Loader } from "@shared/ui/Loader/Loader";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useIsLoggedIn } from "@shared/utils/isLoggedIn";
 import { authUrl } from "@shared/api/authUrl";
+import { ToastProvider } from "@shared/contexts/ToastContext";
 
 const queryClient = new QueryClient();
 
@@ -19,9 +20,11 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Suspense fallback={<Loader />}>
-        <RouterProvider router={router} />
-      </Suspense>
+      <ToastProvider>
+        <Suspense fallback={<Loader />}>
+          <RouterProvider router={router} />
+        </Suspense>
+      </ToastProvider>
     </QueryClientProvider>
   );
 }

@@ -2,9 +2,10 @@ import { useCreateRoom } from "@shared/api/requests/createRoom";
 import { fetchRoom } from "@shared/api/requests/fetchRoom";
 import { useConfig } from "@shared/api/requests/useConfig";
 import type { ApiRoom } from "@shared/types/ApiRoom";
-import { userPreferencesStore } from "@shared/stores/userPreferences";
-import { useEffect, useState } from "react";
+import { usePersistentUserChoices } from "@shared/hooks/usePersistentUserChoices";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import type { RoomOptions } from "livekit-client";
 
 type UserProfile = {
   username: string;
@@ -12,6 +13,7 @@ type UserProfile = {
   avatar?: string;
   videoDeviceId?: string;
   audioDeviceId?: string;
+  audioOutputDeviceId?: string;
   audioEnabled?: boolean;
   videoEnabled?: boolean;
   processorSerialized?: string;
@@ -24,6 +26,7 @@ type UnifiedRoomState = {
   livekitToken?: string;
   roomData?: ApiRoom;
   userProfile?: UserProfile;
+  roomOptions?: RoomOptions;
   readyToConnect: boolean;
   error?: string;
   initialize: () => Promise<void>;
@@ -38,19 +41,18 @@ export const useUnifiedRoom = (
   const { data: apiConfig } = useConfig();
   const [readyToConnect, setReadyToConnect] = useState(false);
   const { mutateAsync: createRoom } = useCreateRoom();
+  const { userChoices } = usePersistentUserChoices();
 
-  const [userProfile, setUserProfile] = useState<UserProfile>(() => {
-    const savedUsername = localStorage.getItem("username") || "";
-    return {
-      username: savedUsername || "guest",
-      displayName: savedUsername || "Guest",
-      avatar: undefined,
-      videoDeviceId: undefined,
-      audioDeviceId: undefined,
-      audioEnabled: true,
-      videoEnabled: true,
-    };
-  });
+  const [userProfile, setUserProfile] = useState<UserProfile>(() => ({
+    username: userChoices.username || "guest",
+    displayName: userChoices.username || "Guest",
+    avatar: undefined,
+    videoDeviceId: userChoices.videoDeviceId,
+    audioDeviceId: userChoices.audioDeviceId,
+    audioEnabled: userChoices.audioEnabled ?? true,
+    videoEnabled: userChoices.videoEnabled ?? true,
+    audioOutputDeviceId: "default",
+  }));
 
   const [roomData, setRoomData] = useState<ApiRoom | undefined>(undefined);
   const [serverUrl, setServerUrl] = useState<string | undefined>(undefined);
@@ -59,7 +61,21 @@ export const useUnifiedRoom = (
   );
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const fetchOrCreate = async () => {
+  const roomOptions: RoomOptions = {
+    adaptiveStream: true,
+    dynacast: true,
+    publishDefaults: {
+      videoCodec: "vp9",
+    },
+    audioCaptureDefaults: {
+      deviceId: userProfile.audioDeviceId ?? undefined,
+    },
+    audioOutput: {
+      deviceId: userProfile.audioOutputDeviceId ?? undefined,
+    },
+  };
+
+  const fetchOrCreate = useCallback(async () => {
     if (!roomId) {
       return;
     }
@@ -77,8 +93,9 @@ export const useUnifiedRoom = (
       setLivekitToken(data?.livekit?.token ?? "");
       setReadyToConnect(true);
       return data;
-    } catch (e: any) {
-      if (e?.statusCode === "404") {
+    } catch (e: unknown) {
+      const error = e as Record<string, unknown>;
+      if (error?.statusCode === "404") {
         try {
           const created = await createRoom({
             slug: roomId,
@@ -98,15 +115,15 @@ export const useUnifiedRoom = (
         throw e;
       }
     }
-  };
+  }, [roomId, userProfile.username, apiConfig?.livekit?.url, createRoom]);
 
-  const initialize = async () => {
+  const initialize = useCallback(async () => {
     await fetchOrCreate();
-  };
+  }, [fetchOrCreate]);
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     await fetchOrCreate();
-  };
+  }, [fetchOrCreate]);
 
   const requestPermissions = async (): Promise<boolean> => {
     try {
@@ -140,11 +157,11 @@ export const useUnifiedRoom = (
     }
 
     initialize();
-  }, [roomId, userProfile.username]);
+  }, [roomId, userProfile.username, initialize]);
 
   useEffect(() => {
     const handleStorageChange = () => {
-      const newUsername = userPreferencesStore.getUsername();
+      const newUsername = localStorage.getItem("username") || "";
 
       if (newUsername && newUsername !== "guest") {
         setUserProfile((prev) => ({
@@ -157,7 +174,7 @@ export const useUnifiedRoom = (
 
     window.addEventListener("storage", handleStorageChange);
 
-    const newUsername = userPreferencesStore.getUsername();
+    const newUsername = localStorage.getItem("username") || "";
     if (newUsername && newUsername !== userProfile.username) {
       setUserProfile((prev) => ({
         ...prev,
@@ -169,7 +186,7 @@ export const useUnifiedRoom = (
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, []);
+  }, [userProfile.username]);
 
   return {
     roomId: roomId ?? "",
@@ -178,6 +195,7 @@ export const useUnifiedRoom = (
     livekitToken,
     roomData,
     userProfile,
+    roomOptions,
     readyToConnect,
     error,
     initialize,

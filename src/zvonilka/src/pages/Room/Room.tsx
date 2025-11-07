@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Logo } from "@components/Logo/Logo";
 import { isRoomValid } from "@shared/utils/isRoomValid";
 import { useUnifiedRoom } from "@shared/hooks/useUnifiedRoom";
+import { usePersistentUserChoices } from "@shared/hooks/usePersistentUserChoices";
 import { URLS } from "@app/routes/urls";
 import { LiveKitRoom } from "@livekit/components-react";
+import { Room as LiveKitRoomClient } from "livekit-client";
 import { RoomContent } from "./RoomContent";
 import { useNavigate, useParams } from "react-router-dom";
 import { Loader } from "@shared/ui/Loader/Loader";
@@ -12,6 +14,12 @@ export const Room: React.FC = () => {
   const room = useUnifiedRoom("join");
   const navigate = useNavigate();
   const roomId = useParams().id;
+  const { userChoices } = usePersistentUserChoices();
+
+  const livekitRoom = useMemo(
+    () => new LiveKitRoomClient(room.roomOptions),
+    [room.roomOptions]
+  );
 
   useEffect(() => {
     if (
@@ -33,11 +41,15 @@ export const Room: React.FC = () => {
       <Logo />
       {room.readyToConnect && room.serverUrl && room.livekitToken ? (
         <LiveKitRoom
+          room={livekitRoom}
           serverUrl={room.serverUrl}
           token={room.livekitToken}
           connect={true}
-          audio={room.userProfile?.audioEnabled}
-          video={room.userProfile?.videoEnabled}
+          audio={userChoices.audioEnabled}
+          video={userChoices.videoEnabled}
+          onDisconnected={() => {
+            navigate(URLS.home);
+          }}
         >
           <RoomContent roomId={room.roomId} />
         </LiveKitRoom>

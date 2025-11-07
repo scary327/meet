@@ -8,7 +8,7 @@ import { useCreateRoom } from "@shared/api/requests/createRoom";
 import { generateRoomId } from "@shared/utils/generateRoomId";
 import { useNavigate } from "react-router-dom";
 import { authUrl } from "@shared/api/authUrl";
-import { userPreferencesStore } from "@shared/stores/userPreferences";
+import { usePersistentUserChoices } from "@shared/hooks/usePersistentUserChoices";
 
 const nameSchema = z
   .string()
@@ -17,7 +17,8 @@ const nameSchema = z
   });
 
 const Home = () => {
-  const [name, setName] = useState("");
+  const { saveUsername, userChoices } = usePersistentUserChoices();
+  const [name, setName] = useState(userChoices.username || "");
   const [pendingRoomId, setPendingRoomId] = useState<string | null>(null);
 
   const parsed = nameSchema.safeParse(name);
@@ -37,7 +38,7 @@ const Home = () => {
 
   const onSubmit = async () => {
     if (isValid) {
-      userPreferencesStore.setUsername(name);
+      saveUsername(name);
 
       if (pendingRoomId) {
         localStorage.removeItem("pendingRoomId");
@@ -61,7 +62,9 @@ const Home = () => {
     }
   };
 
-  const buttonText = pendingRoomId ? "Подключиться к звонку" : "Создать конференцию";
+  const buttonText = pendingRoomId
+    ? "Подключиться к звонку"
+    : "Создать конференцию";
 
   return (
     <>

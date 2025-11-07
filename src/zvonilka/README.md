@@ -1,5 +1,5 @@
 # ZVONILKA 1.0.0
 
-Credentials:
+Default local credentials:
 username: meet
 password: meet
