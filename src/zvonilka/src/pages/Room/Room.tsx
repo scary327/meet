@@ -9,6 +9,7 @@ import { Room as LiveKitRoomClient } from "livekit-client";
 import { RoomContent } from "./RoomContent";
 import { useNavigate, useParams } from "react-router-dom";
 import { Loader } from "@shared/ui/Loader/Loader";
+import { StartMediaButton } from "@components/StartMediaButton/StartMediaButton";
 
 export const Room: React.FC = () => {
   const room = useUnifiedRoom("join");
@@ -50,7 +51,9 @@ export const Room: React.FC = () => {
           onDisconnected={() => {
             navigate(URLS.home);
           }}
+          connectOptions={{ autoSubscribe: true }}
         >
+          <StartMediaButton label="Нажмите для включения звука" />
           <RoomContent roomId={room.roomId} />
         </LiveKitRoom>
       ) : (

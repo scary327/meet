@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useConnectionObserver } from "@shared/hooks/useConnectionObserver";
 import CallGrid from "@components/CallGrid/CallGrid";
 import { Chat } from "@components/Chat/Chat";
-import { useParticipants } from "@livekit/components-react";
+import { RoomAudioRenderer, useParticipants } from "@livekit/components-react";
 import type { LocalParticipant, RemoteParticipant } from "livekit-client";
 
 interface RoomContentProps {
@@ -69,6 +69,7 @@ export const RoomContent: React.FC<RoomContentProps> = ({ roomId }) => {
           onClose={() => setIsChatOpen(false)}
         />
       </div>
+      <RoomAudioRenderer muted={false} />
     </div>
   );
 };

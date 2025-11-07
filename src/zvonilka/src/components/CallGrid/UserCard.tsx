@@ -1,5 +1,11 @@
-import { useMemo, useEffect, useRef } from "react";
+import { useMemo } from "react";
 import type { LocalParticipant, RemoteParticipant } from "livekit-client";
+import { Track } from "livekit-client";
+import { VideoTrack, AudioTrack } from "@livekit/components-react";
+import {
+  isTrackReference,
+  type TrackReferenceOrPlaceholder,
+} from "@livekit/components-core";
 
 import img1 from "@shared/icons/users/img1.svg";
 import img2 from "@shared/icons/users/img2.svg";
@@ -19,35 +25,40 @@ function UserCard({ participant }: UserCardProps) {
     return images[rand];
   }, []);
 
-  const videoRef = useRef<HTMLVideoElement>(null);
   const isCameraActive = participant.isCameraEnabled;
   const name = participant.name || participant.identity || "Guest";
 
-  useEffect(() => {
-    if (!videoRef.current || !isCameraActive) return;
+  const videoPublication = [...participant.videoTrackPublications.values()][0];
+  const audioPublication = [...participant.audioTrackPublications.values()][0];
 
-    const videoTrackPublications = participant.videoTrackPublications;
-    if (videoTrackPublications.size === 0) return;
+  const videoTrackRef: TrackReferenceOrPlaceholder | undefined =
+    videoPublication
+      ? {
+          participant,
+          source: Track.Source.Camera,
+          publication: videoPublication,
+        }
+      : undefined;
 
-    const videoPublicationEntry = [...videoTrackPublications][0];
-    const videoPublication = videoPublicationEntry[1];
-    if (videoPublication?.track) {
-      videoPublication.track.attach(videoRef.current);
-      return () => {
-        videoPublication.track?.detach();
-      };
-    }
-  }, [isCameraActive, participant]);
+  const audioTrackRef: TrackReferenceOrPlaceholder | undefined =
+    audioPublication
+      ? {
+          participant,
+          source: Track.Source.Microphone,
+          publication: audioPublication,
+        }
+      : undefined;
 
   return (
     <div className="flex flex-col items-center justify-between bg-black border border-white rounded-xl p-3 w-full h-full relative overflow-hidden">
+      {isTrackReference(audioTrackRef) && (
+        <AudioTrack trackRef={audioTrackRef} />
+      )}
+
       <div className="flex items-center justify-center flex-1 w-full h-full">
-        {isCameraActive ? (
-          <video
-            ref={videoRef}
-            autoPlay={true}
-            muted={true}
-            draggable={false}
+        {isCameraActive && isTrackReference(videoTrackRef) ? (
+          <VideoTrack
+            trackRef={videoTrackRef}
             className="w-full h-full object-cover"
             style={{
               transform: participant.isLocal ? "scaleX(-1)" : undefined,
