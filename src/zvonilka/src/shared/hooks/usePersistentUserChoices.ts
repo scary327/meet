@@ -15,6 +15,10 @@ export function usePersistentUserChoices() {
     saveAudioInputDeviceId: (deviceId: string) => {
       userChoicesStore.audioDeviceId = deviceId;
     },
+    saveAudioOutputDeviceId: (deviceId: string) => {
+      // Audio output в базовом типе LiveKit нет, но сохраним в localStorage
+      localStorage.setItem("audioOutputDeviceId", deviceId);
+    },
     saveVideoInputDeviceId: (deviceId: string) => {
       userChoicesStore.videoDeviceId = deviceId;
     },

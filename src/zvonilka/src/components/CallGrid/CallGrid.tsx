@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback } from "react";
 import UserCard from "./UserCard";
 import { Controls } from "@components/Controls/Controls";
 import { useToast } from "@shared/hooks/useToast";
+import { usePersistentUserChoices } from "@shared/hooks/usePersistentUserChoices";
 import type { LocalParticipant, RemoteParticipant } from "livekit-client";
-import { useLocalParticipant } from "@livekit/components-react";
+import {
+  useLocalParticipant,
+  useTrackToggle,
+  useRoomContext,
+} from "@livekit/components-react";
+import { Track } from "livekit-client";
 
 interface CallGridProps {
   participants: (RemoteParticipant | LocalParticipant)[];
@@ -17,42 +23,45 @@ export const CallGrid: React.FC<CallGridProps> = ({
   isControlsVisible = false,
 }) => {
   const { localParticipant } = useLocalParticipant();
-  const [isMicEnabled, setIsMicEnabled] = useState(true);
-  const [isCameraEnabled, setIsCameraEnabled] = useState(true);
+  const room = useRoomContext();
   const { showToast } = useToast();
+  const {
+    userChoices,
+    saveAudioInputDeviceId,
+    saveAudioInputEnabled,
+    saveVideoInputDeviceId,
+    saveVideoInputEnabled,
+    saveAudioOutputDeviceId,
+  } = usePersistentUserChoices();
 
-  useEffect(() => {
-    if (!localParticipant) return;
-    setIsMicEnabled(localParticipant.isMicrophoneEnabled);
-    setIsCameraEnabled(localParticipant.isCameraEnabled);
-  }, [localParticipant]);
+  const onMicrophoneChange = useCallback(
+    (enabled: boolean, isUserInitiated: boolean) =>
+      isUserInitiated ? saveAudioInputEnabled(enabled) : null,
+    [saveAudioInputEnabled]
+  );
+
+  const micTrackProps = useTrackToggle({
+    source: Track.Source.Microphone,
+    onChange: onMicrophoneChange,
+  });
+
+  const onCameraChange = useCallback(
+    (enabled: boolean, isUserInitiated: boolean) =>
+      isUserInitiated ? saveVideoInputEnabled(enabled) : null,
+    [saveVideoInputEnabled]
+  );
+
+  const cameraTrackProps = useTrackToggle({
+    source: Track.Source.Camera,
+    onChange: onCameraChange,
+  });
 
   const handleToggleMicrophone = async () => {
-    if (!localParticipant) {
-      console.warn("Local participant not found");
-      return;
-    }
-    try {
-      const newState = !isMicEnabled;
-      await localParticipant.setMicrophoneEnabled(newState);
-      setIsMicEnabled(newState);
-    } catch (error) {
-      console.error("Failed to toggle microphone:", error);
-    }
+    await micTrackProps.toggle();
   };
 
   const handleToggleCamera = async () => {
-    if (!localParticipant) {
-      console.warn("Local participant not found");
-      return;
-    }
-    try {
-      const newState = !isCameraEnabled;
-      await localParticipant.setCameraEnabled(newState);
-      setIsCameraEnabled(newState);
-    } catch (error) {
-      console.error("Failed to toggle camera:", error);
-    }
+    await cameraTrackProps.toggle();
   };
 
   const handleCopyMeetLink = async () => {
@@ -64,6 +73,49 @@ export const CallGrid: React.FC<CallGridProps> = ({
     } catch (error) {
       showToast("Ошибка при копировании ссылки");
       console.error("Failed to copy meet link:", error);
+    }
+  };
+
+  const handleSelectAudioInput = async (deviceId: string) => {
+    if (!localParticipant) return;
+    try {
+      const currentlyEnabled = micTrackProps.enabled;
+      if (currentlyEnabled) {
+        await localParticipant.setMicrophoneEnabled(false);
+      }
+      await localParticipant.setMicrophoneEnabled(true, { deviceId });
+      saveAudioInputDeviceId(deviceId);
+      showToast("Микрофон изменён");
+    } catch (error) {
+      console.error("Failed to change audio input:", error);
+      showToast("Ошибка при смене микрофона");
+    }
+  };
+
+  const handleSelectAudioOutput = async (deviceId: string) => {
+    try {
+      await room.switchActiveDevice("audiooutput", deviceId);
+      saveAudioOutputDeviceId(deviceId);
+      showToast("Динамик изменён");
+    } catch (error) {
+      console.error("Failed to change audio output:", error);
+      showToast("Ошибка при смене динамика");
+    }
+  };
+
+  const handleSelectVideoInput = async (deviceId: string) => {
+    if (!localParticipant) return;
+    try {
+      const currentlyEnabled = cameraTrackProps.enabled;
+      if (currentlyEnabled) {
+        await localParticipant.setCameraEnabled(false);
+      }
+      await localParticipant.setCameraEnabled(true, { deviceId });
+      saveVideoInputDeviceId(deviceId);
+      showToast("Камера изменена");
+    } catch (error) {
+      console.error("Failed to change video input:", error);
+      showToast("Ошибка при смене камеры");
     }
   };
 
@@ -87,8 +139,16 @@ export const CallGrid: React.FC<CallGridProps> = ({
           onToggleMicrophone={handleToggleMicrophone}
           onToggleCamera={handleToggleCamera}
           onAddUser={handleCopyMeetLink}
-          isMicEnabled={isMicEnabled}
-          isCameraEnabled={isCameraEnabled}
+          isMicEnabled={micTrackProps.enabled}
+          isCameraEnabled={cameraTrackProps.enabled}
+          onSelectAudioInput={handleSelectAudioInput}
+          onSelectAudioOutput={handleSelectAudioOutput}
+          onSelectVideoInput={handleSelectVideoInput}
+          selectedAudioInputId={userChoices.audioDeviceId}
+          selectedAudioOutputId={
+            localStorage.getItem("audioOutputDeviceId") || undefined
+          }
+          selectedVideoInputId={userChoices.videoDeviceId}
         />
       </div>
     </div>
