@@ -126,7 +126,7 @@ export const Header = () => {
         })}
       >
         <HStack gap={0} justify="space-between" alignItems="center">
-          <header>
+          {/* <header>
             <Stack gap={2.25} direction="row" align="center">
               <Link
                 className={css({
@@ -151,7 +151,7 @@ export const Header = () => {
                 to="/"
               >
                 {/* this is there only as a hook for custom CSS users who might want to show something before the app logo */}
-                <div
+          {/* <div
                   className={`Header-beforeLogo ${css({
                     display: 'none',
                   })}`}
@@ -162,8 +162,8 @@ export const Header = () => {
                 </HStack>
               </Link>
             </Stack>
-          </header>
-          <nav>
+          </header> */}
+          <nav style={{ marginLeft: 'auto', position: 'relative' }}>
             <Stack gap={1} direction="row" align="center">
               {isLoggedIn === false &&
                 !isHome &&
