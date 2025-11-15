@@ -64,14 +64,14 @@ export const Home = () => {
   }, [])
 
   const onSubmit = async () => {
-    if (isValid) {
-      const slug = generateRoomId()
-      createRoom({ slug, username: name }).then((data) =>
-        navigateTo('room', data.slug, {
-          state: { create: true, initialRoomData: data },
-        })
-      )
-    }
+    const slug = generateRoomId()
+    // Use the entered name, or empty string if not valid
+    const usernameToUse = isValid ? name : ''
+    createRoom({ slug, username: usernameToUse }).then((data) =>
+      navigateTo('room', data.slug, {
+        state: { create: true, initialRoomData: data },
+      })
+    )
   }
 
   return (
@@ -141,7 +141,6 @@ export const Home = () => {
             <Button
               variant="primary"
               onPress={onSubmit}
-              isDisabled={!isValid}
               className={css({
                 fontWeight: 'extrabold',
                 fontSize: '24px',

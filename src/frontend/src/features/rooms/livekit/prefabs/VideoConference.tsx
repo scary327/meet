@@ -25,7 +25,6 @@ import { MainNotificationToast } from '@/features/notifications/MainNotification
 import { FocusLayout } from '../components/FocusLayout'
 import { ParticipantTile } from '../components/ParticipantTile'
 import { SidePanel } from '../components/SidePanel'
-import { useSidePanel } from '../hooks/useSidePanel'
 import { RecordingStateToast } from '@/features/recording'
 import { ScreenShareErrorModal } from '../components/ScreenShareErrorModal'
 import { useConnectionObserver } from '../hooks/useConnectionObserver'
@@ -170,18 +169,45 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
   ])
   /* eslint-enable react-hooks/exhaustive-deps */
 
-  const { isSidePanelOpen } = useSidePanel()
   const { areSubtitlesOpen } = useSubtitles()
 
   const [isShareErrorVisible, setIsShareErrorVisible] = useState(false)
+  const [isControlsVisible, setIsControlsVisible] = useState(false)
+  const [hideControlsTimeout, setHideControlsTimeout] = useState<ReturnType<
+    typeof setTimeout
+  > | null>(null)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const bottomThreshold = 80
+    const isNearBottom = window.innerHeight - e.clientY < bottomThreshold
+
+    if (isNearBottom) {
+      setIsControlsVisible(true)
+      if (hideControlsTimeout) {
+        clearTimeout(hideControlsTimeout)
+        setHideControlsTimeout(null)
+      }
+    }
+  }
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setIsControlsVisible(false)
+    }, 3000)
+    setHideControlsTimeout(timeout)
+  }
 
   return (
     <div
       className="lk-video-conference"
       {...props}
       style={{
-        overflowX: 'hidden',
+        width: '100%',
+        height: '100vh',
+        position: 'relative',
       }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       {isWeb() && (
         <LayoutContextProvider
@@ -194,14 +220,16 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
           />
           <IsIdleDisconnectModal />
           <div
-            // todo - extract these magic values into constant
+            // Container with zvonilka styles
             style={{
-              position: 'absolute',
-              inset: isSidePanelOpen
-                ? `var(--lk-grid-gap) calc(358px + 3rem) calc(80px + var(--lk-grid-gap)) 16px`
-                : `var(--lk-grid-gap) var(--lk-grid-gap) calc(80px + var(--lk-grid-gap))`,
-              transition: 'inset .5s cubic-bezier(0.4,0,0.2,1) 5ms',
-              maxHeight: '100%',
+              maxWidth: '1440px',
+              margin: '0 auto',
+              paddingTop: '72px',
+              paddingLeft: '12px',
+              paddingRight: '12px',
+              width: '100%',
+              height: '100%',
+              boxSizing: 'border-box',
             }}
           >
             <LayoutWrapper areSubtitlesOpen={areSubtitlesOpen}>
@@ -245,6 +273,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
             <MainNotificationToast />
           </div>
           <ControlBar
+            isControlsVisible={isControlsVisible}
             onDeviceError={(e) => {
               console.error(e)
               if (

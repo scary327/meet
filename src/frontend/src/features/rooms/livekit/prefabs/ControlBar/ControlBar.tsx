@@ -7,19 +7,36 @@ import { useIsMobile } from '@/utils/useIsMobile'
 
 export interface ControlBarProps extends React.HTMLAttributes<HTMLDivElement> {
   onDeviceError?: (error: { source: Track.Source; error: Error }) => void
+  isControlsVisible?: boolean
 }
 
 /**
  * The `ControlBar` prefab gives the user the basic user interface to control their
  * media devices (camera, microphone and screen share), open the `Chat` and leave the room.
  */
-export function ControlBar({ onDeviceError }: ControlBarProps) {
+export function ControlBar({
+  onDeviceError,
+  isControlsVisible = true,
+}: ControlBarProps) {
   const isMobile = useIsMobile()
 
   if (isMobile) {
-    return <MobileControlBar onDeviceError={onDeviceError} />
+    return (
+      <MobileControlBar
+        onDeviceError={onDeviceError}
+        isControlsVisible={isControlsVisible}
+      />
+    )
   }
-  return <DesktopControlBar onDeviceError={onDeviceError} />
+  return (
+    <DesktopControlBar
+      onDeviceError={onDeviceError}
+      isControlsVisible={isControlsVisible}
+    />
+  )
 }
 
-export type ControlBarAuxProps = Pick<ControlBarProps, 'onDeviceError'>
+export type ControlBarAuxProps = Pick<
+  ControlBarProps,
+  'onDeviceError' | 'isControlsVisible'
+>

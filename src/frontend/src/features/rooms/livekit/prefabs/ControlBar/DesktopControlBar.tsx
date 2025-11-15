@@ -16,6 +16,7 @@ import { AudioDevicesControl } from '../../components/controls/Device/AudioDevic
 
 export function DesktopControlBar({
   onDeviceError,
+  isControlsVisible = true,
 }: Readonly<ControlBarAuxProps>) {
   const browserSupportsScreenSharing = supportsScreenSharing()
   const desktopControlBarEl = useRef<HTMLDivElement>(null)
@@ -30,6 +31,9 @@ export function DesktopControlBar({
         bottom: 0,
         left: 0,
         right: 0,
+        opacity: isControlsVisible ? 1 : 0,
+        transition: 'opacity 0.3s ease',
+        pointerEvents: isControlsVisible ? 'auto' : 'none',
       })}
     >
       <div
