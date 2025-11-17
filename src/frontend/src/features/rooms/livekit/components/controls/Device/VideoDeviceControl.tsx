@@ -8,7 +8,6 @@ import { ToggleDevice } from './ToggleDevice'
 import { css } from '@/styled-system/css'
 import { usePersistentUserChoices } from '../../../hooks/usePersistentUserChoices'
 import { useCanPublishTrack } from '../../../hooks/useCanPublishTrack'
-import { useCannotUseDevice } from '../../../hooks/useCannotUseDevice'
 import { useSidePanel } from '../../../hooks/useSidePanel'
 import { BackgroundProcessorFactory } from '../../blur'
 import Source = Track.Source
@@ -67,7 +66,6 @@ export const VideoDeviceControl = ({
   })
 
   const kind = 'videoinput'
-  const cannotUseDevice = useCannotUseDevice(kind)
 
   const toggleWithProcessor = async () => {
     /**
@@ -126,11 +124,7 @@ export const VideoDeviceControl = ({
             aria-label={selectLabel}
             groupPosition="right"
             square
-            variant={
-              !canPublishTrack || !trackProps.enabled || cannotUseDevice
-                ? 'error2'
-                : 'primaryDark'
-            }
+            variant="primaryDark"
           >
             <RiArrowUpSLine />
           </Button>

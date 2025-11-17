@@ -28,7 +28,6 @@ import { useSettingsDialog } from '@/features/settings/hook/useSettingsDialog'
 
 export function MobileControlBar({
   onDeviceError,
-  isControlsVisible = true,
 }: Readonly<ControlBarAuxProps>) {
   const { t } = useTranslation('rooms')
   const [isMenuOpened, setIsMenuOpened] = React.useState(false)
@@ -50,9 +49,7 @@ export function MobileControlBar({
           bottom: 0,
           left: 0,
           right: 0,
-          opacity: isControlsVisible ? 1 : 0,
-          transition: 'opacity 0.3s ease',
-          pointerEvents: isControlsVisible ? 'auto' : 'none',
+          pointerEvents: 'auto',
         })}
       >
         <div
@@ -60,6 +57,10 @@ export function MobileControlBar({
             display: 'flex',
             justifyContent: 'space-between',
             width: '330px',
+            backgroundColor: '#0e0b10',
+            borderRadius: '28px',
+            padding: '0.25rem',
+            gap: '0.25rem',
           })}
         >
           <LeaveButton />

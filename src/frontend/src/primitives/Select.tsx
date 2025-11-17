@@ -46,20 +46,19 @@ const StyledButton = styled(Button, {
     variant: {
       light: {},
       dark: {
-        backgroundColor: 'primaryDark.100',
+        backgroundColor: '#ffffff',
         fontWeight: 'medium !important',
-        color: 'white',
+        color: '#0e0b10',
+        border: '1px solid #0e0b10',
         '&[data-pressed]': {
-          backgroundColor: 'primaryDark.900',
-          color: 'primaryDark.100',
+          backgroundColor: '#e8e8e8',
         },
         '&[data-hovered]': {
-          backgroundColor: 'primaryDark.300',
-          color: 'white',
+          backgroundColor: '#f5f5f5',
         },
-        '&[data-selected]': {
-          backgroundColor: 'primaryDark.700 !important',
-          color: 'primaryDark.100 !important',
+        '&[data-focus-visible]': {
+          outline: '2px solid #0e0b10',
+          outlineOffset: '2px',
         },
       },
     },

@@ -37,10 +37,11 @@ export function ResponsiveMenu({
     >
       <Modal
         className={css({
-          backgroundColor: 'primaryDark.200',
+          backgroundColor: '#0e0b10',
           borderRadius: '20px',
           flexGrow: 1,
           padding: '1.5rem',
+          border: '1px solid #ffffff',
           '&[data-entering]': {
             animation: 'slide-full 200ms',
           },

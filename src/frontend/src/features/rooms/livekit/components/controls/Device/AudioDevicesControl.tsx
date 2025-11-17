@@ -8,7 +8,6 @@ import { ToggleDevice } from './ToggleDevice'
 import { css } from '@/styled-system/css'
 import { usePersistentUserChoices } from '../../../hooks/usePersistentUserChoices'
 import { useCanPublishTrack } from '../../../hooks/useCanPublishTrack'
-import { useCannotUseDevice } from '../../../hooks/useCannotUseDevice'
 import * as React from 'react'
 import { SelectDevice } from './SelectDevice'
 import { SettingsButton } from './SettingsButton'
@@ -50,7 +49,6 @@ export const AudioDevicesControl = ({
   })
 
   const kind = 'audioinput'
-  const cannotUseDevice = useCannotUseDevice(kind)
   const selectLabel = t(`settings.${SettingsDialogExtendedKey.AUDIO}`)
 
   const canPublishTrack = useCanPublishTrack(TrackSource.MICROPHONE)
@@ -82,11 +80,7 @@ export const AudioDevicesControl = ({
             aria-label={selectLabel}
             groupPosition="right"
             square
-            variant={
-              !canPublishTrack || !trackProps.enabled || cannotUseDevice
-                ? 'error2'
-                : 'primaryDark'
-            }
+            variant="primaryDark"
           >
             <RiArrowUpSLine />
           </Button>

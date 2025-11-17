@@ -172,30 +172,6 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
   const { areSubtitlesOpen } = useSubtitles()
 
   const [isShareErrorVisible, setIsShareErrorVisible] = useState(false)
-  const [isControlsVisible, setIsControlsVisible] = useState(false)
-  const [hideControlsTimeout, setHideControlsTimeout] = useState<ReturnType<
-    typeof setTimeout
-  > | null>(null)
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const bottomThreshold = 80
-    const isNearBottom = window.innerHeight - e.clientY < bottomThreshold
-
-    if (isNearBottom) {
-      setIsControlsVisible(true)
-      if (hideControlsTimeout) {
-        clearTimeout(hideControlsTimeout)
-        setHideControlsTimeout(null)
-      }
-    }
-  }
-
-  const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
-      setIsControlsVisible(false)
-    }, 3000)
-    setHideControlsTimeout(timeout)
-  }
 
   return (
     <div
@@ -206,8 +182,6 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
         height: '100vh',
         position: 'relative',
       }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
     >
       {isWeb() && (
         <LayoutContextProvider
@@ -273,7 +247,6 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
             <MainNotificationToast />
           </div>
           <ControlBar
-            isControlsVisible={isControlsVisible}
             onDeviceError={(e) => {
               console.error(e)
               if (

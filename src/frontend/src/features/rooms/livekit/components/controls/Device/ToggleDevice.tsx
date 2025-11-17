@@ -21,7 +21,6 @@ import { ToggleSource, CaptureOptionsBySource } from '@livekit/components-core'
 
 type ToggleDeviceStyleProps = {
   variant?: NonNullable<ButtonRecipeProps>['variant']
-  errorVariant?: NonNullable<ButtonRecipeProps>['variant']
   toggleButtonProps?: Partial<ToggleButtonProps>
 }
 
@@ -47,28 +46,23 @@ export const ToggleDevice = <T extends ToggleSource>({
 }: ToggleDeviceProps<T>) => {
   const { t } = useTranslation('rooms', { keyPrefix: 'selectDevice' })
 
-  const {
-    variant,
-    errorVariant,
-    toggleButtonProps: computedToggleButtonProps,
-  } = useMemo<ToggleDeviceStyleProps>(() => {
-    if (context === 'join') {
+  const { variant, toggleButtonProps: computedToggleButtonProps } =
+    useMemo<ToggleDeviceStyleProps>(() => {
+      if (context === 'join') {
+        return {
+          variant: 'whiteCircle',
+          toggleButtonProps: {
+            groupPosition: undefined,
+          },
+        } as ToggleDeviceStyleProps
+      }
       return {
-        variant: 'whiteCircle',
-        errorVariant: 'errorCircle',
+        variant: 'primaryDark',
         toggleButtonProps: {
-          groupPosition: undefined,
+          groupPosition: 'left',
         },
       } as ToggleDeviceStyleProps
-    }
-    return {
-      variant: 'primaryDark',
-      errorVariant: 'error2',
-      toggleButtonProps: {
-        groupPosition: 'left',
-      },
-    } as ToggleDeviceStyleProps
-  }, [context])
+    }, [context])
 
   const [pushToTalk, setPushToTalk] = useState(false)
 
@@ -118,11 +112,9 @@ export const ToggleDevice = <T extends ToggleSource>({
     <div style={{ position: 'relative' }}>
       {cannotUseDevice && <PermissionNeededButton />}
       <ToggleButton
-        isSelected={!enabled}
+        isSelected={enabled}
         isDisabled={isDisabled}
-        variant={
-          isDisabled || cannotUseDevice || !enabled ? errorVariant : variant
-        }
+        variant={variant}
         shySelected
         onPress={() => {
           if (cannotUseDevice) {

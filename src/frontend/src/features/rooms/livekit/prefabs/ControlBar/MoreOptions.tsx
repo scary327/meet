@@ -49,13 +49,14 @@ export const LateralMenu = () => {
         <Dialog
           className={css({
             width: '65px',
-            backgroundColor: 'primaryDark.50',
+            backgroundColor: '#0e0b10',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            borderRadius: '4px',
+            borderRadius: '10px',
             paddingTop: '10px',
             gap: '0.5rem',
+            border: '1px solid #ffffff',
           })}
         >
           <NavigationControls onPress={handleClose} tooltipType="delayed" />

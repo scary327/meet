@@ -51,8 +51,9 @@ const box = cva({
         color: 'control.text',
       },
       dark: {
-        backgroundColor: 'primaryDark.50',
-        borderColord: 'primaryDark.50',
+        backgroundColor: '#ffffff',
+        border: '1px solid #0e0b10',
+        color: '#0e0b10',
       },
     },
     size: {
