@@ -93,7 +93,7 @@ const StyledSidePanel = ({
       }}
     >
       <Button
-        variant="sidePanelButton"
+        variant="tertiaryText"
         size="xs"
         square
         onPress={onClose}
