@@ -25,6 +25,7 @@ import { MainNotificationToast } from '@/features/notifications/MainNotification
 import { FocusLayout } from '../components/FocusLayout'
 import { ParticipantTile } from '../components/ParticipantTile'
 import { SidePanel } from '../components/SidePanel'
+import { useSidePanel } from '../hooks/useSidePanel'
 import { RecordingStateToast } from '@/features/recording'
 import { ScreenShareErrorModal } from '../components/ScreenShareErrorModal'
 import { useConnectionObserver } from '../hooks/useConnectionObserver'
@@ -169,6 +170,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
   ])
   /* eslint-enable react-hooks/exhaustive-deps */
 
+  const { isSidePanelOpen } = useSidePanel()
   const { areSubtitlesOpen } = useSubtitles()
 
   const [isShareErrorVisible, setIsShareErrorVisible] = useState(false)
@@ -178,9 +180,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
       className="lk-video-conference"
       {...props}
       style={{
-        width: '100%',
-        height: '100vh',
-        position: 'relative',
+        overflowX: 'hidden',
       }}
     >
       {isWeb() && (
@@ -194,16 +194,14 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
           />
           <IsIdleDisconnectModal />
           <div
-            // Container with zvonilka styles
+            // todo - extract these magic values into constant
             style={{
-              maxWidth: '1440px',
-              margin: '0 auto',
-              paddingTop: '72px',
-              paddingLeft: '12px',
-              paddingRight: '12px',
-              width: '100%',
-              height: '100%',
-              boxSizing: 'border-box',
+              position: 'absolute',
+              inset: isSidePanelOpen
+                ? `var(--lk-grid-gap) calc(358px + 3rem) calc(80px + var(--lk-grid-gap)) 16px`
+                : `var(--lk-grid-gap) var(--lk-grid-gap) calc(80px + var(--lk-grid-gap))`,
+              transition: 'inset .5s cubic-bezier(0.4,0,0.2,1) 5ms',
+              maxHeight: '100%',
             }}
           >
             <LayoutWrapper areSubtitlesOpen={areSubtitlesOpen}>

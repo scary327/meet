@@ -72,7 +72,7 @@ export const HandRaisedListItem = ({
       {isAdminOrOwner && (
         <Button
           square
-          variant="greyscale"
+          variant="primaryDark"
           size="sm"
           onPress={() => lowerHandParticipant(participant)}
           aria-label={t('participants.lowerParticipantHand', { name })}

@@ -17,7 +17,7 @@ export const ParticipantMenuButton = ({
     <Menu>
       <Button
         square
-        variant="tertiaryText"
+        variant="primaryDark"
         size="sm"
         aria-label={t('moreOptions')}
         tooltip={t('moreOptions')}

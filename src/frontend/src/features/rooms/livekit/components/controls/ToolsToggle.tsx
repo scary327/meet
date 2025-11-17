@@ -6,7 +6,7 @@ import { css } from '@/styled-system/css'
 import { ToggleButtonProps } from '@/primitives/ToggleButton'
 
 export const ToolsToggle = ({
-  variant = 'primaryTextDark',
+  variant = 'sidePanelButton',
   onPress,
   ...props
 }: ToggleButtonProps) => {

@@ -23,7 +23,7 @@ export const InfoToggle = ({
     >
       <ToggleButton
         square
-        variant="primaryTextDark"
+        variant="sidePanelButton"
         aria-label={t(tooltipLabel)}
         tooltip={t(tooltipLabel)}
         isSelected={isInfoOpen}

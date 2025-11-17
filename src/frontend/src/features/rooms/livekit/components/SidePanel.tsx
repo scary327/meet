@@ -73,7 +73,7 @@ const StyledSidePanel = ({
     >
       {isSubmenu && (
         <Button
-          variant="secondaryText"
+          variant="sidePanelButton"
           size={'sm'}
           square
           className={css({ marginRight: '0.5rem' })}
@@ -93,9 +93,9 @@ const StyledSidePanel = ({
       }}
     >
       <Button
-        invisible
-        variant="tertiaryText"
+        variant="sidePanelButton"
         size="xs"
+        square
         onPress={onClose}
         aria-label={closeButtonTooltip}
         tooltip={closeButtonTooltip}

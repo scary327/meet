@@ -33,7 +33,7 @@ export const ParticipantsToggle = ({
     >
       <ToggleButton
         square
-        variant="primaryTextDark"
+        variant="sidePanelButton"
         aria-label={t(tooltipLabel)}
         tooltip={t(tooltipLabel)}
         isSelected={isParticipantsOpen}

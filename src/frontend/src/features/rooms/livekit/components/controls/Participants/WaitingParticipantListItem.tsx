@@ -75,7 +75,7 @@ export const WaitingParticipantListItem = ({
           size="sm"
           square
           tooltip={t('participants.waiting.deny.button')}
-          variant="secondaryText"
+          variant="primaryDark"
           onPress={() => onAction(participant, false)}
           aria-label={t('waiting.deny.label', { name: participant.username })}
           data-attr="participants-deny"
