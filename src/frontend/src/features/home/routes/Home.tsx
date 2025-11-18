@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { DialogTrigger } from 'react-aria-components'
 import { Button } from '@/primitives'
 import { css } from '@/styled-system/css'
 import { navigateTo } from '@/navigation/navigateTo'
 import { Screen } from '@/layout/Screen'
 import { generateRoomId, useCreateRoom } from '@/features/rooms'
-import { useUser } from '@/features/auth'
+import { authUrl, useUser } from '@/features/auth'
 import { usePersistentUserChoices } from '@/features/rooms/livekit/hooks/usePersistentUserChoices'
 import { Logo } from '@/components/Logo'
 import { CreateName } from '../components/CreateName'
@@ -21,7 +21,7 @@ const nameSchema = z
   })
 
 export const Home = () => {
-  const { t } = useTranslation('home')
+  // const { t } = useTranslation('home')
   const { isLoggedIn } = useUser()
 
   const {
@@ -64,6 +64,11 @@ export const Home = () => {
   }, [])
 
   const onSubmit = async () => {
+    if (!isLoggedIn) {
+      window.location.href = authUrl()
+      return
+    }
+
     const slug = generateRoomId()
     // Use the entered name, or empty string if not valid
     const usernameToUse = isValid ? name : ''
@@ -90,12 +95,13 @@ export const Home = () => {
           padding: '2rem',
         })}
       >
-        <CreateName
-          value={name}
-          onChange={handleNameChange}
-          error={errorMessage}
-        />
-
+        {isLoggedIn && (
+          <CreateName
+            value={name}
+            onChange={handleNameChange}
+            error={errorMessage}
+          />
+        )}
         <div
           className={css({
             position: 'relative',
@@ -151,24 +157,21 @@ export const Home = () => {
                 },
               })}
             >
-              {t('createMeeting')}
+              {isLoggedIn ? 'Создать звонок' : 'Войти чтобы создать звонок'}
             </Button>
           </div>
         </div>
 
-        {/* Join meeting button */}
-        {isLoggedIn && (
-          <div
-            className={css({
-              marginTop: '2rem',
-            })}
-          >
-            <DialogTrigger>
-              <Button variant="secondary">{t('joinMeeting')}</Button>
-              <JoinMeetingDialog />
-            </DialogTrigger>
-          </div>
-        )}
+        <div
+          className={css({
+            marginTop: '2rem',
+          })}
+        >
+          <DialogTrigger>
+            <Button variant="secondary">Присоединиться к звонку</Button>
+            <JoinMeetingDialog />
+          </DialogTrigger>
+        </div>
       </div>
     </Screen>
   )

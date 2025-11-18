@@ -56,9 +56,9 @@ export const buttonRecipe = cva({
       },
       secondary: {
         backgroundColor: 'white',
-        color: 'primary.800',
+        color: '#0e0b10',
         fontWeight: 'medium !important',
-        borderColor: 'primary.800',
+        borderColor: '#0e0b10',
         '&[data-hovered]': {
           backgroundColor: 'greyscale.100',
         },
