@@ -1,7 +1,6 @@
-import { Link } from 'wouter'
 import { css } from '@/styled-system/css'
 import { HStack, Stack } from '@/styled-system/jsx'
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { Button, Text } from '@/primitives'
 import { SettingsButton } from '@/features/settings'
 import { useUser } from '@/features/auth'
@@ -13,42 +12,8 @@ import { LoginButton } from '@/components/LoginButton'
 
 import { useLoginHint } from '@/hooks/useLoginHint'
 
-const BetaBadge = () => (
-  <span
-    className={css({
-      content: '"Beta"',
-      display: 'block',
-      letterSpacing: '-0.02rem',
-      padding: '0 0.25rem',
-      backgroundColor: '#E8EDFF',
-      color: '#0063CB',
-      fontSize: '12px',
-      fontWeight: 500,
-      margin: '0 0 0.9375rem 0.3125rem',
-      lineHeight: '1rem',
-      borderRadius: '4px',
-      width: 'fit-content',
-      height: 'fit-content',
-      marginTop: { base: '10px', sm: '5px' },
-    })}
-  >
-    Beta
-  </span>
-)
-
-const Logo = () => (
-  <img
-    src="/assets/logo.svg"
-    alt={`${import.meta.env.VITE_APP_TITLE}`}
-    className={`Header-logo ${css({
-      maxHeight: { base: '30px', sm: '40px' },
-      marginTop: { base: '10px', sm: '5px' },
-    })}`}
-  />
-)
-
 const LoginHint = () => {
-  const { t } = useTranslation()
+  // const { t } = useTranslation()
   const { isVisible, closeLoginHint } = useLoginHint()
   if (!isVisible) return null
   return (
@@ -86,32 +51,32 @@ const LoginHint = () => {
       })}
     >
       <Text variant="h3" margin={false} bold>
-        {t('loginHint.title')}
+        Подсказка для входа
       </Text>
       <Text variant="paragraph" margin={false}>
-        {t('loginHint.body')}
+        Войдите, чтобы получить доступ ко всем функциям
       </Text>
       <Button
-        aria-label={t('loginHint.button.ariaLabel')}
+        aria-label="Закрыть подсказку"
         size="sm"
         className={css({
           marginLeft: 'auto',
         })}
         onPress={() => closeLoginHint()}
       >
-        {t('loginHint.button.label')}
+        Понятно
       </Button>
     </div>
   )
 }
 
 export const Header = () => {
-  const { t } = useTranslation()
+  // const { t } = useTranslation()
   const isHome = useMatchesRoute('home')
   const isLegalTerms = useMatchesRoute('legalTerms')
   const isAccessibility = useMatchesRoute('accessibility')
   const isTermsOfService = useMatchesRoute('termsOfService')
-  const isRoom = useMatchesRoute('room')
+  // const isRoom = useMatchesRoute('room')
   const { user, isLoggedIn, logout } = useUser()
 
   return (
@@ -179,9 +144,16 @@ export const Header = () => {
                 <Menu>
                   <Button
                     size="sm"
-                    variant="secondaryText"
-                    tooltip={t('loggedInUserTooltip')}
+                    variant="primaryTextDark"
+                    tooltip="Вы вошли как"
                     tooltipType="delayed"
+                    className={css({
+                      borderRadius: '8px',
+                      _hover: {
+                        backgroundColor: '#0e0b10',
+                        color: 'white',
+                      },
+                    })}
                   >
                     <span
                       className={css({
@@ -197,7 +169,7 @@ export const Header = () => {
                   </Button>
                   <MenuList
                     variant={'light'}
-                    items={[{ value: 'logout', label: t('logout') }]}
+                    items={[{ value: 'logout', label: 'Выйти' }]}
                     onAction={(value) => {
                       if (value === 'logout') {
                         logout()

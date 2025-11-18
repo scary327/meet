@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { usePreviewTracks } from '@livekit/components-react'
 import { css } from '@/styled-system/css'
 import { Screen } from '@/layout/Screen'
@@ -46,7 +45,6 @@ const Effects = ({
   videoTrack,
   onSubmit,
 }: Pick<EffectsConfigurationProps, 'videoTrack' | 'onSubmit'>) => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'join.effects' })
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const openDialog = () => setIsDialogOpen(true)
 
@@ -71,7 +69,7 @@ const Effects = ({
             marginBottom: '0.25rem',
           })}
         >
-          {t('title')}
+          Эффекты
         </Heading>
         <Text
           variant="subTitle"
@@ -79,15 +77,15 @@ const Effects = ({
             marginBottom: '1.5rem',
           })}
         >
-          {t('subTitle')}
+          Настройте эффекты вашей камеры.
         </Text>
         <EffectsConfiguration videoTrack={videoTrack} onSubmit={onSubmit} />
       </Dialog>
       <Button
         variant="whiteCircle"
         onPress={openDialog}
-        tooltip={t('description')}
-        aria-label={t('description')}
+        tooltip="Применить эффекты"
+        aria-label="Применить эффекты"
       >
         <RiImageCircleAiFill size={24} />
       </Button>
@@ -102,8 +100,6 @@ export const Join = ({
   enterRoom: () => void
   roomId: string
 }) => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'join' })
-
   const {
     userChoices: {
       audioEnabled,
@@ -354,14 +350,14 @@ export const Join = ({
   const hintMessage = useMemo(() => {
     if (isCameraDeniedOrPrompted) {
       return isMicrophoneDeniedOrPrompted
-        ? 'cameraAndMicNotGranted'
-        : 'cameraNotGranted'
+        ? 'Хотите, чтобы другие видели и слышали вас во время встречи?'
+        : 'Хотите, чтобы другие видели вас во время встречи?'
     }
     if (!videoEnabled) {
-      return 'cameraDisabled'
+      return 'Камера отключена.'
     }
     if (!isVideoInitiated.current) {
-      return 'cameraStarting'
+      return 'Камера запускается...'
     }
     if (videoTrack && videoEnabled) {
       return ''
@@ -378,10 +374,10 @@ export const Join = ({
       return null
     }
     if (isCameraDeniedOrPrompted && isMicrophoneDeniedOrPrompted) {
-      return 'cameraAndMicNotGranted'
+      return 'Разрешить доступ к камере и микрофону'
     }
     if (isCameraDeniedOrPrompted && !isMicrophoneDeniedOrPrompted) {
-      return 'cameraNotGranted'
+      return 'Разрешить доступ к камере'
     }
     return null
   }, [isMicrophoneDeniedOrPrompted, isCameraDeniedOrPrompted])
@@ -392,10 +388,10 @@ export const Join = ({
         return (
           <VStack alignItems="center" textAlign="center">
             <H lvl={1} margin={false} centered>
-              {t('timeoutInvite.title')}
+              Вы не можете присоединиться к этому звонку
             </H>
             <Text as="p" variant="note">
-              {t('timeoutInvite.body')}
+              Никто не ответил на ваш запрос
             </Text>
           </VStack>
         )
@@ -404,10 +400,10 @@ export const Join = ({
         return (
           <VStack alignItems="center" textAlign="center">
             <H lvl={1} margin={false} centered>
-              {t('denied.title')}
+              Вы не можете присоединиться к этому звонку
             </H>
             <Text as="p" variant="note">
-              {t('denied.body')}
+              Ваш запрос на присоединение был отклонен.
             </Text>
           </VStack>
         )
@@ -416,14 +412,15 @@ export const Join = ({
         return (
           <VStack alignItems="center" textAlign="center">
             <H lvl={1} margin={false} centered>
-              {t('waiting.title')}
+              Отправка запроса на присоединение...
             </H>
             <Text
               as="p"
               variant="note"
               className={css({ marginBottom: '1.5rem' })}
             >
-              {t('waiting.body')}
+              Вы сможете присоединиться к этому звонку, как только кто-то вас
+              авторизует
             </Text>
             <Spinner />
           </VStack>
@@ -433,7 +430,7 @@ export const Join = ({
         return (
           <Form
             onSubmit={handleSubmit}
-            submitLabel={t('joinLabel')}
+            submitLabel="Присоединиться"
             submitButtonProps={{
               fullWidth: true,
               className: css({
@@ -449,15 +446,15 @@ export const Join = ({
           >
             <VStack marginBottom={1}>
               <H lvl={1} margin="sm" centered>
-                {t('heading')}
+                Присоединиться к встрече?
               </H>
               <Field
                 type="text"
                 onChange={saveUsername}
-                label={t('usernameLabel')}
-                aria-label={t('usernameLabel')}
+                label="Ваше имя"
+                aria-label="Ваше имя"
                 defaultValue={username}
-                validate={(value) => !value && t('errors.usernameEmpty')}
+                validate={(value) => !value && 'Ваше имя не может быть пустым'}
                 wrapperProps={{
                   noMargin: true,
                   fullWidth: true,
@@ -509,9 +506,11 @@ export const Join = ({
           >
             {/* Video element */}
             <div
-              aria-label={t(
-                `videoPreview.${videoEnabled ? 'enabled' : 'disabled'}`
-              )}
+              aria-label={
+                videoEnabled
+                  ? 'Предпросмотр видео включен'
+                  : 'Предпросмотр видео отключен'
+              }
               role="status"
               className={css({
                 position: 'absolute',
@@ -571,7 +570,7 @@ export const Join = ({
                   color: 'white',
                 })}
               >
-                {hintMessage && t(hintMessage)}
+                {hintMessage}
               </p>
               {isCameraDeniedOrPrompted && (
                 <Button
@@ -579,7 +578,7 @@ export const Join = ({
                   variant="tertiary"
                   onPress={() => openPermissionsDialog('videoinput')}
                 >
-                  {t(`permissionsButton.${permissionsButtonLabel}`)}
+                  {permissionsButtonLabel}
                 </Button>
               )}
             </div>

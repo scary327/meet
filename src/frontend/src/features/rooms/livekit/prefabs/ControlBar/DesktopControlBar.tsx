@@ -26,7 +26,7 @@ export function DesktopControlBar({
         width: '100vw',
         display: 'flex',
         position: 'absolute',
-        padding: '1.125rem',
+        padding: '0.75rem',
         bottom: 0,
         left: 0,
         right: 0,

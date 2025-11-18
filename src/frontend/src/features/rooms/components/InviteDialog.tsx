@@ -68,7 +68,7 @@ export const InviteDialog = (props: Omit<DialogProps, 'title'>) => {
           style={{ maxWidth: '100%', overflow: 'hidden' }}
         >
           <Heading slot="title" level={3} className={text({ variant: 'h2' })}>
-            {t('heading')}
+            Ваш звонок готов
           </Heading>
           <Div position="absolute" top="5" right="5">
             <Button
@@ -79,12 +79,15 @@ export const InviteDialog = (props: Omit<DialogProps, 'title'>) => {
                 props.onClose?.()
                 close()
               }}
-              aria-label={t('closeDialog')}
+              aria-label="Закрыть диалог"
             >
               <RiCloseLine />
             </Button>
           </Div>
-          <P>{t('description')}</P>
+          <P>
+            Поделитесь этой ссылкой с людьми, которых вы хотите пригласить на
+            встречу.
+          </P>
           {isTelephonyReadyForUse ? (
             <div
               className={css({
@@ -112,8 +115,8 @@ export const InviteDialog = (props: Omit<DialogProps, 'title'>) => {
                     square
                     size={'sm'}
                     onPress={copyRoomUrlToClipboard}
-                    aria-label={t('copyUrl')}
-                    tooltip={t('copyUrl')}
+                    aria-label="Скопировать ссылку"
+                    tooltip="Скопировать ссылку"
                   >
                     {isRoomUrlCopied ? <RiCheckLine /> : <RiFileCopyLine />}
                   </Button>
@@ -148,14 +151,14 @@ export const InviteDialog = (props: Omit<DialogProps, 'title'>) => {
                 {isCopied ? (
                   <>
                     <RiCheckLine size={18} style={{ marginRight: '8px' }} />
-                    {t('copied')}
+                    Скопировано
                   </>
                 ) : (
                   <>
                     <RiFileCopyLine
                       style={{ marginRight: '6px', minWidth: '18px' }}
                     />
-                    {t('copy')}
+                    Скопировать ссылку
                   </>
                 )}
               </Button>
@@ -171,12 +174,12 @@ export const InviteDialog = (props: Omit<DialogProps, 'title'>) => {
               {isCopied ? (
                 <>
                   <RiCheckLine size={24} style={{ marginRight: '8px' }} />
-                  {t('copied')}
+                  Скопировано
                 </>
               ) : (
                 <>
                   <RiFileCopyLine size={24} style={{ marginRight: '8px' }} />
-                  {t('copyUrl')}
+                  Скопировать ссылку
                 </>
               )}
             </Button>
@@ -199,7 +202,8 @@ export const InviteDialog = (props: Omit<DialogProps, 'title'>) => {
                 />
               </div>
               <Text variant="sm" style={{ marginTop: '1rem' }}>
-                {t('permissions')}
+                Людям, у которых есть эта ссылка, не требуется ваше разрешение
+                для присоединения к этой встрече.
               </Text>
             </HStack>
           )}

@@ -1,12 +1,12 @@
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { Field, Ul, H, P, Form, Dialog } from '@/primitives'
 import { navigateTo } from '@/navigation/navigateTo'
 import { isRoomValid } from '@/features/rooms'
 
 export const JoinMeetingDialog = () => {
-  const { t } = useTranslation('home')
+  // const { t } = useTranslation('home')
   return (
-    <Dialog title={t('joinMeeting')}>
+    <Dialog title="Присоединиться к встрече">
       <Form
         onSubmit={(data) => {
           navigateTo(
@@ -16,19 +16,17 @@ export const JoinMeetingDialog = () => {
               .replace(`${window.location.origin}/`, '')
           )
         }}
-        submitLabel={t('joinInputSubmit')}
+        submitLabel="Присоединиться к встрече"
       >
         <Field
           type="text"
           name="roomId"
-          label={t('joinInputLabel')}
-          description={t('joinInputExample', {
-            example: window.origin + '/azer-tyu-qsdf',
-          })}
+          label="Ссылка на встречу"
+          description={`URL или 10-буквенный код`}
           validate={(value) => {
             return !isRoomValid(value.trim()) ? (
               <>
-                <p>{t('joinInputError')}</p>
+                <p>Используйте ссылку или код встречи. Примеры:</p>
                 <Ul>
                   <li>{window.location.origin}/uio-azer-jkl</li>
                   <li>uio-azer-jkl</li>
@@ -38,8 +36,11 @@ export const JoinMeetingDialog = () => {
           }}
         />
       </Form>
-      <H lvl={2}>{t('joinMeetingTipHeading')}</H>
-      <P last>{t('joinMeetingTipContent')}</P>
+      <H lvl={2}>Знаете ли вы?</H>
+      <P last>
+        Вы можете присоединиться к встрече, вставив полную ссылку в адресную
+        строку браузера.
+      </P>
     </Dialog>
   )
 }
