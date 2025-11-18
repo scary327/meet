@@ -210,23 +210,32 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
                   display: 'flex',
                   position: 'relative',
                   width: '100%',
+                  backgroundColor: '#0e0b10',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
                 }}
               >
                 {!focusTrack ? (
                   <div
                     className="lk-grid-layout-wrapper"
-                    style={{ height: 'auto' }}
+                    style={{
+                      height: 'auto',
+                      backgroundColor: '#0e0b10',
+                    }}
                   >
-                    <GridLayout tracks={tracks} style={{ padding: 0 }}>
+                    <GridLayout tracks={tracks} style={{ padding: '1.5rem' }}>
                       <ParticipantTile />
                     </GridLayout>
                   </div>
                 ) : (
                   <div
                     className="lk-focus-layout-wrapper"
-                    style={{ height: 'auto' }}
+                    style={{
+                      height: 'auto',
+                      backgroundColor: '#0e0b10',
+                    }}
                   >
-                    <FocusLayoutContainer style={{ padding: 0 }}>
+                    <FocusLayoutContainer style={{ padding: '1.5rem' }}>
                       <CarouselLayout
                         tracks={carouselTracks}
                         style={{

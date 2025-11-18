@@ -281,6 +281,30 @@ export const buttonRecipe = cva({
           border: '1px solid #0e0b10',
         },
       },
+      participantTileButton: {
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        fontWeight: 'medium !important',
+        color: '#ffffff',
+        border: '1px solid transparent',
+        borderRadius: '8px',
+        padding: '0.5rem',
+        position: 'relative',
+        '&[data-hovered]': {
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          color: '#0e0b10',
+          border: '1px solid #ffffff',
+        },
+        '&[data-pressed]': {
+          backgroundColor: '#ffffff',
+          color: '#0e0b10',
+          border: '1px solid #ffffff',
+        },
+        '&[data-disabled]': {
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          color: 'rgba(255, 255, 255, 0.5)',
+          opacity: '0.5',
+        },
+      },
       quaternaryText: {
         backgroundColor: 'transparent',
         fontWeight: 'medium !important',

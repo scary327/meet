@@ -118,6 +118,13 @@ export const ParticipantTile: (
                   trackRef={trackReference}
                   onSubscriptionStatusChanged={handleSubscribe}
                   manageSubscription={autoManageSubscription}
+                  style={{
+                    transform:
+                      trackReference.participant.isLocal &&
+                      trackReference.source === Track.Source.Camera
+                        ? 'scaleX(-1)'
+                        : undefined,
+                  }}
                 />
               ) : (
                 isTrackReference(trackReference) && (

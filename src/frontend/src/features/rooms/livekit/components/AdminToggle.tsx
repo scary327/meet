@@ -7,7 +7,7 @@ import { useIsAdminOrOwner } from '../hooks/useIsAdminOrOwner'
 import { useSidePanel } from '../hooks/useSidePanel'
 
 export const AdminToggle = ({
-  variant = 'primaryTextDark',
+  variant = 'sidePanelButton',
   onPress,
   ...props
 }: ToggleButtonProps) => {

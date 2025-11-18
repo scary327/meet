@@ -40,7 +40,7 @@ const ZoomButton = ({
   return (
     <Button
       size="sm"
-      variant="primaryTextDark"
+      variant="participantTileButton"
       square
       tooltip={t('fullScreen')}
       onPress={() => toggleFullScreen()}
@@ -63,7 +63,7 @@ const FocusButton = ({
   return (
     <Button
       size="sm"
-      variant="primaryTextDark"
+      variant="participantTileButton"
       square
       tooltip={inFocus ? t('pin.disable') : t('pin.enable')}
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -80,7 +80,7 @@ const EffectsButton = () => {
   return (
     <Button
       size={'sm'}
-      variant={'primaryTextDark'}
+      variant={'participantTileButton'}
       square
       tooltip={t('effects')}
       onPress={() => !isEffectsOpen && toggleEffects()}
@@ -108,7 +108,7 @@ const MuteButton = ({ participant }: { participant: Participant }) => {
       <Button
         isDisabled={isMuted}
         size={'sm'}
-        variant={'primaryTextDark'}
+        variant={'participantTileButton'}
         square
         onPress={() => setIsAlertOpen(true)}
         tooltip={t('muteParticipant', { name })}
@@ -187,10 +187,10 @@ export const ParticipantTileFocus = ({
       {hovered && (
         <div
           className={css({
-            backgroundColor: 'primaryDark.50',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
             transition: 'opacity 200ms linear',
             zIndex: 1,
-            borderRadius: '0.25rem',
+            borderRadius: '0.5rem',
             display: 'flex',
             _hover: {
               opacity: '0.95 !important',
