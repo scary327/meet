@@ -164,10 +164,6 @@ export const buttonRecipe = cva({
         color: '#0e0b10',
         border: '1px solid #0e0b10',
         borderRadius: '50%',
-        width: '56px',
-        height: '56px',
-        minWidth: '56px',
-        minHeight: '56px',
         padding: '0',
         position: 'relative',
         '&[data-hovered]': {
@@ -201,10 +197,6 @@ export const buttonRecipe = cva({
         color: '#0e0b10',
         border: '1px solid #0e0b10',
         borderRadius: '50%',
-        width: '56px',
-        height: '56px',
-        minWidth: '56px',
-        minHeight: '56px',
         padding: '0',
         position: 'relative',
         '&[data-hovered]': {
@@ -232,10 +224,6 @@ export const buttonRecipe = cva({
         fontWeight: 'medium !important',
         color: '#0e0b10',
         borderRadius: '50%',
-        width: '56px',
-        height: '56px',
-        minWidth: '56px',
-        minHeight: '56px',
         padding: '0',
         position: 'relative',
         '&[data-hovered]': {
@@ -477,7 +465,38 @@ export const buttonRecipe = cva({
       },
     },
   },
-  compoundVariants: [],
+  compoundVariants: [
+    {
+      variant: 'primaryDark',
+      size: 'default',
+      css: {
+        width: '56px',
+        height: '56px',
+        minWidth: '56px',
+        minHeight: '56px',
+      },
+    },
+    {
+      variant: 'secondaryDark',
+      size: 'default',
+      css: {
+        width: '56px',
+        height: '56px',
+        minWidth: '56px',
+        minHeight: '56px',
+      },
+    },
+    {
+      variant: 'primaryTextDark',
+      size: 'default',
+      css: {
+        width: '56px',
+        height: '56px',
+        minWidth: '56px',
+        minHeight: '56px',
+      },
+    },
+  ],
   defaultVariants: {
     size: 'default',
     variant: 'primary',

@@ -18,7 +18,7 @@ export const ParticipantMenuButton = ({
       <Button
         square
         variant="primaryDark"
-        size="sm"
+        size="xs"
         aria-label={t('moreOptions')}
         tooltip={t('moreOptions')}
       >

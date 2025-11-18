@@ -50,7 +50,7 @@ const MicIndicator = ({ participant }: MicIndicatorProps) => {
       <Button
         square
         variant="greyscale"
-        size="sm"
+        size="xs"
         tooltip={label}
         aria-label={label}
         isDisabled={isMuted || !canMute}
