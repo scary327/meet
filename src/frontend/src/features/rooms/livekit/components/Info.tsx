@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { useMemo } from 'react'
 import { VStack } from '@/styled-system/jsx'
 import { css } from '@/styled-system/css'
@@ -11,7 +11,7 @@ import { useTelephony } from '../hooks/useTelephony'
 import { useCopyRoomToClipboard } from '../hooks/useCopyRoomToClipboard'
 
 export const Info = () => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'info' })
+  // const { t } = useTranslation('rooms', { keyPrefix: 'info' })
 
   const data = useRoomData()
   const roomUrl = getRouteUrl('room', data?.slug)
@@ -41,7 +41,7 @@ export const Info = () => {
             alignItems: 'center',
           })}
         >
-          {t('roomInformation.title')}
+          Информация о подключении
         </Text>
         <div
           className={css({
@@ -56,12 +56,11 @@ export const Info = () => {
           {isTelephonyReadyForUse && (
             <>
               <Text as="p" variant="xsNote" wrap="pretty">
-                <Bold>{t('roomInformation.phone.call')}</Bold> (
-                {telephony?.country}) {telephony?.internationalPhoneNumber}
+                <Bold>Звонить:</Bold> ({telephony?.country}){' '}
+                {telephony?.internationalPhoneNumber}
               </Text>
               <Text as="p" variant="xsNote" wrap="pretty">
-                <Bold>{t('roomInformation.phone.pinCode')}</Bold>{' '}
-                {formatPinCode(data?.pin_code)}
+                <Bold>Код:</Bold> {formatPinCode(data?.pin_code)}
               </Text>
             </>
           )}
@@ -69,7 +68,7 @@ export const Info = () => {
         <Button
           size="sm"
           variant={isCopied ? 'success' : 'tertiaryText'}
-          aria-label={t('roomInformation.button.ariaLabel')}
+          aria-label="Скопировать информацию из вашей встречи"
           onPress={copyRoomToClipboard}
           data-attr="copy-info-sidepannel"
           style={{
@@ -79,12 +78,12 @@ export const Info = () => {
           {isCopied ? (
             <>
               <RiCheckLine size={24} style={{ marginRight: '6px' }} />
-              {t('roomInformation.button.copied')}
+              Информация скопирована
             </>
           ) : (
             <>
               <RiFileCopyLine size={24} style={{ marginRight: '6px' }} />
-              {t('roomInformation.button.copy')}
+              Скопировать информацию
             </>
           )}
         </Button>

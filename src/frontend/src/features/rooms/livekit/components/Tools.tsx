@@ -1,7 +1,7 @@
 import { A, Div, Text } from '@/primitives'
 import { css } from '@/styled-system/css'
 import { Button as RACButton } from 'react-aria-components'
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { ReactNode } from 'react'
 import { RiFileTextFill, RiLiveFill } from '@remixicon/react'
 import { SubPanelId, useSidePanel } from '../hooks/useSidePanel'
@@ -116,7 +116,7 @@ export const Tools = () => {
   const { data } = useConfig()
   const { openTranscript, openScreenRecording, activeSubPanelId } =
     useSidePanel()
-  const { t } = useTranslation('rooms', { keyPrefix: 'moreTools' })
+  // const { t } = useTranslation('rooms', { keyPrefix: 'moreTools' })
 
   const isTranscriptEnabled = useIsRecordingModeEnabled(
     RecordingMode.Transcript
@@ -160,11 +160,12 @@ export const Tools = () => {
         })}
         margin="md"
       >
-        {t('body')}{' '}
+        Получите доступ к большему количеству инструментов для улучшения ваших
+        встреч.{' '}
         {data?.support?.help_article_more_tools && (
           <>
             <A href={data?.support?.help_article_more_tools} target="_blank">
-              {t('moreLink')}
+              Узнайте больше
             </A>
             .
           </>
@@ -173,8 +174,8 @@ export const Tools = () => {
       {isTranscriptEnabled && (
         <ToolButton
           icon={<RiFileTextFill size={24} color="white" />}
-          title={t('tools.transcript.title')}
-          description={t('tools.transcript.body')}
+          title="Транскрипция"
+          description="Ведите письменный отчет о вашей встрече."
           onPress={() => openTranscript()}
           isBetaFeature
           isActive={isTranscriptActive}
@@ -183,8 +184,8 @@ export const Tools = () => {
       {hasScreenRecordingAccess && (
         <ToolButton
           icon={<RiLiveFill size={24} color="white" />}
-          title={t('tools.screenRecording.title')}
-          description={t('tools.screenRecording.body')}
+          title="Запись"
+          description="Запишите свою встречу, чтобы смотреть ее когда угодно."
           onPress={() => openScreenRecording()}
           isBetaFeature
           isActive={isScreenRecordingActive}

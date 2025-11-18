@@ -6,7 +6,7 @@ import {
   useParticipants,
   useRoomContext,
 } from '@livekit/components-react'
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { useSnapshot } from 'valtio'
 import { chatStore } from '@/stores/chat'
 import { Div, Text } from '@/primitives'
@@ -25,7 +25,7 @@ export interface ChatProps
  * in the room. Only users who are in the room at the time of dispatch will receive the message.
  */
 export function Chat({ ...props }: ChatProps) {
-  const { t } = useTranslation('rooms', { keyPrefix: 'chat' })
+  // const { t } = useTranslation('rooms', { keyPrefix: 'chat' })
 
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
   const ulRef = React.useRef<HTMLUListElement>(null)
@@ -130,7 +130,8 @@ export function Chat({ ...props }: ChatProps) {
           marginBottom: '0.75rem',
         })}
       >
-        {t('disclaimer')}
+        Сообщения видны участникам только в момент их отправки. Все сообщения
+        удаляются в конце звонка.
       </Text>
       <Div
         flexGrow={1}

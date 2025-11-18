@@ -1,7 +1,7 @@
 import { Div, Field, H, Text } from '@/primitives'
 import { css } from '@/styled-system/css'
 import { Separator as RACSeparator } from 'react-aria-components'
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { usePatchRoom } from '@/features/rooms/api/patchRoom'
 import { fetchRoom } from '@/features/rooms/api/fetchRoom'
 import { ApiAccessLevel } from '@/features/rooms/api/ApiRoom'
@@ -12,7 +12,7 @@ import { useParams } from 'wouter'
 import { usePublishSourcesManager } from '@/features/rooms/livekit/hooks/usePublishSourcesManager'
 
 export const Admin = () => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'admin' })
+  // const { t } = useTranslation('rooms', { keyPrefix: 'admin' })
 
   const { roomId } = useParams()
 
@@ -55,7 +55,8 @@ export const Admin = () => {
         })}
         margin={'md'}
       >
-        {t('description')}
+        Эти настройки организатора позволяют вам контролировать встречу. Только
+        организаторы имеют доступ к этим элементам управления.
       </Text>
       <div
         className={css({
@@ -78,7 +79,7 @@ export const Admin = () => {
           })}
           margin="sm"
         >
-          {t('moderation.title')}
+          Модерирование встречи
         </H>
         <Text
           variant="note"
@@ -88,7 +89,7 @@ export const Admin = () => {
           })}
           margin={'md'}
         >
-          {t('moderation.description')}
+          Эти параметры ограничивают действия участников во время встречи.
         </Text>
         <div
           className={css({
@@ -99,8 +100,8 @@ export const Admin = () => {
         >
           <Field
             type="switch"
-            label={t('moderation.microphone.label')}
-            description={t('moderation.microphone.description')}
+            label="Включить микрофон"
+            description=""
             isSelected={isMicrophoneEnabled}
             onChange={toggleMicrophone}
             wrapperProps={{
@@ -110,8 +111,8 @@ export const Admin = () => {
           />
           <Field
             type="switch"
-            label={t('moderation.camera.label')}
-            description={t('moderation.camera.description')}
+            label="Включить видео"
+            description=""
             isSelected={isCameraEnabled}
             onChange={toggleCamera}
             wrapperProps={{
@@ -121,8 +122,8 @@ export const Admin = () => {
           />
           <Field
             type="switch"
-            label={t('moderation.screenshare.label')}
-            description={t('moderation.screenshare.description')}
+            label="Поделиться экраном"
+            description="Отключение этой опции помешает участникам делиться экраном, и любой текущий скриншер будет остановлен немедленно."
             isSelected={isScreenShareEnabled}
             onChange={toggleScreenShare}
             wrapperProps={{
@@ -154,7 +155,7 @@ export const Admin = () => {
           })}
           margin="sm"
         >
-          {t('access.title')}
+          Доступ к комнате
         </H>
         <Text
           variant="note"
@@ -164,12 +165,12 @@ export const Admin = () => {
           })}
           margin={'md'}
         >
-          {t('access.description')}
+          Эти параметры также будут применяться к будущим событиям этой встречи.
         </Text>
         <Field
           type="radioGroup"
-          label={t('access.type')}
-          aria-label={t('access.type')}
+          label="Типы доступа к встрече"
+          aria-label="Типы доступа к встрече"
           labelProps={{
             className: css({
               fontSize: '1rem',
@@ -190,18 +191,21 @@ export const Admin = () => {
           items={[
             {
               value: ApiAccessLevel.PUBLIC,
-              label: t('access.levels.public.label'),
-              description: t('access.levels.public.description'),
+              label: 'Открытая',
+              description:
+                'Никому не нужно запрашивать присоединение к встрече.',
             },
             {
               value: ApiAccessLevel.TRUSTED,
-              label: t('access.levels.trusted.label'),
-              description: t('access.levels.trusted.description'),
+              label: 'Открыто для доверенных лиц',
+              description:
+                'Аутентифицированные люди не должны запрашивать присоединение к встрече.',
             },
             {
               value: ApiAccessLevel.RESTRICTED,
-              label: t('access.levels.restricted.label'),
-              description: t('access.levels.restricted.description'),
+              label: 'Ограниченная',
+              description:
+                'Люди, которые не были приглашены на встречу, должны запросить присоединение.',
             },
           ]}
         />

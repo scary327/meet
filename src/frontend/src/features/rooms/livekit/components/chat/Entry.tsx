@@ -10,6 +10,11 @@ export interface ChatEntryProps extends React.HTMLAttributes<HTMLLIElement> {
   messageFormatter?: MessageFormatter
 }
 
+const MESSAGE_COLORS = {
+  MY: '#EFF9FF',
+  OTHER: '#F3EFFF',
+}
+
 export const ChatEntry: (
   props: ChatEntryProps & React.RefAttributes<HTMLLIElement>
 ) => React.ReactNode = /* @__PURE__ */ React.forwardRef<
@@ -23,7 +28,7 @@ export const ChatEntry: (
     return messageFormatter ? messageFormatter(entry.message) : entry.message
   }, [entry.message, messageFormatter])
   const time = new Date(entry.timestamp)
-  const locale = navigator ? navigator.language : 'en-US'
+  const locale = navigator ? navigator.language : 'ru-RU'
 
   return (
     <li
@@ -31,7 +36,17 @@ export const ChatEntry: (
         display: 'flex',
         flexDirection: 'column',
         gap: '0.25rem',
+        padding: '0.75rem',
+        borderRadius: '2px 12px 12px 12px',
+        maxWidth: '80%',
+        marginTop: '0.75rem',
+        marginLeft: entry.from?.isLocal ? 'auto' : undefined,
       })}
+      style={{
+        backgroundColor: entry.from?.isLocal
+          ? MESSAGE_COLORS.MY
+          : MESSAGE_COLORS.OTHER,
+      }}
       ref={ref}
       title={time.toLocaleTimeString(locale, { timeStyle: 'full' })}
       data-lk-message-origin={entry.from?.isLocal ? 'local' : 'remote'}
@@ -42,7 +57,6 @@ export const ChatEntry: (
           className={css({
             display: 'flex',
             gap: '0.5rem',
-            paddingTop: '0.75rem',
           })}
         >
           <Text bold={true} variant="sm">

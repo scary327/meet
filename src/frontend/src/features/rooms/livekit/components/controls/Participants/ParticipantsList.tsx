@@ -2,7 +2,7 @@ import { css } from '@/styled-system/css'
 import { useParticipants } from '@livekit/components-react'
 
 import { Div, H } from '@/primitives'
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { ParticipantListItem } from '../../controls/Participants/ParticipantListItem'
 import { ParticipantsCollapsableList } from '../../controls/Participants/ParticipantsCollapsableList'
 import { HandRaisedListItem } from '../../controls/Participants/HandRaisedListItem'
@@ -15,7 +15,7 @@ import { MuteEveryoneButton } from './MuteEveryoneButton'
 
 // TODO: Optimize rendering performance, especially for longer participant lists, even though they are generally short.
 export const ParticipantsList = () => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'participants' })
+  // const { t } = useTranslation('rooms', { keyPrefix: 'participants' })
 
   // Preferred using the 'useParticipants' hook rather than the separate remote and local hooks,
   // because the 'useLocalParticipant' hook does not update the participant's information when their
@@ -61,12 +61,12 @@ export const ParticipantsList = () => {
           marginBottom: '0.83em',
         })}
       >
-        {t('subheading').toUpperCase()}
+        В КОМНАТЕ
       </H>
       {waitingParticipants?.length > 0 && (
         <Div marginBottom=".9375rem">
           <ParticipantsCollapsableList<WaitingParticipant>
-            heading={t('waiting.title')}
+            heading="Лобби"
             participants={waitingParticipants}
             renderParticipant={(participant) => (
               <WaitingParticipantListItem
@@ -82,7 +82,7 @@ export const ParticipantsList = () => {
       {raisedHandParticipants.length > 0 && (
         <Div marginBottom=".9375rem">
           <ParticipantsCollapsableList<Participant>
-            heading={t('raisedHands')}
+            heading="Поднятые руки"
             participants={raisedHandParticipants}
             renderParticipant={(participant) => (
               <HandRaisedListItem
@@ -97,7 +97,7 @@ export const ParticipantsList = () => {
         </Div>
       )}
       <ParticipantsCollapsableList<Participant>
-        heading={t('contributors')}
+        heading="Участники"
         participants={sortedParticipants}
         renderParticipant={(participant) => (
           <ParticipantListItem

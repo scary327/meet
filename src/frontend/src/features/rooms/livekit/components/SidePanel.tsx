@@ -4,7 +4,7 @@ import { Heading } from 'react-aria-components'
 import { text } from '@/primitives/Text'
 import { Button, Div } from '@/primitives'
 import { RiArrowLeftLine, RiCloseLine } from '@remixicon/react'
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { ParticipantsList } from './controls/Participants/ParticipantsList'
 import { useSidePanel } from '../hooks/useSidePanel'
 import { ReactNode } from 'react'
@@ -13,6 +13,28 @@ import { Effects } from './effects/Effects'
 import { Admin } from './Admin'
 import { Tools } from './Tools'
 import { Info } from './Info'
+
+const panelTitles: Record<string, string> = {
+  participants: 'Участники',
+  effects: 'Эффекты',
+  chat: 'Сообщения',
+  transcript: 'Транскрипция',
+  screenRecording: 'Запись',
+  admin: 'Настройки администратора',
+  tools: 'Больше инструментов',
+  info: 'Информация о встрече',
+}
+
+const panelContent: Record<string, string> = {
+  participants: 'участников',
+  effects: 'эффектов',
+  chat: 'сообщений',
+  transcript: 'транскрипции',
+  screenRecording: 'записи',
+  admin: 'настроек администратора',
+  tools: 'инструментов',
+  info: 'информации о встрече',
+}
 
 type StyledSidePanelProps = {
   title: string
@@ -139,18 +161,20 @@ export const SidePanel = () => {
     isSubPanelOpen,
     activeSubPanelId,
   } = useSidePanel()
-  const { t } = useTranslation('rooms', { keyPrefix: 'sidePanel' })
+  // const { t } = useTranslation('rooms', { keyPrefix: 'sidePanel' })
+
+  const currentPanelId = activeSubPanelId || activePanelId || ''
+  const title = panelTitles[currentPanelId] || ''
+  const content = panelContent[currentPanelId] || ''
 
   return (
     <StyledSidePanel
-      title={t(`heading.${activeSubPanelId || activePanelId}`)}
+      title={title}
       onClose={() => {
         layoutStore.activePanelId = null
         layoutStore.activeSubPanelId = null
       }}
-      closeButtonTooltip={t('closeButton', {
-        content: t(`content.${activeSubPanelId || activePanelId}`),
-      })}
+      closeButtonTooltip={`Скрыть ${content}`}
       isClosed={!isSidePanelOpen}
       isSubmenu={isSubPanelOpen}
       onBack={() => (layoutStore.activeSubPanelId = null)}

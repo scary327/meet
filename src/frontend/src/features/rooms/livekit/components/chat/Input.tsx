@@ -2,7 +2,7 @@ import { Button, TextArea } from '@/primitives'
 import { HStack } from '@/styled-system/jsx'
 import { RiSendPlane2Fill } from '@remixicon/react'
 import { useState, useEffect, RefObject } from 'react'
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { css } from '@/styled-system/css'
 
 const MAX_ROWS = 6
@@ -18,7 +18,7 @@ export const ChatInput = ({
   onSubmit,
   isSending,
 }: ChatInputProps) => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'controls.chat.input' })
+  // const { t } = useTranslation('rooms', { keyPrefix: 'controls.chat.input' })
   const [text, setText] = useState('')
   const [rows, setRows] = useState(1)
 
@@ -84,7 +84,7 @@ export const ChatInput = ({
           submitOnEnter(e)
         }}
         onKeyUp={(e) => e.stopPropagation()}
-        placeholder={t('textArea.placeholder')}
+        placeholder="Введите сообщение..."
         value={text}
         onChange={(e) => {
           setText(e.target.value)
@@ -102,7 +102,7 @@ export const ChatInput = ({
         placeholderStyle={'strong'}
         spellCheck={false}
         maxLength={2000}
-        aria-label={t('textArea.label')}
+        aria-label="Введите сообщение"
       />
       <Button
         square
@@ -111,7 +111,7 @@ export const ChatInput = ({
         size="sm"
         onPress={handleSubmit}
         isDisabled={isDisabled}
-        aria-label={t('button.label')}
+        aria-label="Отправить сообщение"
       >
         <RiSendPlane2Fill />
       </Button>
