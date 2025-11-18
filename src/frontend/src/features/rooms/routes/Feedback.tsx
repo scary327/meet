@@ -1,9 +1,10 @@
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { Button } from '@/primitives'
 import { Screen } from '@/layout/Screen'
 import { Center, HStack, styled, VStack } from '@/styled-system/jsx'
 import { Rating } from '@/features/rooms/components/Rating.tsx'
 import { useLocation, useSearchParams } from 'wouter'
+import { css } from '@/styled-system/css'
 
 // fixme - duplicated with home, refactor in a proper style
 const Heading = styled('h1', {
@@ -21,26 +22,36 @@ const Heading = styled('h1', {
 })
 
 export const FeedbackRoute = () => {
-  const { t } = useTranslation('rooms')
+  // const { t } = useTranslation('rooms')
   const [, setLocation] = useLocation()
 
   const [searchParams] = useSearchParams()
+
+  const heading = searchParams.get('duplicateIdentity')
+    ? 'Вы присоединились к встрече с другого устройства'
+    : 'Вы покинули встречу'
 
   return (
     <Screen layout="centered" footer={false}>
       <Center>
         <VStack>
-          <Heading>
-            {t(
-              `feedback.heading.${searchParams.get('duplicateIdentity') ? 'duplicateIdentity' : 'normal'}`
-            )}
-          </Heading>
+          <Heading>{heading}</Heading>
           <HStack>
             <Button variant="secondary" onPress={() => window.history.back()}>
-              {t('feedback.back')}
+              Вернуться к встрече
             </Button>
-            <Button variant="primary" onPress={() => setLocation('/')}>
-              {t('feedback.home')}
+            <Button
+              variant="primary"
+              onPress={() => setLocation('/')}
+              className={css({
+                backgroundColor: 'black !important',
+                color: 'white',
+                _hover: {
+                  backgroundColor: '#1a1a1a',
+                },
+              })}
+            >
+              На главную
             </Button>
           </HStack>
           <Rating />

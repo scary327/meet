@@ -40,18 +40,18 @@ export const buttonRecipe = cva({
     },
     variant: {
       primary: {
-        backgroundColor: 'primary.800',
+        backgroundColor: '#0e0b10',
         color: 'white',
         fontWeight: 'medium !important',
         '&[data-hovered]': {
-          backgroundColor: 'primary.action',
+          backgroundColor: '#1a1718',
         },
         '&[data-pressed]': {
-          backgroundColor: 'primary.action',
+          backgroundColor: '#2a2528',
         },
         '&[data-disabled]': {
-          backgroundColor: 'greyscale.100',
-          color: 'greyscale.400',
+          backgroundColor: '#e8e8e8',
+          color: '#999999',
         },
       },
       secondary: {
