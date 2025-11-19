@@ -6,7 +6,7 @@ import { Conference } from '../components/Conference'
 import { Join } from '../components/Join'
 import { Permissions } from '../components/Permissions'
 import { useKeyboardShortcuts } from '@/features/shortcuts/useKeyboardShortcuts'
-// import { Logo } from '@/components/Logo'
+import { Logo } from '@/components/Logo'
 import {
   isRoomValid,
   normalizeRoomId,
@@ -15,7 +15,7 @@ import {
 const BaseRoom = ({ children }: { children: ReactNode }) => {
   return (
     <UserAware>
-      {/* <Logo /> */}
+       <Logo isRoom={true} />
       <Permissions />
       {children}
     </UserAware>

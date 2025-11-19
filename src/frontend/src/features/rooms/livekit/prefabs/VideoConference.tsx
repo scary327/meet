@@ -194,7 +194,6 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
           />
           <IsIdleDisconnectModal />
           <div
-            // todo - extract these magic values into constant
             style={{
               position: 'absolute',
               inset: isSidePanelOpen

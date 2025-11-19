@@ -49,35 +49,42 @@ export function DesktopControlBar({
           alignItems: 'center',
           justifyContent: 'center',
           display: 'flex',
-          gap: '0.25rem',
-          backgroundColor: '#0e0b10',
-          borderRadius: '32px',
-          padding: '0.25rem',
         })}
       >
-        <AudioDevicesControl
-          onDeviceError={(error) =>
-            onDeviceError?.({ source: Track.Source.Microphone, error })
-          }
-        />
-        <VideoDeviceControl
-          onDeviceError={(error) =>
-            onDeviceError?.({ source: Track.Source.Camera, error })
-          }
-        />
-        <ReactionsToggle />
-        {browserSupportsScreenSharing && (
-          <ScreenShareToggle
+        <div
+          className={css({
+            display: 'flex',
+            gap: '0.25rem',
+            backgroundColor: '#0e0b10',
+            borderRadius: '32px',
+            padding: '0.25rem',
+            width: 'fit-content',
+          })}
+        >
+          <AudioDevicesControl
             onDeviceError={(error) =>
-              onDeviceError?.({ source: Track.Source.ScreenShare, error })
+              onDeviceError?.({ source: Track.Source.Microphone, error })
             }
           />
-        )}
-        <SubtitlesToggle />
-        <HandToggle />
-        <OptionsButton />
-        <LeaveButton />
-        <StartMediaButton />
+          <VideoDeviceControl
+            onDeviceError={(error) =>
+              onDeviceError?.({ source: Track.Source.Camera, error })
+            }
+          />
+          <ReactionsToggle />
+          {browserSupportsScreenSharing && (
+            <ScreenShareToggle
+              onDeviceError={(error) =>
+                onDeviceError?.({ source: Track.Source.ScreenShare, error })
+              }
+            />
+          )}
+          <SubtitlesToggle />
+          <HandToggle />
+          <OptionsButton />
+          <LeaveButton />
+          <StartMediaButton />
+        </div>
       </div>
       <MoreOptions parentElement={desktopControlBarEl} />
     </div>
