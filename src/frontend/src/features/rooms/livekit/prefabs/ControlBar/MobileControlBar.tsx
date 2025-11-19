@@ -20,7 +20,6 @@ import { useSidePanel } from '../../hooks/useSidePanel'
 import { LinkButton } from '@/primitives'
 import { ResponsiveMenu } from './ResponsiveMenu'
 import { ToolsToggle } from '../../components/controls/ToolsToggle'
-import { CameraSwitchButton } from '../../components/controls/CameraSwitchButton'
 import { useConfig } from '@/api/useConfig'
 import { AudioDevicesControl } from '../../components/controls/Device/AudioDevicesControl'
 import { VideoDeviceControl } from '../../components/controls/Device/VideoDeviceControl'
@@ -115,21 +114,17 @@ export function MobileControlBar({
                 onDeviceError={(error) =>
                   onDeviceError?.({ source: Track.Source.ScreenShare, error })
                 }
-                variant="primaryTextDark"
-                description={true}
+                variant="sidePanelButton"
                 onPress={() => setIsMenuOpened(false)}
               />
             )}
             <ChatToggle
-              description={true}
               onPress={() => setIsMenuOpened(false)}
             />
             <ParticipantsToggle
-              description={true}
               onPress={() => setIsMenuOpened(false)}
             />
             <ToolsToggle
-              description={true}
               onPress={() => setIsMenuOpened(false)}
             />
             <Button
@@ -137,20 +132,18 @@ export function MobileControlBar({
                 toggleEffects()
                 setIsMenuOpened(false)
               }}
-              variant="primaryTextDark"
+              variant="sidePanelButton"
               aria-label={t('options.items.effects')}
               tooltip={t('options.items.effects')}
-              description={true}
             >
               <RiAccountBoxLine size={20} />
             </Button>
             {data?.feedback?.url && (
               <LinkButton
                 href={data?.feedback?.url}
-                variant="primaryTextDark"
+                variant="sidePanelButton"
                 tooltip={t('options.items.feedback')}
                 aria-label={t('options.items.feedback')}
-                description={true}
                 target="_blank"
                 onPress={() => setIsMenuOpened(false)}
               >
@@ -162,14 +155,12 @@ export function MobileControlBar({
                 openSettingsDialog()
                 setIsMenuOpened(false)
               }}
-              variant="primaryTextDark"
+              variant="sidePanelButton"
               aria-label={t('options.items.settings')}
               tooltip={t('options.items.settings')}
-              description={true}
             >
               <RiSettings3Line size={20} />
             </Button>
-            <CameraSwitchButton onPress={() => setIsMenuOpened(false)} />
           </div>
         </div>
       </ResponsiveMenu>

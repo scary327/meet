@@ -54,80 +54,92 @@ const StyledSidePanel = ({
   closeButtonTooltip,
   isSubmenu = false,
   onBack,
-}: StyledSidePanelProps) => (
-  <div
-    className={css({
-      borderWidth: '1px',
-      borderStyle: 'solid',
-      borderColor: 'box.border',
-      backgroundColor: 'box.bg',
-      color: 'box.text',
-      borderRadius: 8,
-      flex: 1,
-      position: 'absolute',
-      overflow: 'hidden',
-      display: 'flex',
-      flexDirection: 'column',
-      margin: '1.5rem 1.5rem 1.5rem 0',
-      padding: 0,
-      gap: 0,
-      right: 0,
-      top: 0,
-      bottom: '80px',
-      width: '360px',
-      transition: '.5s cubic-bezier(.4,0,.2,1) 5ms',
-    })}
-    style={{
-      transform: isClosed ? 'translateX(calc(360px + 1.5rem))' : 'none',
-    }}
-  >
-    <Heading
-      slot="title"
-      level={1}
-      className={text({ variant: 'h2' })}
+}: StyledSidePanelProps) => {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 560
+
+  return (
+    <div
+      className={css({
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: 'box.border',
+        backgroundColor: 'box.bg',
+        color: 'box.text',
+        borderRadius: 8,
+        flex: 1,
+        position: 'absolute',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '2rem 1.5rem 1.5rem 0',
+        padding: 0,
+        gap: 0,
+        right: 0,
+        top: 0,
+        bottom: '80px',
+        width: '360px',
+        transition: '.5s cubic-bezier(.4,0,.2,1) 5ms',
+        '@media (max-width: 560px)': {
+          width: 'calc(100vw - 2.5rem)',
+          margin: '2rem 1.25rem',
+        },
+      })}
       style={{
-        paddingLeft: '1.5rem',
-        paddingTop: '1rem',
-        display: isClosed ? 'none' : 'flex',
-        justifyContent: 'start',
-        alignItems: 'center',
+        transform: isClosed
+          ? isMobile
+            ? 'translateX(100vw)'
+            : 'translateX(calc(360px + 1.5rem))'
+          : 'none',
       }}
     >
-      {isSubmenu && (
-        <Button
-          variant="sidePanelButton"
-          size={'sm'}
-          square
-          className={css({ marginRight: '0.5rem' })}
-          onPress={onBack}
-        >
-          <RiArrowLeftLine size={20} />
-        </Button>
-      )}
-      {title}
-    </Heading>
-    <Div
-      position="absolute"
-      top="5"
-      right="5"
-      style={{
-        display: isClosed ? 'none' : undefined,
-      }}
-    >
-      <Button
-        variant="tertiaryText"
-        size="xs"
-        square
-        onPress={onClose}
-        aria-label={closeButtonTooltip}
-        tooltip={closeButtonTooltip}
+      <Heading
+        slot="title"
+        level={1}
+        className={text({ variant: 'h2' })}
+        style={{
+          paddingLeft: '1.5rem',
+          paddingTop: '1rem',
+          display: isClosed ? 'none' : 'flex',
+          justifyContent: 'start',
+          alignItems: 'center',
+        }}
       >
-        <RiCloseLine />
-      </Button>
-    </Div>
-    {children}
-  </div>
-)
+        {isSubmenu && (
+          <Button
+            variant="sidePanelButton"
+            size={'sm'}
+            square
+            className={css({ marginRight: '0.5rem' })}
+            onPress={onBack}
+          >
+            <RiArrowLeftLine size={20} />
+          </Button>
+        )}
+        {title}
+      </Heading>
+      <Div
+        position="absolute"
+        top="5"
+        right="5"
+        style={{
+          display: isClosed ? 'none' : undefined,
+        }}
+      >
+        <Button
+          variant="tertiaryText"
+          size="xs"
+          square
+          onPress={onClose}
+          aria-label={closeButtonTooltip}
+          tooltip={closeButtonTooltip}
+        >
+          <RiCloseLine />
+        </Button>
+      </Div>
+      {children}
+    </div>
+  )
+}
 
 type PanelProps = {
   isOpen: boolean

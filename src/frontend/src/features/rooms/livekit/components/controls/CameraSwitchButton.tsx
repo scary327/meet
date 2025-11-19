@@ -112,7 +112,7 @@ export const CameraSwitchButton = (props: Partial<ButtonProps>) => {
         toggle()
         props.onPress?.(e)
       }}
-      variant="primaryTextDark"
+      variant="sidePanelButton"
       aria-label={t('options.items.switchCamera')}
       tooltip={t('options.items.switchCamera')}
       description={true}
