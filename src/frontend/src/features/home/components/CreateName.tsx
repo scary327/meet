@@ -17,6 +17,7 @@ export const CreateName = ({
       className={css({
         display: 'flex',
         flexDirection: 'column',
+        marginTop: '40px'
       })}
     >
       <div

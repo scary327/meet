@@ -90,7 +90,6 @@ export const Home = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '100vh',
           gap: '80px',
           padding: '2rem',
         })}

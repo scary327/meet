@@ -36,6 +36,11 @@ const StyledRACDialog = styled(Dialog, {
     backgroundColor: 'white',
     '&[data-entering]': { animation: 'fade 200ms' },
     '&[data-exiting]': { animation: 'fade 150ms reverse ease-in' },
+    '@media (max-width: 560px)': {
+      width: 'auto',
+      left: '1.5rem',
+      right: '1.5rem',
+    },
   },
 })
 
