@@ -9,10 +9,11 @@ import { authUrl, useUser } from '@/features/auth'
 import { usePersistentUserChoices } from '@/features/rooms/livekit/hooks/usePersistentUserChoices'
 import { Logo } from '@/components/Logo'
 import { CreateName } from '../components/CreateName'
+// import { AirplaneModel } from '../components/AirplaneModel'
 import purpleCurve from '@/assets/purpleCurve.svg'
 import { useMemo, useState, useRef, useCallback, useEffect } from 'react'
-import { z } from 'zod'
 import { JoinMeetingDialog } from '../components/JoinMeetingDialog'
+import { z } from 'zod'
 
 const nameSchema = z
   .string()
@@ -83,6 +84,20 @@ export const Home = () => {
     <Screen>
       {/* Logo in top left corner */}
       <Logo />
+
+      {/* Airplane 3D model in top right corner */}
+      {/*<div*/}
+      {/*  className={css({*/}
+      {/*    position: 'fixed',*/}
+      {/*    top: '20px',*/}
+      {/*    right: '20px',*/}
+      {/*    width: '200px',*/}
+      {/*    height: '200px',*/}
+      {/*    zIndex: 5,*/}
+      {/*  })}*/}
+      {/*>*/}
+      {/*  <AirplaneModel />*/}
+      {/*</div>*/}
 
       <div
         className={css({

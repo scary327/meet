@@ -356,9 +356,9 @@ export const Join = ({
     if (!videoEnabled) {
       return 'Камера отключена.'
     }
-    if (!isVideoInitiated.current) {
-      return 'Камера запускается...'
-    }
+    // if (!isVideoInitiated.current) {
+    //   return 'Камера запускается...'
+    // }
     if (videoTrack && videoEnabled) {
       return ''
     }
@@ -480,7 +480,7 @@ export const Join = ({
           paddingLeft: '12px',
           paddingRight: '12px',
           width: '100%',
-          minHeight: '100vh',
+          // minHeight: '100vh',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -595,32 +595,6 @@ export const Join = ({
                 gap: '1rem',
               })}
             >
-              <ToggleDevice
-                kind="audioinput"
-                context="join"
-                enabled={audioEnabled}
-                toggle={async () => {
-                  saveAudioInputEnabled(!audioEnabled)
-                  if (audioEnabled) {
-                    await audioTrack?.mute()
-                  } else {
-                    await audioTrack?.unmute()
-                  }
-                }}
-              />
-              <ToggleDevice
-                kind="videoinput"
-                context="join"
-                enabled={videoEnabled}
-                toggle={async () => {
-                  saveVideoInputEnabled(!videoEnabled)
-                  if (videoEnabled) {
-                    await videoTrack?.mute()
-                  } else {
-                    await videoTrack?.unmute()
-                  }
-                }}
-              />
               <Effects
                 videoTrack={videoTrack}
                 onSubmit={(processor) =>
@@ -628,6 +602,40 @@ export const Join = ({
                 }
               />
             </div>
+          </div>
+
+          <div className={css({
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            marginTop: '1rem',
+          })}>
+          <ToggleDevice
+            kind="audioinput"
+            context="join"
+            enabled={audioEnabled}
+            toggle={async () => {
+              saveAudioInputEnabled(!audioEnabled)
+              if (audioEnabled) {
+                await audioTrack?.mute()
+              } else {
+                await audioTrack?.unmute()
+              }
+            }}
+          />
+          <ToggleDevice
+            kind="videoinput"
+            context="join"
+            enabled={videoEnabled}
+            toggle={async () => {
+              saveVideoInputEnabled(!videoEnabled)
+              if (videoEnabled) {
+                await videoTrack?.mute()
+              } else {
+                await videoTrack?.unmute()
+              }
+            }}
+          />
           </div>
 
           {/* Device selectors */}
@@ -712,3 +720,4 @@ export const Join = ({
     </Screen>
   )
 }
+

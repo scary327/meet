@@ -12,10 +12,10 @@ import {
   normalizeRoomId,
 } from '@/features/rooms/utils/isRoomValid'
 
-const BaseRoom = ({ children }: { children: ReactNode }) => {
+const BaseRoom = ({ children, isRoom=false }: { children: ReactNode, isRoom?: boolean }) => {
   return (
     <UserAware>
-       <Logo isRoom={true} />
+       <Logo isRoom={isRoom} />
       <Permissions />
       {children}
     </UserAware>
@@ -59,14 +59,14 @@ export const Room = () => {
 
   if (!hasSubmittedEntry && !skipJoinScreen) {
     return (
-      <BaseRoom>
+      <BaseRoom isRoom={false}>
         <Join enterRoom={() => setHasSubmittedEntry(true)} roomId={roomId} />
       </BaseRoom>
     )
   }
 
   return (
-    <BaseRoom>
+    <BaseRoom isRoom={true}>
       <Conference
         initialRoomData={initialRoomData}
         roomId={roomId}
