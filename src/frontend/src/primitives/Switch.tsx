@@ -18,7 +18,7 @@ export const StyledSwitch = styled(RACSwitch, {
       width: '2.6rem',
       height: '1.563rem',
       border: '0.125rem solid',
-      borderColor: 'primary.800',
+      borderColor: 'black',
       borderRadius: '1.143rem',
       transition: 'all 200ms, outline 200ms',
       _before: {
@@ -29,7 +29,7 @@ export const StyledSwitch = styled(RACSwitch, {
         width: '1.063rem',
         height: '1.063rem',
         borderRadius: '1.063rem',
-        background: 'primary.800',
+        background: 'black',
         transition: 'transform 200ms, background-color 200ms',
         transitionDelay: '0ms',
       },
@@ -40,7 +40,7 @@ export const StyledSwitch = styled(RACSwitch, {
       top: '50%',
       right: '0.1rem',
       transform: 'translateY(-50%)',
-      color: 'primary.800',
+      color: 'black',
       fontSize: '0.75rem',
       fontWeight: 'bold',
       pointerEvents: 'none',
@@ -63,8 +63,8 @@ export const StyledSwitch = styled(RACSwitch, {
       transitionDelay: '0ms',
     },
     '&[data-selected] .indicator': {
-      borderColor: 'primary.800',
-      background: 'primary.800',
+      borderColor: 'black',
+      background: 'black',
       _before: {
         background: 'white',
         transform: 'translateX(100%)',
@@ -81,14 +81,14 @@ export const StyledSwitch = styled(RACSwitch, {
       transitionDelay: '0ms',
     },
     '&[data-disabled] .indicator': {
-      borderColor: 'primary.200',
+      borderColor: 'gray.300',
       background: 'transparent',
       _before: {
-        background: 'primary.200',
+        background: 'gray.300',
       },
     },
     '&[data-disabled] .cross': {
-      color: 'primary.500',
+      color: 'gray.500',
     },
     '&[data-focus-visible] .indicator': {
       outline: '2px solid!',

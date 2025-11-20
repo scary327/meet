@@ -1,5 +1,5 @@
 import { A, Badge, Button, DialogProps, Field, H, P } from '@/primitives'
-import { Trans, useTranslation } from 'react-i18next'
+import { Trans } from 'react-i18next'
 import { useRoomContext } from '@livekit/components-react'
 import { useUser } from '@/features/auth'
 import { css } from '@/styled-system/css'
@@ -13,7 +13,6 @@ export type AccountTabProps = Pick<DialogProps, 'onOpenChange'> &
   Pick<TabPanelProps, 'id'>
 
 export const AccountTab = ({ id, onOpenChange }: AccountTabProps) => {
-  const { t } = useTranslation('settings')
   const { saveUsername } = usePersistentUserChoices()
   const room = useRoomContext()
   const { user, isLoggedIn, logout } = useUser()
@@ -33,18 +32,18 @@ export const AccountTab = ({ id, onOpenChange }: AccountTabProps) => {
   }
 
   return (
-    <TabPanel padding={'md'} flex id={id}>
-      <H lvl={2}>{t('account.heading')}</H>
+    <TabPanel flex id={id}>
+      <H lvl={2}>Профиль</H>
       <Field
         type="text"
-        label={t('account.nameLabel')}
+        label="Ваше имя"
         value={name}
         onChange={setName}
         validate={(value) => {
-          return !value ? <p>{t('account.nameError')}</p> : null
+          return !value ? <p>Имя не может быть пустым</p> : null
         }}
       />
-      <H lvl={2}>{t('account.authentication')}</H>
+      <H lvl={2}>Аутентификация</H>
       {isLoggedIn ? (
         <>
           <P>
@@ -55,12 +54,12 @@ export const AccountTab = ({ id, onOpenChange }: AccountTabProps) => {
             />
           </P>
           <P>
-            <A onPress={logout}>{t('logout', { ns: 'global' })}</A>
+            <A onPress={logout}>Выход</A>
           </P>
         </>
       ) : (
         <>
-          <P>{t('account.youAreNotLoggedIn')}</P>
+          <P>Вы не авторизованы.</P>
           <LoginButton />
         </>
       )}
@@ -71,10 +70,10 @@ export const AccountTab = ({ id, onOpenChange }: AccountTabProps) => {
         })}
       >
         <Button variant="secondary" onPress={handleOnCancel}>
-          {t('cancel', { ns: 'global' })}
+          Отмена
         </Button>
         <Button variant={'primary'} onPress={handleOnSubmit}>
-          {t('submit', { ns: 'global' })}
+          ОК
         </Button>
       </HStack>
     </TabPanel>

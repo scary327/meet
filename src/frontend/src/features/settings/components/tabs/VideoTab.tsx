@@ -2,7 +2,6 @@ import { DialogProps, Field } from '@/primitives'
 
 import { TabPanel, TabPanelProps } from '@/primitives/Tabs'
 import { useMediaDeviceSelect, useRoomContext } from '@livekit/components-react'
-import { useTranslation } from 'react-i18next'
 import { usePersistentUserChoices } from '@/features/rooms/livekit/hooks/usePersistentUserChoices'
 import { useCallback, useEffect, useState } from 'react'
 import { css } from '@/styled-system/css'
@@ -23,7 +22,6 @@ export type VideoTabProps = Pick<DialogProps, 'onOpenChange'> &
 type DeviceItems = Array<{ value: string; label: string }>
 
 export const VideoTab = ({ id }: VideoTabProps) => {
-  const { t } = useTranslation('settings', { keyPrefix: 'video' })
   const { localParticipant, remoteParticipants } = useRoomContext()
 
   const {
@@ -53,15 +51,12 @@ export const VideoTab = ({ id }: VideoTabProps) => {
     label: d.label,
   }))
 
-  // The Permissions API is not fully supported in Firefox and Safari, and attempting to use it for camera permissions
-  // may raise an error. As a workaround, we infer camera permission status by checking if the list of camera input
-  // devices (devicesIn) is non-empty. If the list has one or more devices, we assume the user has granted camera access.
   const isCamEnabled = devicesIn?.length > 0
 
   const disabledProps = isCamEnabled
     ? {}
     : {
-        placeholder: t('permissionsRequired'),
+        placeholder: 'Требуется разрешение',
         isDisabled: true,
       }
 
@@ -118,11 +113,11 @@ export const VideoTab = ({ id }: VideoTabProps) => {
   }, [videoDeviceId, videoElement])
 
   return (
-    <TabPanel padding={'md'} flex id={id}>
-      <RowWrapper heading={t('camera.heading')}>
+    <TabPanel flex id={id}>
+      <RowWrapper heading="Камера">
         <Field
           type="select"
-          label={t('camera.label')}
+          label="Выберите входное видеоустройство"
           items={itemsIn}
           selectedKey={videoDeviceId}
           onSelectionChange={async (key) => {
@@ -136,9 +131,11 @@ export const VideoTab = ({ id }: VideoTabProps) => {
         />
         <div
           role="status"
-          aria-label={t(
-            `camera.previewAriaLabel.${localParticipant.isCameraEnabled ? 'enabled' : 'disabled'}`
-          )}
+          aria-label={
+            localParticipant.isCameraEnabled
+              ? 'Предпросмотр видео включен'
+              : 'Предпросмотр видео отключен'
+          }
         >
           {localParticipant.isCameraEnabled ? (
             <>
@@ -169,27 +166,27 @@ export const VideoTab = ({ id }: VideoTabProps) => {
                 textAlign: 'center',
               })}
             >
-              {t('camera.disabled')}
+              Камера отключена
             </span>
           )}
         </div>
       </RowWrapper>
-      <RowWrapper heading={t('resolution.heading')}>
+      <RowWrapper heading="Разрешение">
         <Field
           type="select"
-          label={t('resolution.publish.label')}
+          label="Выберите разрешение отправки (макс.)"
           items={[
             {
               value: 'h720',
-              label: `${t('resolution.publish.items.high')} (720p)`,
+              label: 'Высокое качество (720p)',
             },
             {
               value: 'h360',
-              label: `${t('resolution.publish.items.medium')} (360p)`,
+              label: 'Стандартное качество (360p)',
             },
             {
               value: 'h180',
-              label: `${t('resolution.publish.items.low')} (180p)`,
+              label: 'Низкое качество (180p)',
             },
           ]}
           selectedKey={videoPublishResolution}
@@ -205,19 +202,19 @@ export const VideoTab = ({ id }: VideoTabProps) => {
       <RowWrapper>
         <Field
           type="select"
-          label={t('resolution.subscribe.label')}
+          label="Выберите разрешение приема (макс.)"
           items={[
             {
               value: VideoQuality.HIGH.toString(),
-              label: t('resolution.subscribe.items.high'),
+              label: 'Высокое качество (автоматическое)',
             },
             {
               value: VideoQuality.MEDIUM.toString(),
-              label: t('resolution.subscribe.items.medium'),
+              label: 'Стандартное качество',
             },
             {
               value: VideoQuality.LOW.toString(),
-              label: t('resolution.subscribe.items.low'),
+              label: 'Низкое качество',
             },
           ]}
           selectedKey={videoSubscribeQuality?.toString()}

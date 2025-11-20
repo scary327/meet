@@ -5,6 +5,7 @@ const languageLabels: Record<string, string> = {
   fr: 'Français',
   de: 'Deutsch',
   nl: 'Nederlands',
+  ru: 'Русский',
 }
 
 export const useLanguageLabels = () => {

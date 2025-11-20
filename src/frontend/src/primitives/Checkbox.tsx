@@ -49,12 +49,12 @@ export const StyledCheckbox = styled(RACCheckbox, {
       outlineOffset: '2px!',
     },
     '&[data-selected] .mt-Checkbox-checkbox': {
-      borderColor: 'primary',
-      backgroundColor: 'primary',
+      borderColor: 'black',
+      backgroundColor: 'black',
     },
     '&[data-selected][data-pressed] .mt-Checkbox-checkbox': {
-      borderColor: 'primary.active',
-      backgroundColor: 'primary.active',
+      borderColor: 'gray.800',
+      backgroundColor: 'gray.800',
     },
     '&[data-selected] svg': {
       strokeDashoffset: '44',

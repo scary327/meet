@@ -1,0 +1,60 @@
+{
+  "backToHome": "Вернуться на главную",
+  "cancel": "Отмена",
+  "closeDialog": "Закрыть диалог",
+  "error": {
+    "heading": "При загрузке страницы произошла ошибка"
+  },
+  "feedback": {
+    "context": "Продукт находится в разработке — ваше мнение важно!",
+    "cta": "Поделитесь отзывом"
+  },
+  "forbidden": {
+    "heading": "У вас нет разрешения на просмотр этой страницы"
+  },
+  "loading": "Загрузка…",
+  "loggedInUserTooltip": "Вошли как…",
+  "login": {
+    "buttonLabel": "Вход",
+    "proconnectButtonLabel": "Вход через ProConnect",
+    "proconnectLinkLabel": "Что такое ProConnect? - новая вкладка",
+    "proconnectLink": "Что такое ProConnect?"
+  },
+  "logout": "Выход",
+  "notFound": {
+    "heading": "Проверьте код встречи",
+    "body": "Убедитесь, что вы ввели правильный код встречи в URL. Пример:"
+  },
+  "submit": "ОК",
+  "footer": {
+    "links": {
+      "legifrance": "legifrance.gouv.fr",
+      "infogouv": "info.gouv.fr",
+      "servicepublic": "service-public.fr",
+      "datagouv": "data.gouv.fr",
+      "legalsTerms": "Правовая информация",
+      "data": "Персональные данные и файлы cookie",
+      "accessibility": "Доступность: не соответствует",
+      "ariaLabel": "новая вкладка",
+      "codeAnnotation": "Наш код открыт и доступен на",
+      "code": "Репозитории открытого исходного кода",
+      "technicalDetails": "Техническое уведомление",
+      "termsOfService": "Условия использования"
+    },
+    "mentions": "Если не указано иное, содержимое этого сайта доступно в соответствии с",
+    "license": "лицензией etalab 2.0"
+  },
+  "loginHint": {
+    "title": "Войдите через свою учетную запись ProConnect",
+    "body": "Не ждите, войдите через свою учетную запись ProConnect.",
+    "button": {
+      "ariaLabel": "Закрыть предложение",
+      "label": "ОК"
+    }
+  },
+  "clipboardContent": {
+    "url": "Чтобы присоединиться к видеоконференции, нажмите на эту ссылку: {{roomUrl}}",
+    "numberAndPin": "Чтобы присоединиться по телефону, наберите {{phoneNumber}} и введите код: {{pinCode}}"
+  }
+}
+

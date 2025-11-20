@@ -1,18 +1,23 @@
 import { TabPanel, TabPanelProps } from '@/primitives/Tabs'
 import { Field, H } from '@/primitives'
 import { css } from '@/styled-system/css'
-import { useTranslation } from 'react-i18next'
 import { useSnapshot } from 'valtio'
 import { notificationsStore } from '@/stores/notifications'
 
 export type NotificationsTabProps = Pick<TabPanelProps, 'id'>
 
 export const NotificationsTab = ({ id }: NotificationsTabProps) => {
-  const { t } = useTranslation('settings', { keyPrefix: 'notifications' })
   const notificationsSnap = useSnapshot(notificationsStore)
+
+  const notificationLabels: Record<string, string> = {
+    participantJoined: 'Участник присоединился',
+    handRaised: 'Поднята рука',
+    messageReceived: 'Получено сообщение',
+  }
+
   return (
-    <TabPanel padding={'md'} flex id={id}>
-      <H lvl={2}>{t('heading')}</H>
+    <TabPanel flex id={id}>
+      <H lvl={2}>Звуковые уведомления</H>
       <ul
         className={css({
           display: 'flex',
@@ -25,8 +30,8 @@ export const NotificationsTab = ({ id }: NotificationsTabProps) => {
             <li key={key}>
               <Field
                 type="switch"
-                aria-label={`${t(`actions.${value ? 'disable' : 'enable'}`)} ${t('label')} "${t(`items.${key}.label`)}"`}
-                label={t(`items.${key}.label`)}
+                aria-label={`${value ? 'Отключить' : 'Включить'} звуковые уведомления для "${notificationLabels[key] || key}"`}
+                label={notificationLabels[key] || key}
                 isSelected={value}
                 onChange={(v) => {
                   notificationsStore.soundNotifications.set(key, v)

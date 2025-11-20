@@ -47,7 +47,7 @@ const StyledTab = styled(RACTab, {
     border: {
       true: {
         '&[data-selected]': {
-          borderColor: 'primary',
+          borderColor: 'black',
         },
         borderBottom: 'var(--horizontal) solid',
         borderInlineEnd: 'var(--vertical) solid',
@@ -66,7 +66,7 @@ const StyledTab = styled(RACTab, {
           color: 'box.text',
         },
         '&[data-selected]': {
-          backgroundColor: 'primary.800',
+          backgroundColor: 'black',
           color: 'white',
         },
       },

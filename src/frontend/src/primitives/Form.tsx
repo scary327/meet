@@ -1,6 +1,5 @@
 import { type FormEvent } from 'react'
 import { Form as RACForm, type FormProps } from 'react-aria-components'
-import { useTranslation } from 'react-i18next'
 import { HStack } from '@/styled-system/jsx'
 import { Button, useCloseDialog } from '@/primitives'
 import { ButtonProps } from '@/primitives/Button'
@@ -31,7 +30,6 @@ export const Form = ({
   withCancelButton?: boolean
   onCancelButtonPress?: () => void
 }) => {
-  const { t } = useTranslation()
   const closeDialog = useCloseDialog()
   const onCancel = withCancelButton
     ? onCancelButtonPress || closeDialog
@@ -55,7 +53,7 @@ export const Form = ({
         </Button>
         {!!onCancel && (
           <Button variant="secondary" onPress={() => onCancel()}>
-            {t('cancel')}
+            Отмена
           </Button>
         )}
       </HStack>

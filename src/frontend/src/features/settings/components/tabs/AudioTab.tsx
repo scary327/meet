@@ -7,7 +7,6 @@ import {
   useRoomContext,
 } from '@livekit/components-react'
 import { isSafari } from '@/utils/livekit'
-import { useTranslation } from 'react-i18next'
 import { SoundTester } from '@/components/SoundTester'
 import { ActiveSpeaker } from '@/features/rooms/components/ActiveSpeaker'
 import { usePersistentUserChoices } from '@/features/rooms/livekit/hooks/usePersistentUserChoices'
@@ -21,7 +20,6 @@ export type AudioTabProps = Pick<DialogProps, 'onOpenChange'> &
 type DeviceItems = Array<{ value: string; label: string }>
 
 export const AudioTab = ({ id }: AudioTabProps) => {
-  const { t } = useTranslation('settings')
   const { localParticipant } = useRoomContext()
 
   const {
@@ -49,15 +47,12 @@ export const AudioTab = ({ id }: AudioTabProps) => {
     label: d.label,
   }))
 
-  // The Permissions API is not fully supported in Firefox and Safari, and attempting to use it for microphone permissions
-  // may raise an error. As a workaround, we infer microphone permission status by checking if the list of audio input
-  // devices (devicesIn) is non-empty. If the list has one or more devices, we assume the user has granted microphone access.
   const isMicEnabled = devicesIn?.length > 0
 
   const disabledProps = isMicEnabled
     ? {}
     : {
-        placeholder: t('audio.permissionsRequired'),
+        placeholder: 'Требуется разрешение',
         isDisabled: true,
         defaultSelectedKey: undefined,
       }
@@ -65,11 +60,11 @@ export const AudioTab = ({ id }: AudioTabProps) => {
   const noiseReductionAvailable = useNoiseReductionAvailable()
 
   return (
-    <TabPanel padding={'md'} flex id={id}>
-      <RowWrapper heading={t('audio.microphone.heading')}>
+    <TabPanel flex id={id}>
+      <RowWrapper heading="Микрофон">
         <Field
           type="select"
-          label={t('audio.microphone.label')}
+          label="Выберите входное аудиоустройство"
           items={itemsIn}
           selectedKey={audioDeviceId}
           onSelectionChange={async (key) => {
@@ -85,17 +80,17 @@ export const AudioTab = ({ id }: AudioTabProps) => {
           {localParticipant.isMicrophoneEnabled ? (
             <ActiveSpeaker isSpeaking={isSpeaking} />
           ) : (
-            <span>{t('audio.microphone.disabled')}</span>
+            <span>Микрофон отключен</span>
           )}
         </>
       </RowWrapper>
       {/* Safari has a known limitation where its implementation of 'enumerateDevices' does not include audio output devices.
         To prevent errors or an empty selection list, we only render the speakers selection field on non-Safari browsers. */}
       {!isSafari() ? (
-        <RowWrapper heading={t('audio.speakers.heading')}>
+        <RowWrapper heading="Громкоговорители">
           <Field
             type="select"
-            label={t('audio.speakers.label')}
+            label="Выберите выходное аудиоустройство"
             items={itemsOut}
             selectedKey={audioOutputDeviceId}
             onSelectionChange={async (key) => {
@@ -110,26 +105,24 @@ export const AudioTab = ({ id }: AudioTabProps) => {
           <SoundTester />
         </RowWrapper>
       ) : (
-        <RowWrapper heading={t('audio.speakers.heading')}>
+        <RowWrapper heading="Громкоговорители">
           <Text variant="warning" margin="md">
-            {t('audio.speakers.safariWarning')}
+            Выбор громкоговорителей пока недоступен в Safari из-за ограничений браузера.
           </Text>
           <div />
         </RowWrapper>
       )}
       {noiseReductionAvailable && (
-        <RowWrapper heading={t('audio.noiseReduction.heading')} beta>
+        <RowWrapper heading="Шумоподавление" beta>
           <Switch
-            aria-label={t(
-              `audio.noiseReduction.ariaLabel.${noiseReductionEnabled ? 'disable' : 'enable'}`
-            )}
+            aria-label={noiseReductionEnabled ? 'Отключить шумоподавление' : 'Включить шумоподавление'}
             isSelected={noiseReductionEnabled}
             onChange={(v) => {
               saveNoiseReductionEnabled(v)
               if (v) posthog.capture('noise-reduction-init')
             }}
           >
-            {t('audio.noiseReduction.label')}
+            Шумоподавление
           </Switch>
           <div />
         </RowWrapper>

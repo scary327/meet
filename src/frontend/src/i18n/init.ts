@@ -14,8 +14,8 @@ i18n
   .use(initReactI18next)
   .use(LanguageDetector)
   .init({
-    supportedLngs: ['en', 'fr', 'nl', 'de'],
-    fallbackLng: 'fr',
+    supportedLngs: ['ru'],
+    fallbackLng: 'ru',
     ns: i18nDefaultNamespace,
     detection: {
       order: ['localStorage', 'navigator'],

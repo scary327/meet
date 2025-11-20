@@ -1,11 +1,9 @@
 import { css } from '@/styled-system/css'
 import { RiErrorWarningLine, RiExternalLinkLine } from '@remixicon/react'
-import { useTranslation } from 'react-i18next'
 import { Text, A } from '@/primitives'
 import { useConfig } from '@/api/useConfig'
 
 export const FeedbackBanner = () => {
-  const { t } = useTranslation()
   const { data } = useConfig()
 
   if (!data?.feedback?.url) return
@@ -30,7 +28,7 @@ export const FeedbackBanner = () => {
       >
         <RiErrorWarningLine size={20} aria-hidden="true" />
         <Text as="p" variant="sm">
-          {t('feedback.context')}
+          Продукт находится в разработке — ваше мнение важно!
         </Text>
         <div
           className={css({
@@ -40,7 +38,7 @@ export const FeedbackBanner = () => {
           })}
         >
           <A href={data?.feedback?.url} target="_blank" size="sm">
-            {t('feedback.cta')}
+            Поделитесь отзывом
           </A>
           <RiExternalLinkLine size={16} aria-hidden="true" />
         </div>
