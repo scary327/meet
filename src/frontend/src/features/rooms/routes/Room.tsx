@@ -11,6 +11,7 @@ import {
   isRoomValid,
   normalizeRoomId,
 } from '@/features/rooms/utils/isRoomValid'
+import { useWakeLock } from '@/utils/useWakeLock.ts'
 
 const BaseRoom = ({ children, isRoom=false }: { children: ReactNode, isRoom?: boolean }) => {
   return (
@@ -31,6 +32,8 @@ export const Room = () => {
   const initialRoomData = history.state?.initialRoomData
   const mode = isLoggedIn && history.state?.create ? 'create' : 'join'
   const skipJoinScreen = isLoggedIn && mode === 'create'
+
+  useWakeLock(hasSubmittedEntry || !!skipJoinScreen);
 
   useKeyboardShortcuts()
 
