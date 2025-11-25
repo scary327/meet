@@ -26,8 +26,8 @@ export const ParticipantPlaceholder = ({
   const isSpeaking = useIsSpeaking(participant)
   const imgSrc = useMemo(
     () =>
-      getAvatarByUserName(participant.identity || participant.name || 'Guest'),
-    [participant.identity, participant.name]
+      getAvatarByUserName(participant.name || 'Guest'),
+    [participant.name]
   )
 
   const placeholderEl = useRef<HTMLDivElement>(null)
