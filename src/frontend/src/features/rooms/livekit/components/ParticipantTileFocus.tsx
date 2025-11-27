@@ -13,7 +13,6 @@ import {
   useFocusToggle,
   useTrackMutedIndicator,
 } from '@livekit/components-react'
-import { useTranslation } from 'react-i18next'
 import { TrackReferenceOrPlaceholder } from '@livekit/components-core'
 import { useEffect, useRef, useState } from 'react'
 import { useSidePanel } from '../hooks/useSidePanel'

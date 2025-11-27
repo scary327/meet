@@ -3,7 +3,6 @@ import { useState, useEffect, useMemo } from 'react'
 import { Text } from '@/primitives'
 import { css } from '@/styled-system/css'
 import { Participant } from 'livekit-client'
-import { useTranslation } from 'react-i18next'
 import { Reaction } from '@/features/rooms/livekit/components/controls/ReactionsToggle'
 
 export const ANIMATION_DURATION = 3000
@@ -114,7 +113,6 @@ export function ReactionPortal({
   emoji: string
   participant: Participant
 }) {
-  const { t } = useTranslation('rooms', { keyPrefix: 'controls.reactions' })
   const speed = useMemo(() => Math.random() * 1.5 + 0.5, [])
   const scale = useMemo(() => Math.max(Math.random() + 0.5, 1), [])
   return createPortal(
@@ -132,7 +130,7 @@ export function ReactionPortal({
         emoji={emoji}
         speed={speed}
         scale={scale}
-        name={participant?.isLocal ? "Вы" : participant.name}
+        name={participant?.isLocal ? 'Вы' : participant.name}
         isLocal={participant?.isLocal}
       />
     </div>,
