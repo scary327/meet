@@ -14,7 +14,7 @@ export const SettingsMenuItem = () => {
       onAction={() => openSettingsDialog()}
     >
       <RiSettings3Line size={20} />
-      {t('settings')}
+      Настройки
     </MenuItem>
   )
 }

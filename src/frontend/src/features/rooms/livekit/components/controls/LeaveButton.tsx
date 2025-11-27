@@ -1,19 +1,22 @@
 import { useConnectionState, useRoomContext } from '@livekit/components-react'
 import { Button } from '@/primitives'
 import { RiPhoneFill } from '@remixicon/react'
-import { useTranslation } from 'react-i18next'
 import { ConnectionState } from 'livekit-client'
 
+// Русские тексты для компонента
+const texts = {
+  leave: 'Выйти',
+}
+
 export const LeaveButton = () => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'controls' })
   const room = useRoomContext()
   const connectionState = useConnectionState(room)
   return (
     <Button
       isDisabled={connectionState === ConnectionState.Disconnected}
       variant={'danger'}
-      tooltip={t('leave')}
-      aria-label={t('leave')}
+      tooltip={texts.leave}
+      aria-label={texts.leave}
       onPress={() => {
         room
           .disconnect(true)

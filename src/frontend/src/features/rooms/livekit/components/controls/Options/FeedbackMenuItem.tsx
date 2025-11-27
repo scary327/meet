@@ -17,7 +17,7 @@ export const FeedbackMenuItem = () => {
       className={menuRecipe({ icon: true, variant: 'dark' }).item}
     >
       <RiMegaphoneLine size={20} />
-      {t('feedback')}
+      Фидбек
     </MenuItem>
   )
 }

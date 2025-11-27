@@ -132,7 +132,7 @@ export function ReactionPortal({
         emoji={emoji}
         speed={speed}
         scale={scale}
-        name={participant?.isLocal ? t('you') : participant.name}
+        name={participant?.isLocal ? "Вы" : participant.name}
         isLocal={participant?.isLocal}
       />
     </div>,

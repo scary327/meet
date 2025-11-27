@@ -21,7 +21,7 @@ export const SupportMenuItem = () => {
       }}
     >
       <RiQuestionLine size={20} />
-      {t('support')}
+      Поддержка
     </MenuItem>
   )
 }

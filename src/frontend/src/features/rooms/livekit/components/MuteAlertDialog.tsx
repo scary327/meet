@@ -1,6 +1,14 @@
-import { useTranslation } from 'react-i18next'
 import { Button, Dialog, P } from '@/primitives'
 import { HStack } from '@/styled-system/jsx'
+
+// Русские тексты для компонента
+const texts = {
+  heading: 'Отключить микрофон {{name}}',
+  description:
+    'Отключить микрофон {{name}} для всех участников? {{name}} сможет включить микрофон только самостоятельно.',
+  confirm: 'Отключить',
+  cancel: 'Отмена',
+}
 
 export const MuteAlertDialog = ({
   isOpen,
@@ -13,22 +21,27 @@ export const MuteAlertDialog = ({
   onSubmit: () => void
   name: string
 }) => {
-  const { t } = useTranslation('rooms', {
-    keyPrefix: 'participants.muteParticipantAlert',
-  })
+  const formatText = (text: string, vars: Record<string, string>) => {
+    let result = text
+    Object.entries(vars).forEach(([key, value]) => {
+      result = result.replace(`{{${key}}}`, value)
+    })
+    return result
+  }
+
   return (
     <Dialog
       isOpen={isOpen}
       role="alertdialog"
-      aria-label={t('heading', { name })}
+      aria-label={formatText(texts.heading, { name })}
     >
-      <P>{t('description', { name })}</P>
+      <P>{formatText(texts.description, { name })}</P>
       <HStack gap={1}>
         <Button variant="text" size="sm" onPress={onClose}>
-          {t('cancel')}
+          {texts.cancel}
         </Button>
         <Button variant="text" size="sm" onPress={onSubmit}>
-          {t('confirm')}
+          {texts.confirm}
         </Button>
       </HStack>
     </Dialog>

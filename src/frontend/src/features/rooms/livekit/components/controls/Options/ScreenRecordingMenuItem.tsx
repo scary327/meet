@@ -26,7 +26,7 @@ export const ScreenRecordingMenuItem = () => {
       }
     >
       <RiRecordCircleLine size={20} />
-      {t('screenRecording')}
+      Запись экрана
     </MenuItem>
   )
 }

@@ -19,8 +19,8 @@ export const ParticipantMenuButton = ({
         square
         variant="primaryDark"
         size="xs"
-        aria-label={t('moreOptions')}
-        tooltip={t('moreOptions')}
+        aria-label="Настройки"
+        tooltip="Настройки"
       >
         <RiMore2Fill />
       </Button>

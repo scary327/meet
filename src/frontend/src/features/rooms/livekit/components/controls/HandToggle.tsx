@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { RiHand } from '@remixicon/react'
 import { ToggleButton } from '@/primitives'
 import { css } from '@/styled-system/css'
@@ -10,11 +9,16 @@ import {
   showLowerHandToast,
 } from '@/features/notifications/utils'
 
+const texts = {
+  hand: {
+    raise: 'Поднять руку',
+    lower: 'Опустить руку',
+  },
+}
+
 const SPEAKING_DETECTION_DELAY = 3000
 
 export const HandToggle = () => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'controls.hand' })
-
   const room = useRoomContext()
   const { isHandRaised, toggleRaisedHand } = useRaisedHand({
     participant: room.localParticipant,
@@ -53,7 +57,7 @@ export const HandToggle = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSpeaking, isHandRaised, hasShownToast, toggleRaisedHand])
 
-  const tooltipLabel = isHandRaised ? 'lower' : 'raise'
+  const tooltipLabel = isHandRaised ? texts.hand.lower : texts.hand.raise
 
   return (
     <div
@@ -65,14 +69,14 @@ export const HandToggle = () => {
       <ToggleButton
         square
         variant="primaryDark"
-        aria-label={t(tooltipLabel)}
-        tooltip={t(tooltipLabel)}
+        aria-label={tooltipLabel}
+        tooltip={tooltipLabel}
         isSelected={isHandRaised}
         onPress={() => {
           toggleRaisedHand()
           resetToastState()
         }}
-        data-attr={`controls-hand-${tooltipLabel}`}
+        data-attr={`controls-hand-${isHandRaised ? 'lower' : 'raise'}`}
       >
         <RiHand />
       </ToggleButton>

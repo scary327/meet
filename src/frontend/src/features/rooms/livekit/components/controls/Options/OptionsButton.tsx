@@ -2,16 +2,19 @@ import { RiMoreFill } from '@remixicon/react'
 import { Button, Menu } from '@/primitives'
 import { OptionsMenuItems } from './OptionsMenuItems'
 
-export const OptionsButton = () => {
-  const text = 'Настройки'
+// Русские тексты для компонента
+const texts = {
+  moreOptions: 'Ещё опции',
+}
 
+export const OptionsButton = () => {
   return (
     <Menu variant="dark">
       <Button
         square
         variant="primaryDark"
-        aria-label={text}
-        tooltip={text}
+        aria-label={texts.moreOptions}
+        tooltip={texts.moreOptions}
       >
         <RiMoreFill />
       </Button>

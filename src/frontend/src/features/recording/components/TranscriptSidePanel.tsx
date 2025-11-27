@@ -13,7 +13,6 @@ import {
 } from '../index'
 import { useEffect, useMemo, useState } from 'react'
 import { ConnectionState, RoomEvent } from 'livekit-client'
-import { useTranslation } from 'react-i18next'
 import { RecordingStatus, recordingStore } from '@/stores/recording'
 import { FeatureFlags } from '@/features/analytics/enums'
 import {
@@ -26,13 +25,50 @@ import { useSnapshot } from 'valtio/index'
 import { Spinner } from '@/primitives/Spinner'
 import { useConfig } from '@/api/useConfig'
 import humanizeDuration from 'humanize-duration'
-import i18n from 'i18next'
+
+// Русские тексты для компонента
+const texts = {
+  start: {
+    heading: 'Транскрибировать этот звонок',
+    body: 'Автоматически транскрибировать этот звонок {{duration_message}} и получить резюме в Документах.',
+    button: 'Начать транскрипцию',
+    loading: 'Запуск транскрипции',
+    linkMore: 'Узнать больше',
+  },
+  notAdminOrOwner: {
+    heading: 'Ограниченный доступ',
+    body: 'По соображениям безопасности только создатель встречи или администратор может начать транскрипцию (бета).',
+    linkMore: 'Узнать больше',
+  },
+  stop: {
+    heading: 'Транскрипция в процессе...',
+    body: 'Транскрипция вашей встречи в процессе. Вы получите результат по электронной почте после завершения встречи.',
+    button: 'Остановить транскрипцию',
+  },
+  stopping: {
+    heading: 'Сохранение ваших данных…',
+    body: 'Вы можете покинуть встречу, если хотите; запись завершится автоматически.',
+  },
+  beta: {
+    heading: 'Стать бета-тестером',
+    body: 'Записывайте встречу для последующего просмотра. Вы получите резюме по электронной почте после завершения встречи.',
+    button: 'Зарегистрироваться',
+  },
+  alert: {
+    title: 'Ошибка транскрипции',
+    body: {
+      stop: 'Не удалось остановить транскрипцию. Пожалуйста, попробуйте еще раз через некоторое время.',
+      start: 'Не удалось начать транскрипцию. Пожалуйста, попробуйте еще раз через некоторое время.',
+    },
+    button: 'OK',
+  },
+  durationMessage: '(ограничено до {{max_duration}}) ',
+}
 
 export const TranscriptSidePanel = () => {
   const { data } = useConfig()
 
   const [isLoading, setIsLoading] = useState(false)
-  const { t } = useTranslation('rooms', { keyPrefix: 'transcript' })
 
   const [isErrorDialogOpen, setIsErrorDialogOpen] = useState('')
 
@@ -127,6 +163,14 @@ export const TranscriptSidePanel = () => {
     [isLoading, isRecordingTransitioning, statuses, isRoomConnected]
   )
 
+  const formatText = (text: string, vars: Record<string, string>) => {
+    let result = text
+    Object.entries(vars).forEach(([key, value]) => {
+      result = result.replace(`{{${key}}}`, value)
+    })
+    return result
+  }
+
   return (
     <Div
       display="flex"
@@ -148,7 +192,7 @@ export const TranscriptSidePanel = () => {
         <>
           {hasFeatureWithoutAdminRights ? (
             <>
-              <Text>{t('notAdminOrOwner.heading')}</Text>
+              <Text>{texts.notAdminOrOwner.heading}</Text>
               <Text
                 variant="note"
                 wrap="balance"
@@ -159,21 +203,21 @@ export const TranscriptSidePanel = () => {
                   marginTop: '0.25rem',
                 })}
               >
-                {t('notAdminOrOwner.body')}
+                {texts.notAdminOrOwner.body}
                 <br />
                 {data?.support?.help_article_transcript && (
                   <A
                     href={data.support.help_article_transcript}
                     target="_blank"
                   >
-                    {t('notAdminOrOwner.linkMore')}
+                    {texts.notAdminOrOwner.linkMore}
                   </A>
                 )}
               </Text>
             </>
           ) : (
             <>
-              <Text>{t('beta.heading')}</Text>
+              <Text>{texts.beta.heading}</Text>
               <Text
                 variant="note"
                 wrap={'pretty'}
@@ -184,13 +228,13 @@ export const TranscriptSidePanel = () => {
                   marginTop: '0.25rem',
                 })}
               >
-                {t('beta.body')}{' '}
+                {texts.beta.body}{' '}
                 {data?.support?.help_article_transcript && (
                   <A
                     href={data.support.help_article_transcript}
                     target="_blank"
                   >
-                    {t('start.linkMore')}
+                    {texts.start.linkMore}
                   </A>
                 )}
               </Text>
@@ -201,7 +245,7 @@ export const TranscriptSidePanel = () => {
                   href={data?.transcript.form_beta_users}
                   target="_blank"
                 >
-                  {t('beta.button')}
+                  {texts.beta.button}
                 </LinkButton>
               )}
             </>
@@ -212,7 +256,7 @@ export const TranscriptSidePanel = () => {
           {statuses.isStarted ? (
             <>
               <H lvl={3} margin={false}>
-                {t('stop.heading')}
+                {texts.stop.heading}
               </H>
               <Text
                 variant="note"
@@ -224,7 +268,7 @@ export const TranscriptSidePanel = () => {
                   marginTop: '0.25rem',
                 })}
               >
-                {t('stop.body')}
+                {texts.stop.body}
               </Text>
               <Button
                 isDisabled={isDisabled}
@@ -233,7 +277,7 @@ export const TranscriptSidePanel = () => {
                 size="sm"
                 variant="tertiary"
               >
-                {t('stop.button')}
+                {texts.stop.button}
               </Button>
             </>
           ) : (
@@ -241,7 +285,7 @@ export const TranscriptSidePanel = () => {
               {statuses.isStopping || isPendingToStop ? (
                 <>
                   <H lvl={3} margin={false}>
-                    {t('stopping.heading')}
+                    {texts.stopping.heading}
                   </H>
                   <Text
                     variant="note"
@@ -254,14 +298,14 @@ export const TranscriptSidePanel = () => {
                       marginTop: '0.25rem',
                     })}
                   >
-                    {t('stopping.body')}
+                    {texts.stopping.body}
                   </Text>
                   <Spinner />
                 </>
               ) : (
                 <>
                   <H lvl={3} margin={false}>
-                    {t('start.heading')}
+                    {texts.start.heading}
                   </H>
                   <Text
                     variant="note"
@@ -274,13 +318,13 @@ export const TranscriptSidePanel = () => {
                       marginTop: '0.25rem',
                     })}
                   >
-                    {t('start.body', {
+                    {formatText(texts.start.body, {
                       duration_message: data?.recording?.max_duration
-                        ? t('durationMessage', {
+                        ? formatText(texts.durationMessage, {
                             max_duration: humanizeDuration(
                               data?.recording?.max_duration,
                               {
-                                language: i18n.language,
+                                language: 'ru',
                               }
                             ),
                           })
@@ -291,7 +335,7 @@ export const TranscriptSidePanel = () => {
                         href={data.support.help_article_transcript}
                         target="_blank"
                       >
-                        {t('start.linkMore')}
+                        {texts.start.linkMore}
                       </A>
                     )}
                   </Text>
@@ -305,10 +349,10 @@ export const TranscriptSidePanel = () => {
                     {statuses.isStarting || isPendingToStart ? (
                       <>
                         <Spinner size={20} />
-                        {t('start.loading')}
+                        {texts.start.loading}
                       </>
                     ) : (
-                      t('start.button')
+                      texts.start.button
                     )}
                   </Button>
                 </>
@@ -320,15 +364,15 @@ export const TranscriptSidePanel = () => {
       <Dialog
         isOpen={!!isErrorDialogOpen}
         role="alertdialog"
-        aria-label={t('alert.title')}
+        aria-label={texts.alert.title}
       >
-        <P>{t(`alert.body.${isErrorDialogOpen}`)}</P>
+        <P>{isErrorDialogOpen === 'stop' ? texts.alert.body.stop : texts.alert.body.start}</P>
         <Button
           variant="text"
           size="sm"
           onPress={() => setIsErrorDialogOpen('')}
         >
-          {t('alert.button')}
+          {texts.alert.button}
         </Button>
       </Dialog>
     </Div>

@@ -1,6 +1,5 @@
 import { LocalVideoTrack, Track } from 'livekit-client'
 import { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import {
   BackgroundOptions,
   BackgroundProcessorFactory,
@@ -27,6 +26,38 @@ enum BlurRadius {
 
 const isSupported = BackgroundProcessorFactory.isSupported()
 
+// Русские тексты для компонента
+const texts = {
+  activateCamera: 'Ваша камера отключена. Выберите опцию для её включения.',
+  cameraDisabled: 'Ваша камера отключена.',
+  notAvailable: 'Видеоэффекты скоро будут доступны в вашем браузере. Мы работаем над этим! А пока вы можете использовать Google Chrome для лучшей производительности или Firefox :(',
+  heading: 'Размытие',
+  clear: 'Отключить эффект',
+  blur: {
+    title: 'Размытие фона',
+    light: 'Легкое размытие',
+    normal: 'Размытие',
+    apply: 'Включить размытие',
+    clear: 'Отключить размытие',
+  },
+  virtual: {
+    title: 'Виртуальный фон',
+    apply: 'Включить виртуальный фон',
+    clear: 'Отключить виртуальный фон',
+  },
+  faceLandmarks: {
+    title: 'Визуальные эффекты',
+    glasses: {
+      apply: 'Добавить очки',
+      clear: 'Удалить очки',
+    },
+    french: {
+      apply: 'Добавить французский стиль',
+      clear: 'Удалить французский стиль',
+    },
+  },
+}
+
 const Information = styled('div', {
   base: {
     backgroundColor: 'orange.50',
@@ -50,7 +81,6 @@ export const EffectsConfiguration = ({
   layout = 'horizontal',
 }: EffectsConfigurationProps) => {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const { t } = useTranslation('rooms', { keyPrefix: 'effects' })
   const { toggle, enabled } = useTrackToggle({ source: Track.Source.Camera })
   const [processorPending, setProcessorPending] = useState(false)
   const processorPendingReveal = useSyncAfterDelay(processorPending)
@@ -154,7 +184,19 @@ export const EffectsConfiguration = ({
   }
 
   const tooltipLabel = (type: ProcessorType, options: BackgroundOptions) => {
-    return t(`${type}.${isSelected(type, options) ? 'clear' : 'apply'}`)
+    if (type === ProcessorType.BLUR) {
+      const blurOptions = options as { blurRadius: number }
+      if (isSelected(type, options)) {
+        return texts.blur.clear
+      }
+      if (blurOptions.blurRadius === BlurRadius.LIGHT) {
+        return texts.blur.apply
+      }
+      return texts.blur.apply
+    } else if (type === ProcessorType.VIRTUAL) {
+      return isSelected(type, options) ? texts.virtual.clear : texts.virtual.apply
+    }
+    return ''
   }
 
   return (
@@ -216,7 +258,7 @@ export const EffectsConfiguration = ({
                 marginBottom: 0,
               }}
             >
-              {t(isDisabled ? 'cameraDisabled' : 'activateCamera')}
+              {isDisabled ? texts.cameraDisabled : texts.activateCamera}
             </P>
           </div>
         )}
@@ -263,7 +305,7 @@ export const EffectsConfiguration = ({
                 }}
                 variant="bodyXsBold"
               >
-                {t('blur.title')}
+                {texts.blur.title}
               </H>
               <div
                 className={css({
@@ -273,7 +315,7 @@ export const EffectsConfiguration = ({
               >
                 <ToggleButton
                   variant="bigSquare"
-                  aria-label={t('clear')}
+                  aria-label={texts.clear}
                   onPress={async () => {
                     await clearEffect()
                   }}
@@ -337,7 +379,7 @@ export const EffectsConfiguration = ({
                   }}
                   variant="bodyXsBold"
                 >
-                  {t('virtual.title')}
+                  {texts.virtual.title}
                 </H>
                 <div
                   className={css({
@@ -384,7 +426,7 @@ export const EffectsConfiguration = ({
           </div>
         ) : (
           <Information>
-            <Text variant="sm">{t('notAvailable')}</Text>
+            <Text variant="sm">{texts.notAvailable}</Text>
           </Information>
         )}
       </div>

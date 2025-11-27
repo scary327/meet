@@ -3,7 +3,14 @@ import { css } from '@/styled-system/css'
 import { ToggleButton } from 'react-aria-components'
 import { HStack, styled, VStack } from '@/styled-system/jsx'
 import { RiArrowUpSLine } from '@remixicon/react'
-import { useTranslation } from 'react-i18next'
+
+// Русские тексты для компонента
+const texts = {
+  collapsable: {
+    open: 'Открыть список {{name}}',
+    close: 'Закрыть список {{name}}',
+  },
+}
 
 const ToggleHeader = styled(ToggleButton, {
   base: {
@@ -60,11 +67,21 @@ export function ParticipantsCollapsableList<T>({
   renderParticipant,
   action,
 }: ParticipantsCollapsableListProps<T>) {
-  const { t } = useTranslation('rooms')
   const [isOpen, setIsOpen] = useState(true)
-  const label = t(`participants.collapsable.${isOpen ? 'close' : 'open'}`, {
-    name: heading,
-  })
+
+  const formatText = (text: string, vars: Record<string, string>) => {
+    let result = text
+    Object.entries(vars).forEach(([key, value]) => {
+      result = result.replace(`{{${key}}}`, value)
+    })
+    return result
+  }
+
+  const label = formatText(
+    isOpen ? texts.collapsable.close : texts.collapsable.open,
+    { name: heading }
+  )
+
   return (
     <Container>
       <ToggleHeader
@@ -101,8 +118,12 @@ export function ParticipantsCollapsableList<T>({
       </ToggleHeader>
       {isOpen && (
         <ListContainer>
+          {participants?.map((participant) => (
+            <div key={participants.indexOf(participant)} style={{ width: '100%' }}>
+              {renderParticipant(participant)}
+            </div>
+          ))}
           {action}
-          {participants.map((participant) => renderParticipant(participant))}
         </ListContainer>
       )}
     </Container>

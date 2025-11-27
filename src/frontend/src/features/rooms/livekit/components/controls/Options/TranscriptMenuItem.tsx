@@ -23,7 +23,7 @@ export const TranscriptMenuItem = () => {
       onAction={() => (!isTranscriptOpen ? openTranscript() : toggleTools())}
     >
       <RiFileTextLine size={20} />
-      {t('transcript')}
+      Транскрипция
     </MenuItem>
   )
 }

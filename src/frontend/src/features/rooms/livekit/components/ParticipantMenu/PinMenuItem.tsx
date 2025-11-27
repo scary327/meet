@@ -3,19 +3,39 @@ import { menuRecipe } from '@/primitives/menuRecipe'
 import { HStack } from '@/styled-system/jsx'
 import { RiPushpin2Line, RiUnpinLine } from '@remixicon/react'
 import { MenuItem } from 'react-aria-components'
-import { useTranslation } from 'react-i18next'
 import { useFocusToggleParticipant } from '@/features/rooms/livekit/hooks/useFocusToggleParticipant'
 
-export const PinMenuItem = ({ participant }: { participant: Participant }) => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'participantMenu' })
+// Русские тексты для компонента
+const texts = {
+  pin: {
+    label: 'Закрепить',
+    ariaLabel: 'Закрепить {{name}}',
+  },
+  unpin: {
+    label: 'Открепить',
+    ariaLabel: 'Открепить {{name}}',
+  },
+}
 
+export const PinMenuItem = ({ participant }: { participant: Participant }) => {
   const { toggle, inFocus } = useFocusToggleParticipant(participant)
+
+  const formatText = (text: string, vars: Record<string, string>) => {
+    let result = text
+    Object.entries(vars).forEach(([key, value]) => {
+      result = result.replace(`{{${key}}}`, value)
+    })
+    return result
+  }
 
   return (
     <MenuItem
-      aria-label={t(`${inFocus ? 'unpin' : 'pin'}.ariaLabel`, {
-        name: participant.name,
-      })}
+      aria-label={formatText(
+        inFocus ? texts.unpin.ariaLabel : texts.pin.ariaLabel,
+        {
+          name: participant.name || '',
+        }
+      )}
       className={menuRecipe({ icon: true }).item}
       onAction={toggle}
     >
@@ -23,12 +43,12 @@ export const PinMenuItem = ({ participant }: { participant: Participant }) => {
         {inFocus ? (
           <>
             <RiUnpinLine size={20} aria-hidden />
-            {t('unpin.label')}
+            {texts.unpin.label}
           </>
         ) : (
           <>
             <RiPushpin2Line size={20} aria-hidden />
-            {t('pin.label')}
+            {texts.pin.label}
           </>
         )}
       </HStack>

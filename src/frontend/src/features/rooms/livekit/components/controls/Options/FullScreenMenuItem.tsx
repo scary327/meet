@@ -21,12 +21,12 @@ export const FullScreenMenuItem = () => {
       {isCurrentlyFullscreen ? (
         <>
           <RiFullscreenExitLine size={20} />
-          {t('fullscreen.exit')}
+            Выйти из полноэкранного режима
         </>
       ) : (
         <>
           <RiFullscreenLine size={20} />
-          {t('fullscreen.enter')}
+           Полный экран
         </>
       )}
     </MenuItem>

@@ -2,9 +2,22 @@ import { Button, Text } from '@/primitives'
 import { HStack } from '@/styled-system/jsx'
 import { css } from '@/styled-system/css'
 import { Avatar } from '@/components/Avatar'
-import { useTranslation } from 'react-i18next'
 import { WaitingParticipant } from '@/features/rooms/api/listWaitingParticipants'
 import { RiCloseLine } from '@remixicon/react'
+
+// Русские тексты для компонента
+const texts = {
+  waiting: {
+    accept: {
+      button: 'Принять',
+      label: 'Принять {{name}} на встречу',
+    },
+    deny: {
+      button: 'Отклонить',
+      label: 'Отклонить {{name}} от встречи',
+    },
+  },
+}
 
 export const WaitingParticipantListItem = ({
   participant,
@@ -13,7 +26,13 @@ export const WaitingParticipantListItem = ({
   participant: WaitingParticipant
   onAction: (participant: WaitingParticipant, allowEntry: boolean) => void
 }) => {
-  const { t } = useTranslation('rooms')
+  const formatText = (text: string, vars: Record<string, string>) => {
+    let result = text
+    Object.entries(vars).forEach(([key, value]) => {
+      result = result.replace(`{{${key}}}`, value)
+    })
+    return result
+  }
 
   return (
     <HStack
@@ -64,20 +83,24 @@ export const WaitingParticipantListItem = ({
       >
         <Button
           size="sm"
-          variant="tertiary"
+          variant="secondary"
           onPress={() => onAction(participant, true)}
-          aria-label={t('waiting.accept.label', { name: participant.username })}
+          aria-label={formatText(texts.waiting.accept.label, {
+            name: participant.username,
+          })}
           data-attr="participants-accept"
         >
-          {t('participants.waiting.accept.button')}
+          {texts.waiting.accept.button}
         </Button>
         <Button
           size="sm"
           square
-          tooltip={t('participants.waiting.deny.button')}
+          tooltip={texts.waiting.deny.button}
           variant="primaryDark"
           onPress={() => onAction(participant, false)}
-          aria-label={t('waiting.deny.label', { name: participant.username })}
+          aria-label={formatText(texts.waiting.deny.label, {
+            name: participant.username,
+          })}
           data-attr="participants-deny"
         >
           <RiCloseLine />

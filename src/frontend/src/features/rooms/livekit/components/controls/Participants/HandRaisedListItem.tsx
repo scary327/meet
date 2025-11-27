@@ -2,7 +2,6 @@ import { css } from '@/styled-system/css'
 
 import { HStack } from '@/styled-system/jsx'
 import { Text } from '@/primitives/Text'
-import { useTranslation } from 'react-i18next'
 import { Avatar } from '@/components/Avatar'
 import { useLowerHandParticipant } from '@/features/rooms/api/lowerHandParticipant'
 import { getParticipantColor } from '@/features/rooms/utils/getParticipantColor'
@@ -12,6 +11,12 @@ import { isLocal } from '@/utils/livekit'
 import { RiHand } from '@remixicon/react'
 import { Button } from '@/primitives'
 
+// Русские тексты для компонента
+const texts = {
+  you: '(Вы)',
+  lowerParticipantHand: 'Опустить руку {{name}}',
+}
+
 type HandRaisedListItemProps = {
   participant: Participant
 }
@@ -19,11 +24,18 @@ type HandRaisedListItemProps = {
 export const HandRaisedListItem = ({
   participant,
 }: HandRaisedListItemProps) => {
-  const { t } = useTranslation('rooms')
   const name = participant.name || participant.identity
 
   const { lowerHandParticipant } = useLowerHandParticipant()
   const isAdminOrOwner = useIsAdminOrOwner()
+
+  const formatText = (text: string, vars: Record<string, string>) => {
+    let result = text
+    Object.entries(vars).forEach(([key, value]) => {
+      result = result.replace(`{{${key}}}`, value)
+    })
+    return result
+  }
 
   return (
     <HStack
@@ -64,7 +76,7 @@ export const HandRaisedListItem = ({
                 whiteSpace: 'nowrap',
               })}
             >
-              ({t('participants.you')})
+              {texts.you}
             </span>
           )}
         </Text>
@@ -72,12 +84,12 @@ export const HandRaisedListItem = ({
       {isAdminOrOwner && (
         <Button
           square
-          variant="primaryDark"
-          size="sm"
+          variant="greyscale"
+          size="xs"
+          tooltip={formatText(texts.lowerParticipantHand, { name })}
+          aria-label={formatText(texts.lowerParticipantHand, { name })}
           onPress={() => lowerHandParticipant(participant)}
-          aria-label={t('participants.lowerParticipantHand', { name })}
-          tooltip={t('participants.lowerParticipantHand', { name })}
-          data-attr="participants-lower-hand"
+          data-attr="hand-raised-lower"
         >
           <RiHand />
         </Button>

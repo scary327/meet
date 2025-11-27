@@ -28,7 +28,6 @@ const ZoomButton = ({
 }: {
   trackRef: TrackReferenceOrPlaceholder
 }) => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'participantTileFocus' })
   const { toggleFullScreen, isFullscreenAvailable } = useFullScreen({
     trackRef,
   })
@@ -42,7 +41,7 @@ const ZoomButton = ({
       size="sm"
       variant="participantTileButton"
       square
-      tooltip={t('fullScreen')}
+      tooltip="Полный экран"
       onPress={() => toggleFullScreen()}
     >
       <RiFullscreenLine />
@@ -55,7 +54,6 @@ const FocusButton = ({
 }: {
   trackRef: TrackReferenceOrPlaceholder
 }) => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'participantTileFocus' })
   const { mergedProps, inFocus } = useFocusToggle({
     trackRef,
     props: {},
@@ -65,7 +63,7 @@ const FocusButton = ({
       size="sm"
       variant="participantTileButton"
       square
-      tooltip={inFocus ? t('pin.disable') : t('pin.enable')}
+      tooltip={inFocus ? 'Открепить' : 'Закрепить'}
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onPress={(event) => mergedProps?.onClick?.(event as any)}
     >
@@ -75,14 +73,13 @@ const FocusButton = ({
 }
 
 const EffectsButton = () => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'participantTileFocus' })
   const { isEffectsOpen, toggleEffects } = useSidePanel()
   return (
     <Button
       size={'sm'}
       variant={'participantTileButton'}
       square
-      tooltip={t('effects')}
+      tooltip={'Применить визуальные эффекты'}
       onPress={() => !isEffectsOpen && toggleEffects()}
     >
       <RiImageCircleAiFill />
@@ -91,8 +88,6 @@ const EffectsButton = () => {
 }
 
 const MuteButton = ({ participant }: { participant: Participant }) => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'participantTileFocus' })
-
   const { isMuted } = useTrackMutedIndicator({
     participant: participant,
     source: Track.Source.Microphone,
@@ -111,7 +106,7 @@ const MuteButton = ({ participant }: { participant: Participant }) => {
         variant={'participantTileButton'}
         square
         onPress={() => setIsAlertOpen(true)}
-        tooltip={t('muteParticipant', { name })}
+        tooltip={`Отключить микрофон ${name}`}
       >
         {!isMuted ? <RiMicLine /> : <RiMicOffLine />}
       </Button>

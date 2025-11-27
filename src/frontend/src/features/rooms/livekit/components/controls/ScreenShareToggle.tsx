@@ -1,6 +1,5 @@
 import { Div, ToggleButton } from '@/primitives'
 import { RiArrowUpLine, RiCloseFill, RiRectangleLine } from '@remixicon/react'
-import { useTranslation } from 'react-i18next'
 import { useTrackToggle, UseTrackToggleProps } from '@livekit/components-react'
 import { Track } from 'livekit-client'
 import React from 'react'
@@ -8,6 +7,13 @@ import { type ButtonRecipeProps } from '@/primitives/buttonRecipe'
 import { ToggleButtonProps } from '@/primitives/ToggleButton'
 import { TrackSource } from '@livekit/protocol'
 import { useCanPublishTrack } from '@/features/rooms/livekit/hooks/useCanPublishTrack'
+
+const texts = {
+  screenShare: {
+    start: 'Поделиться экраном',
+    stop: 'Остановить демонстрацию',
+  },
+}
 
 type Props = Omit<
   UseTrackToggleProps<Track.Source.ScreenShare>,
@@ -21,14 +27,13 @@ export const ScreenShareToggle = ({
   onPress,
   ...props
 }: Props) => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'controls.screenShare' })
   const { buttonProps, enabled } = useTrackToggle({
     ...props,
     source: Track.Source.ScreenShare,
     captureOptions: { audio: true, selfBrowserSurface: 'include' },
   })
 
-  const tooltipLabel = enabled ? 'stop' : 'start'
+  const tooltipLabel = enabled ? texts.screenShare.stop : texts.screenShare.start
   const Icon = enabled ? RiCloseFill : RiArrowUpLine
 
   const canShareScreen = useCanPublishTrack(TrackSource.SCREEN_SHARE)
@@ -40,16 +45,15 @@ export const ScreenShareToggle = ({
       isDisabled={!canShareScreen}
       square
       variant={variant}
-      aria-label={t(tooltipLabel)}
-      tooltip={t(tooltipLabel)}
+      aria-label={tooltipLabel}
+      tooltip={tooltipLabel}
       onPress={(e) => {
         buttonProps.onClick?.(
           e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>
         )
         onPress?.(e)
       }}
-      data-attr={`controls-screenshare-${tooltipLabel}`}
-      {...props}
+      data-attr={`controls-screenshare-${enabled ? 'stop' : 'start'}`}
     >
       <Div position="relative">
         <RiRectangleLine size={24} />

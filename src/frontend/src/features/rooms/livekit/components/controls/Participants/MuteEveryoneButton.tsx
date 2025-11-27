@@ -1,10 +1,14 @@
 import { Button } from '@/primitives'
-import { useTranslation } from 'react-i18next'
 import { Participant } from 'livekit-client'
 import { useIsAdminOrOwner } from '@/features/rooms/livekit/hooks/useIsAdminOrOwner'
 import { useMuteParticipants } from '@/features/rooms/api/muteParticipants'
 import { RiMicOffLine } from '@remixicon/react'
 import { css } from '@/styled-system/css'
+
+// Русские тексты для компонента
+const texts = {
+  muteParticipants: 'Отключить все микрофоны',
+}
 
 type MuteEveryoneButtonProps = {
   participants: Array<Participant>
@@ -14,17 +18,16 @@ export const MuteEveryoneButton = ({
   participants,
 }: MuteEveryoneButtonProps) => {
   const { muteParticipants } = useMuteParticipants()
-  const { t } = useTranslation('rooms')
 
   const isAdminOrOwner = useIsAdminOrOwner()
   if (!isAdminOrOwner || !participants.length) return null
 
   return (
     <Button
-      aria-label={t('participants.muteParticipants')}
+      aria-label={texts.muteParticipants}
       size="sm"
       fullWidth
-      variant="tertiary"
+      variant="secondary"
       onPress={() => muteParticipants(participants)}
       data-attr="participants-mute"
       className={css({
@@ -32,7 +35,7 @@ export const MuteEveryoneButton = ({
       })}
     >
       <RiMicOffLine size={16} />
-      {t('participants.muteParticipants')}
+      {texts.muteParticipants}
     </Button>
   )
 }

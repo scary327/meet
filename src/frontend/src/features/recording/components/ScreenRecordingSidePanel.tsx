@@ -11,7 +11,6 @@ import {
 } from '@/features/recording'
 import { useEffect, useMemo, useState } from 'react'
 import { ConnectionState, RoomEvent } from 'livekit-client'
-import { useTranslation } from 'react-i18next'
 import { RecordingStatus, recordingStore } from '@/stores/recording'
 
 import {
@@ -24,13 +23,45 @@ import { useSnapshot } from 'valtio/index'
 import { Spinner } from '@/primitives/Spinner'
 import { useConfig } from '@/api/useConfig'
 import humanizeDuration from 'humanize-duration'
-import i18n from 'i18next'
+
+// Русские тексты для компонента
+const texts = {
+  start: {
+    heading: 'Записать этот звонок',
+    body: 'Записать этот звонок для просмотра позже {{duration_message}} и получить видеозапись по электронной почте.',
+    button: 'Начать запись',
+    loading: 'Запись начинается',
+    linkMore: 'Узнать больше',
+  },
+  notAdminOrOwner: {
+    heading: 'Ограниченный доступ',
+    body: 'По соображениям безопасности только создатель встречи или администратор может начать запись (бета).',
+    linkMore: 'Узнать больше',
+  },
+  stopping: {
+    heading: 'Сохранение ваших данных…',
+    body: 'Вы можете покинуть встречу, если хотите; запись завершится автоматически.',
+  },
+  stop: {
+    heading: 'Запись в процессе…',
+    body: 'Вы получите результат по электронной почте после завершения записи.',
+    button: 'Остановить запись',
+  },
+  alert: {
+    title: 'Ошибка записи',
+    body: {
+      stop: 'Не удалось остановить запись. Пожалуйста, попробуйте еще раз через некоторое время.',
+      start: 'Не удалось начать запись. Пожалуйста, попробуйте еще раз через некоторое время.',
+    },
+    button: 'OK',
+  },
+  durationMessage: '(ограничено до {{max_duration}}) ',
+}
 
 export const ScreenRecordingSidePanel = () => {
   const { data } = useConfig()
   const [isLoading, setIsLoading] = useState(false)
   const recordingSnap = useSnapshot(recordingStore)
-  const { t } = useTranslation('rooms', { keyPrefix: 'screenRecording' })
 
   const [isErrorDialogOpen, setIsErrorDialogOpen] = useState('')
 
@@ -117,6 +148,15 @@ export const ScreenRecordingSidePanel = () => {
     [isLoading, isRecordingTransitioning, statuses, isRoomConnected]
   )
 
+  // Функция для форматирования текста с переменными
+  const formatText = (text: string, vars: Record<string, string>) => {
+    let result = text
+    Object.entries(vars).forEach(([key, value]) => {
+      result = result.replace(`{{${key}}}`, value)
+    })
+    return result
+  }
+
   return (
     <Div
       display="flex"
@@ -138,7 +178,7 @@ export const ScreenRecordingSidePanel = () => {
       {statuses.isStarted ? (
         <>
           <H lvl={3} margin={false}>
-            {t('stop.heading')}
+            {texts.stop.heading}
           </H>
           <Text
             variant="note"
@@ -150,7 +190,7 @@ export const ScreenRecordingSidePanel = () => {
               marginTop: '0.25rem',
             })}
           >
-            {t('stop.body')}
+            {texts.stop.body}
           </Text>
           <Button
             isDisabled={isDisabled}
@@ -159,7 +199,7 @@ export const ScreenRecordingSidePanel = () => {
             size="sm"
             variant="tertiary"
           >
-            {t('stop.button')}
+            {texts.stop.button}
           </Button>
         </>
       ) : (
@@ -167,7 +207,7 @@ export const ScreenRecordingSidePanel = () => {
           {statuses.isStopping || isPendingToStop ? (
             <>
               <H lvl={3} margin={false}>
-                {t('stopping.heading')}
+                {texts.stopping.heading}
               </H>
               <Text
                 variant="note"
@@ -180,14 +220,14 @@ export const ScreenRecordingSidePanel = () => {
                   marginTop: '0.25rem',
                 })}
               >
-                {t('stopping.body')}
+                {texts.stopping.body}
               </Text>
               <Spinner />
             </>
           ) : (
             <>
               <H lvl={3} margin={false}>
-                {t('start.heading')}
+                {texts.start.heading}
               </H>
               <Text
                 variant="note"
@@ -200,13 +240,13 @@ export const ScreenRecordingSidePanel = () => {
                   marginTop: '0.25rem',
                 })}
               >
-                {t('start.body', {
+                {formatText(texts.start.body, {
                   duration_message: data?.recording?.max_duration
-                    ? t('durationMessage', {
+                    ? formatText(texts.durationMessage, {
                         max_duration: humanizeDuration(
                           data?.recording?.max_duration,
                           {
-                            language: i18n.language,
+                            language: 'ru',
                           }
                         ),
                       })
@@ -214,7 +254,7 @@ export const ScreenRecordingSidePanel = () => {
                 })}{' '}
                 {data?.support?.help_article_recording && (
                   <A href={data.support.help_article_recording} target="_blank">
-                    {t('start.linkMore')}
+                    {texts.start.linkMore}
                   </A>
                 )}
               </Text>
@@ -228,10 +268,10 @@ export const ScreenRecordingSidePanel = () => {
                 {statuses.isStarting || isPendingToStart ? (
                   <>
                     <Spinner size={20} />
-                    {t('start.loading')}
+                    {texts.start.loading}
                   </>
                 ) : (
-                  t('start.button')
+                  texts.start.button
                 )}
               </Button>
             </>
@@ -241,15 +281,15 @@ export const ScreenRecordingSidePanel = () => {
       <Dialog
         isOpen={!!isErrorDialogOpen}
         role="alertdialog"
-        aria-label={t('alert.title')}
+        aria-label={texts.alert.title}
       >
-        <P>{t(`alert.body.${isErrorDialogOpen}`)}</P>
+        <P>{isErrorDialogOpen === 'stop' ? texts.alert.body.stop : texts.alert.body.start}</P>
         <Button
           variant="text"
           size="sm"
           onPress={() => setIsErrorDialogOpen('')}
         >
-          {t('alert.button')}
+          {texts.alert.button}
         </Button>
       </Dialog>
     </Div>

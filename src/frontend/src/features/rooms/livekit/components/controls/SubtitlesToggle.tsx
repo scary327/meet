@@ -1,15 +1,21 @@
-import { useTranslation } from 'react-i18next'
 import { RiClosedCaptioningLine } from '@remixicon/react'
 import { ToggleButton } from '@/primitives'
 import { css } from '@/styled-system/css'
 import { useSubtitles } from '@/features/subtitle/hooks/useSubtitles'
 import { useAreSubtitlesAvailable } from '@/features/subtitle/hooks/useAreSubtitlesAvailable'
 
+// Русские тексты для компонента
+const texts = {
+  subtitles: {
+    closed: 'Показать субтитры',
+    open: 'Скрыть субтитры',
+  },
+}
+
 export const SubtitlesToggle = () => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'controls.subtitles' })
   const { areSubtitlesOpen, toggleSubtitles, areSubtitlesPending } =
     useSubtitles()
-  const tooltipLabel = areSubtitlesOpen ? 'open' : 'closed'
+  const tooltipLabel = areSubtitlesOpen ? texts.subtitles.open : texts.subtitles.closed
   const areSubtitlesAvailable = useAreSubtitlesAvailable()
 
   if (!areSubtitlesAvailable) return null
@@ -24,12 +30,12 @@ export const SubtitlesToggle = () => {
       <ToggleButton
         square
         variant="primaryDark"
-        aria-label={t(tooltipLabel)}
-        tooltip={t(tooltipLabel)}
+        aria-label={tooltipLabel}
+        tooltip={tooltipLabel}
         isSelected={areSubtitlesOpen}
         isDisabled={areSubtitlesPending}
         onPress={toggleSubtitles}
-        data-attr={`controls-subtitles-${tooltipLabel}`}
+        data-attr={`controls-subtitles-${areSubtitlesOpen ? 'open' : 'closed'}`}
       >
         <RiClosedCaptioningLine />
       </ToggleButton>

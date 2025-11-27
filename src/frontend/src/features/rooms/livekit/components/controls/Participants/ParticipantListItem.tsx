@@ -2,7 +2,6 @@ import { css } from '@/styled-system/css'
 
 import { HStack, VStack } from '@/styled-system/jsx'
 import { Text } from '@/primitives/Text'
-import { useTranslation } from 'react-i18next'
 import { Avatar } from '@/components/Avatar'
 import { getParticipantColor } from '@/features/rooms/utils/getParticipantColor'
 import { getParticipantIsRoomAdmin } from '@/features/rooms/utils/getParticipantIsRoomAdmin'
@@ -22,12 +21,19 @@ import { useCanMute } from '@/features/rooms/livekit/hooks/useCanMute'
 import { ParticipantMenuButton } from '../../ParticipantMenu/ParticipantMenuButton'
 import { PinBadge } from './PinBadge'
 
+// Русские тексты для компонента
+const texts = {
+  muteYourself: 'Выключить ваш микрофон',
+  muteParticipant: 'Выключить микрофон {{name}}',
+  you: '(Вы)',
+  organizer: '(Организатор)',
+}
+
 type MicIndicatorProps = {
   participant: Participant
 }
 
 const MicIndicator = ({ participant }: MicIndicatorProps) => {
-  const { t } = useTranslation('rooms')
   const { muteParticipant } = useMuteParticipant()
   const { isMuted } = useTrackMutedIndicator({
     participant: participant,
@@ -40,10 +46,8 @@ const MicIndicator = ({ participant }: MicIndicatorProps) => {
   const name = participant.name || participant.identity
 
   const label = isLocal(participant)
-    ? t('participants.muteYourself')
-    : t('participants.muteParticipant', {
-        name,
-      })
+    ? texts.muteYourself
+    : texts.muteParticipant.replace('{{name}}', name)
 
   return (
     <>
@@ -96,7 +100,6 @@ type ParticipantListItemProps = {
 export const ParticipantListItem = ({
   participant,
 }: ParticipantListItemProps) => {
-  const { t } = useTranslation('rooms')
   const name = participant.name || participant.identity
   return (
     <HStack
@@ -144,12 +147,12 @@ export const ParticipantListItem = ({
                   whiteSpace: 'nowrap',
                 })}
               >
-                ({t('participants.you')})
+                {texts.you}
               </span>
             )}
           </Text>
           {getParticipantIsRoomAdmin(participant) && (
-            <Text variant="xsNote">{t('participants.host')}</Text>
+            <Text variant="xsNote">{texts.organizer}</Text>
           )}
         </VStack>
       </HStack>

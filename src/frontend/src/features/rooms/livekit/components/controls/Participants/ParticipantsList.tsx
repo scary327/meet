@@ -2,7 +2,6 @@ import { css } from '@/styled-system/css'
 import { useParticipants } from '@livekit/components-react'
 
 import { Div, H } from '@/primitives'
-// import { useTranslation } from 'react-i18next'
 import { ParticipantListItem } from '../../controls/Participants/ParticipantListItem'
 import { ParticipantsCollapsableList } from '../../controls/Participants/ParticipantsCollapsableList'
 import { HandRaisedListItem } from '../../controls/Participants/HandRaisedListItem'
@@ -13,10 +12,18 @@ import { Participant } from 'livekit-client'
 import { WaitingParticipant } from '@/features/rooms/api/listWaitingParticipants'
 import { MuteEveryoneButton } from './MuteEveryoneButton'
 
+// Русские тексты для компонента
+const texts = {
+  subheading: 'В помещении',
+  waiting: {
+    title: 'Лобби',
+  },
+  raisedHands: 'Поднятые руки',
+  contributors: 'Участники',
+}
+
 // TODO: Optimize rendering performance, especially for longer participant lists, even though they are generally short.
 export const ParticipantsList = () => {
-  // const { t } = useTranslation('rooms', { keyPrefix: 'participants' })
-
   // Preferred using the 'useParticipants' hook rather than the separate remote and local hooks,
   // because the 'useLocalParticipant' hook does not update the participant's information when their
   // metadata/name changes. The LiveKit team has marked this as a TODO item in the code.
@@ -61,12 +68,12 @@ export const ParticipantsList = () => {
           marginBottom: '0.83em',
         })}
       >
-        В КОМНАТЕ
+        {texts.subheading}
       </H>
       {waitingParticipants?.length > 0 && (
         <Div marginBottom=".9375rem">
           <ParticipantsCollapsableList<WaitingParticipant>
-            heading="Лобби"
+            heading={texts.waiting.title}
             participants={waitingParticipants}
             renderParticipant={(participant) => (
               <WaitingParticipantListItem
@@ -82,7 +89,7 @@ export const ParticipantsList = () => {
       {raisedHandParticipants.length > 0 && (
         <Div marginBottom=".9375rem">
           <ParticipantsCollapsableList<Participant>
-            heading="Поднятые руки"
+            heading={texts.raisedHands}
             participants={raisedHandParticipants}
             renderParticipant={(participant) => (
               <HandRaisedListItem
@@ -97,7 +104,7 @@ export const ParticipantsList = () => {
         </Div>
       )}
       <ParticipantsCollapsableList<Participant>
-        heading="Участники"
+        heading={texts.contributors}
         participants={sortedParticipants}
         renderParticipant={(participant) => (
           <ParticipantListItem
@@ -105,7 +112,7 @@ export const ParticipantsList = () => {
             participant={participant}
           />
         )}
-        action={<MuteEveryoneButton participants={sortedRemoteParticipants} />}
+        action={<MuteEveryoneButton participants={sortedParticipants} />}
       />
     </Div>
   )

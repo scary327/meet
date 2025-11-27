@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { RiEmotionLine } from '@remixicon/react'
 import { useState, useRef, useEffect } from 'react'
 import { css } from '@/styled-system/css'
@@ -13,6 +12,14 @@ import {
 import { Toolbar as RACToolbar } from 'react-aria-components'
 import { Participant } from 'livekit-client'
 import useRateLimiter from '@/hooks/useRateLimiter'
+
+// Русские тексты для компонента
+const texts = {
+  reactions: {
+    button: 'Отправить реакцию',
+    send: 'Отправить реакцию {{emoji}}',
+  },
+}
 
 // eslint-disable-next-line react-refresh/only-export-components
 export enum Emoji {
@@ -33,12 +40,19 @@ export interface Reaction {
 }
 
 export const ReactionsToggle = () => {
-  const { t } = useTranslation('rooms', { keyPrefix: 'controls.reactions' })
   const [reactions, setReactions] = useState<Reaction[]>([])
   const instanceIdRef = useRef(0)
   const room = useRoomContext()
 
   const [isVisible, setIsVisible] = useState(false)
+
+  const formatText = (text: string, vars: Record<string, string>) => {
+    let result = text
+    Object.entries(vars).forEach(([key, value]) => {
+      result = result.replace(`{{${key}}}`, value)
+    })
+    return result
+  }
 
   const sendReaction = async (emoji: string) => {
     const encoder = new TextEncoder()
@@ -65,7 +79,6 @@ export const ReactionsToggle = () => {
       )
     }, ANIMATION_DURATION)
   }
-
   const debouncedSendReaction = useRateLimiter({
     callback: sendReaction,
     maxCalls: 10,
@@ -77,7 +90,6 @@ export const ReactionsToggle = () => {
   // animation isn't perfect
   const [isRendered, setIsRendered] = useState(isVisible)
   const [opacity, setOpacity] = useState(isVisible ? 1 : 0)
-
   useEffect(() => {
     if (isVisible) {
       // Show: first render, then animate in
@@ -111,8 +123,8 @@ export const ReactionsToggle = () => {
         <ToggleButton
           square
           variant="primaryDark"
-          aria-label={t('button')}
-          tooltip={t('button')}
+          aria-label={texts.reactions.button}
+          tooltip={texts.reactions.button}
           onPress={() => setIsVisible(!isVisible)}
         >
           <RiEmotionLine />
@@ -145,7 +157,7 @@ export const ReactionsToggle = () => {
                 <Button
                   key={index}
                   onPress={() => debouncedSendReaction(emoji)}
-                  aria-label={t('send', { emoji })}
+                  aria-label={formatText(texts.reactions.send, { emoji })}
                   variant="primaryTextDark"
                   size="sm"
                   square

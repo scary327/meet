@@ -14,7 +14,7 @@ export const EffectsMenuItem = () => {
       className={menuRecipe({ icon: true, variant: 'dark' }).item}
     >
       <RiImageCircleAiFill size={20} />
-      {t('effects')}
+      Эффекты
     </MenuItem>
   )
 }
