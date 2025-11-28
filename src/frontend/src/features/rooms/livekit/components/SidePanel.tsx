@@ -71,7 +71,7 @@ const StyledSidePanel = ({
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        margin: '2rem 1.5rem 1.5rem 0',
+        margin: '1.5rem 1.5rem 1.5rem 0',
         padding: 0,
         gap: 0,
         right: 0,
@@ -81,7 +81,6 @@ const StyledSidePanel = ({
         transition: '.5s cubic-bezier(.4,0,.2,1) 5ms',
         '@media (max-width: 560px)': {
           width: 'calc(100vw - 2.5rem)',
-          margin: '2rem 1.25rem',
         },
       })}
       style={{
