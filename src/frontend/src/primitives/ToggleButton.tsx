@@ -5,12 +5,14 @@ import {
 import { type ButtonRecipeProps, buttonRecipe } from './buttonRecipe'
 import { TooltipWrapper, TooltipWrapperProps } from './TooltipWrapper'
 import { ReactNode } from 'react'
+import { css } from '@/styled-system/css'
 
 export type ToggleButtonProps = RACToggleButtonProps &
   ButtonRecipeProps &
   TooltipWrapperProps & {
     // Use tooltip as description below the button.
     description?: boolean
+    icon?: ReactNode
   }
 
 /**
@@ -23,15 +25,40 @@ export const ToggleButton = ({
 }: ToggleButtonProps) => {
   const [variantProps, componentProps] = buttonRecipe.splitVariantProps(props)
 
+  const showDescription = props.description && tooltip
+
+  const descriptionWrapperClass = css({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.25rem',
+    fontSize: '0.75rem',
+    alignItems: 'center',
+  })
+
   return (
-    <TooltipWrapper tooltip={tooltip} tooltipType={tooltipType}>
+    <TooltipWrapper
+      tooltip={showDescription ? undefined : tooltip}
+      tooltipType={tooltipType}
+    >
       <RACToggleButton
         {...componentProps}
-        className={[buttonRecipe(variantProps), props.className].join(' ')}
+        className={[
+          buttonRecipe(variantProps),
+          props.className,
+          showDescription ? descriptionWrapperClass : '',
+        ].join(' ')}
       >
         <>
-          {componentProps.children as ReactNode}
-          {props.description && <span>{tooltip}</span>}
+          {!showDescription && (componentProps.children as ReactNode)}
+          {!showDescription && props.icon}
+          {showDescription && (
+            <>
+              <span>
+                {props.icon || (componentProps.children as ReactNode)}
+              </span>
+              <span>{tooltip}</span>
+            </>
+          )}
         </>
       </RACToggleButton>
     </TooltipWrapper>

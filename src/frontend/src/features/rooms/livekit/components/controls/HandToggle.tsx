@@ -77,9 +77,8 @@ export const HandToggle = () => {
           resetToastState()
         }}
         data-attr={`controls-hand-${isHandRaised ? 'lower' : 'raise'}`}
-      >
-        <RiHand />
-      </ToggleButton>
+        icon={<RiHand />}
+      />
     </div>
   )
 }

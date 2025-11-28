@@ -104,8 +104,10 @@ export function MobileControlBar({
               gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
               gridGap: '1rem',
               '& > *': {
-                alignSelf: 'center',
-                justifySelf: 'center',
+                alignSelf: 'stretch',
+                justifySelf: 'stretch',
+                width: '100%',
+                height: '100%',
               },
             })}
           >
@@ -116,16 +118,47 @@ export function MobileControlBar({
                 }
                 variant="sidePanelButton"
                 onPress={() => setIsMenuOpened(false)}
+                description={true}
+                className={css({
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '8px',
+                  border: '2px solid #fff !important',
+                })}
               />
             )}
             <ChatToggle
               onPress={() => setIsMenuOpened(false)}
+              variant="sidePanelButton"
+              description={true}
+              className={css({
+                borderRadius: '8px',
+                border: '2px solid #fff !important',
+                width: '100% !important',
+                height: '100% !important',
+              })}
             />
             <ParticipantsToggle
               onPress={() => setIsMenuOpened(false)}
+              variant="sidePanelButton"
+              description={true}
+              className={css({
+                width: '100% !important',
+                height: '100% !important',
+                borderRadius: '8px',
+                border: '2px solid #fff !important',
+              })}
             />
             <ToolsToggle
               onPress={() => setIsMenuOpened(false)}
+              variant="sidePanelButton"
+              description={true}
+              className={css({
+                width: '100% !important',
+                height: '100% !important',
+                borderRadius: '8px',
+                border: '2px solid #fff !important',
+              })}
             />
             <Button
               onPress={() => {
@@ -135,9 +168,15 @@ export function MobileControlBar({
               variant="sidePanelButton"
               aria-label={t('options.items.effects')}
               tooltip={t('options.items.effects')}
-            >
-              <RiAccountBoxLine size={20} />
-            </Button>
+              description={true}
+              icon={<RiAccountBoxLine size={20} />}
+              className={css({
+                width: '100%',
+                height: '100%',
+                borderRadius: '8px',
+                border: '2px solid #fff !important',
+              })}
+            />
             {data?.feedback?.url && (
               <LinkButton
                 href={data?.feedback?.url}
@@ -146,9 +185,15 @@ export function MobileControlBar({
                 aria-label={t('options.items.feedback')}
                 target="_blank"
                 onPress={() => setIsMenuOpened(false)}
-              >
-                <RiMegaphoneLine size={20} />
-              </LinkButton>
+                description={true}
+                icon={<RiMegaphoneLine size={20} />}
+                className={css({
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '8px',
+                  border: '2px solid #fff !important',
+                })}
+              />
             )}
             <Button
               onPress={() => {
@@ -158,9 +203,15 @@ export function MobileControlBar({
               variant="sidePanelButton"
               aria-label={t('options.items.settings')}
               tooltip={t('options.items.settings')}
-            >
-              <RiSettings3Line size={20} />
-            </Button>
+              description={true}
+              icon={<RiSettings3Line size={20} />}
+              className={css({
+                width: '100%',
+                height: '100%',
+                borderRadius: '8px',
+                border: '2px solid #fff !important',
+              })}
+            />
           </div>
         </div>
       </ResponsiveMenu>

@@ -115,7 +115,6 @@ export const CameraSwitchButton = (props: Partial<ButtonProps>) => {
       variant="sidePanelButton"
       aria-label={t('options.items.switchCamera')}
       tooltip={t('options.items.switchCamera')}
-      description={true}
     >
       <RiCameraSwitchLine size={20} />
     </Button>

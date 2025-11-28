@@ -33,12 +33,29 @@ export const ScreenShareToggle = ({
     captureOptions: { audio: true, selfBrowserSurface: 'include' },
   })
 
-  const tooltipLabel = enabled ? texts.screenShare.stop : texts.screenShare.start
+  const tooltipLabel = enabled
+    ? texts.screenShare.stop
+    : texts.screenShare.start
   const Icon = enabled ? RiCloseFill : RiArrowUpLine
 
   const canShareScreen = useCanPublishTrack(TrackSource.SCREEN_SHARE)
 
   // fixme - remove ToggleButton custom styles when we design a proper icon
+  const iconElement = (
+    <Div position="relative">
+      <RiRectangleLine size={24} />
+      <Icon
+        size={14}
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      />
+    </Div>
+  )
+
   return (
     <ToggleButton
       isSelected={enabled}
@@ -54,19 +71,9 @@ export const ScreenShareToggle = ({
         onPress?.(e)
       }}
       data-attr={`controls-screenshare-${enabled ? 'stop' : 'start'}`}
-    >
-      <Div position="relative">
-        <RiRectangleLine size={24} />
-        <Icon
-          size={14}
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
-      </Div>
-    </ToggleButton>
+      {...props}
+      icon={props.description ? iconElement : undefined}
+      {...(!props.description && { children: iconElement })}
+    />
   )
 }

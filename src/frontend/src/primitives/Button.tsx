@@ -2,7 +2,7 @@ import {
   Button as RACButton,
   type ButtonProps as RACButtonsProps,
 } from 'react-aria-components'
-import { type RecipeVariantProps } from '@/styled-system/css'
+import { type RecipeVariantProps, css } from '@/styled-system/css'
 import { buttonRecipe, type ButtonRecipe } from './buttonRecipe'
 import { TooltipWrapper, type TooltipWrapperProps } from './TooltipWrapper'
 import { ReactNode } from 'react'
@@ -25,16 +25,40 @@ export const Button = ({
   const [variantProps, componentProps] = buttonRecipe.splitVariantProps(props)
   const { className, ...remainingComponentProps } = componentProps
 
+  const showDescription = props.description && tooltip
+
+  const descriptionWrapperClass = css({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.25rem',
+    fontSize: '0.75rem',
+    alignItems: 'center',
+  })
+
   return (
-    <TooltipWrapper tooltip={tooltip} tooltipType={tooltipType}>
+    <TooltipWrapper
+      tooltip={showDescription ? undefined : tooltip}
+      tooltipType={tooltipType}
+    >
       <RACButton
-        className={[buttonRecipe(variantProps), className].join(' ')}
+        className={[
+          buttonRecipe(variantProps),
+          className,
+          showDescription ? descriptionWrapperClass : '',
+        ].join(' ')}
         {...(remainingComponentProps as RACButtonsProps)}
       >
-        {!props.loading && props.icon}
+        {!props.loading && !showDescription && props.icon}
+        {!props.loading &&
+          !showDescription &&
+          (componentProps.children as ReactNode)}
         {props.loading && <Loader />}
-        {componentProps.children as ReactNode}
-        {props.description && <span>{tooltip}</span>}
+        {showDescription && (
+          <>
+            <span>{props.icon}</span>
+            <span>{tooltip}</span>
+          </>
+        )}
       </RACButton>
     </TooltipWrapper>
   )
