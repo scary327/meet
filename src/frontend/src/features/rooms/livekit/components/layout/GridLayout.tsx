@@ -10,6 +10,7 @@ import { mergeProps } from '@/utils/mergeProps'
 import { PaginationIndicator } from '../controls/PaginationIndicator'
 import { useGridLayout } from '../../hooks/useGridLayout'
 import { PaginationControl } from '../controls/PaginationControl'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 /** @public */
 export interface GridLayoutProps
@@ -37,6 +38,7 @@ export interface GridLayoutProps
  */
 export function GridLayout({ tracks, ...props }: GridLayoutProps) {
   const gridEl = React.createRef<HTMLDivElement>()
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   const elementProps = React.useMemo(
     () => mergeProps(props, { className: 'lk-grid-layout' }),
@@ -59,10 +61,12 @@ export function GridLayout({ tracks, ...props }: GridLayoutProps) {
       <TrackLoop tracks={pagination.tracks}>{props.children}</TrackLoop>
       {tracks.length > layout.maxTiles && (
         <>
-          <PaginationIndicator
-            totalPageCount={pagination.totalPageCount}
-            currentPage={pagination.currentPage}
-          />
+          {!isMobile && (
+            <PaginationIndicator
+              totalPageCount={pagination.totalPageCount}
+              currentPage={pagination.currentPage}
+            />
+          )}
           <PaginationControl pagesContainer={gridEl} {...pagination} />
         </>
       )}

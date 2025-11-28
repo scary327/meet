@@ -5,6 +5,7 @@ import { Button } from '@/primitives'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { css } from '@/styled-system/css'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 export interface PaginationControlProps {
   totalPageCount: number
@@ -23,6 +24,7 @@ export function PaginationControl({
 }: PaginationControlProps) {
   const { t } = useTranslation('rooms', { keyPrefix: 'pagination' })
   const [interactive, setInteractive] = useState(false)
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   useEffect(() => {
     let subscription:
@@ -47,7 +49,7 @@ export function PaginationControl({
     <div
       className={css({
         position: 'absolute',
-        bottom: '1rem',
+        bottom: 'calc(1rem - 10px)',
         left: '50%',
         transform: 'translateX(-50%)',
         alignItems: 'stretch',
@@ -60,7 +62,7 @@ export function PaginationControl({
         overflow: 'hidden',
       })}
       style={{
-        display: interactive ? 'flex' : 'none',
+        display: (interactive || isMobile) ? 'flex' : 'none',
       }}
       data-lk-user-interaction={interactive}
     >
