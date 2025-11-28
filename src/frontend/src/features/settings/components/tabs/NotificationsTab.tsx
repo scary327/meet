@@ -36,6 +36,7 @@ export const NotificationsTab = ({ id }: NotificationsTabProps) => {
                 onChange={(v) => {
                   notificationsStore.soundNotifications.set(key, v)
                 }}
+                gap={10}
                 wrapperProps={{
                   noMargin: true,
                   fullWidth: true,

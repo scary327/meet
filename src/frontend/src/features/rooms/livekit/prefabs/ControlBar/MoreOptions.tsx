@@ -19,11 +19,11 @@ const NavigationControls = ({
   tooltipType = 'instant',
 }: Partial<ToggleButtonProps>) => (
   <>
-    <InfoToggle onPress={onPress} tooltipType={tooltipType} />
-    <ChatToggle onPress={onPress} tooltipType={tooltipType} />
-    <ParticipantsToggle onPress={onPress} tooltipType={tooltipType} />
-    <ToolsToggle onPress={onPress} tooltipType={tooltipType} />
-    <AdminToggle onPress={onPress} tooltipType={tooltipType} />
+    <InfoToggle onPress={onPress} tooltipType={tooltipType} variant="sidePanelButtonDark" />
+    <ChatToggle onPress={onPress} tooltipType={tooltipType} variant="sidePanelButtonDark" />
+    <ParticipantsToggle onPress={onPress} tooltipType={tooltipType} variant="sidePanelButtonDark" />
+    <ToolsToggle onPress={onPress} tooltipType={tooltipType} variant="sidePanelButtonDark" />
+    <AdminToggle onPress={onPress} tooltipType={tooltipType} variant="sidePanelButtonDark" />
   </>
 )
 

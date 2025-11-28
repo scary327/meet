@@ -107,6 +107,7 @@ type FieldProps<T extends object> = (
       type: 'switch'
       items?: never
       validate?: never
+      gap?: number
     } & PartialSwitchProps)
 ) & {
   label: string
@@ -260,16 +261,18 @@ export const Field = <T extends object>({
 
   if (type === 'switch') {
     const SWITCH_COMPONENT_WIDTH = '41px'
+    const { gap, ...switchProps } = props as PartialSwitchProps & { gap?: number }
     return (
-      <FieldWrapper {...props.wrapperProps}>
+      <FieldWrapper {...switchProps.wrapperProps}>
         <div
           className={css({
             display: 'flex',
             justifyContent: 'space-between',
+            ...(gap !== undefined && { gap: `${gap}px` }),
           })}
         >
           {label}
-          <Switch aria-label={label} {...(props as PartialSwitchProps)} />
+          <Switch aria-label={label} {...switchProps} />
         </div>
         {description && (
           <Text

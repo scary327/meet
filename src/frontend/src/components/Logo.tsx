@@ -3,18 +3,14 @@ import { css } from '@/styled-system/css'
 
 interface LogoProps {
   textColor?: string
-  isRoom?: boolean
 }
 
-export const Logo = ({ textColor = 'inherit', isRoom = false }: LogoProps) => {
-  const topValue = isRoom ? '0.5rem' : '0.75rem'
-  const color = isRoom ? 'white' : textColor
-
+export const Logo = ({ textColor = 'inherit' }: LogoProps) => {
   return (
     <div
       className={css({
         position: 'fixed',
-        top: topValue,
+        top: '0.25rem',
         left: '0.75rem',
         zIndex: 50,
         display: 'flex',
@@ -25,15 +21,12 @@ export const Logo = ({ textColor = 'inherit', isRoom = false }: LogoProps) => {
       <img
         src={BlackStar}
         alt="Black Star"
-        style={{
-          filter: isRoom ? 'brightness(0) invert(1)' : 'none',
-        }}
       />
       <span
         className={css({
           fontSize: '14px',
           lineHeight: '1.5',
-          color: color,
+          color: textColor,
         })}
       >
         Сервер видео конференцсвязи

@@ -181,6 +181,7 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
       {...props}
       style={{
         overflowX: 'hidden',
+        backgroundColor: 'white',
       }}
     >
       {isWeb() && (

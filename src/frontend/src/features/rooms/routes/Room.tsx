@@ -13,10 +13,10 @@ import {
 } from '@/features/rooms/utils/isRoomValid'
 import { useWakeLock } from '@/utils/useWakeLock.ts'
 
-const BaseRoom = ({ children, isRoom=false }: { children: ReactNode, isRoom?: boolean }) => {
+const BaseRoom = ({ children }: { children: ReactNode }) => {
   return (
     <UserAware>
-       <Logo isRoom={isRoom} />
+       <Logo />
       <Permissions />
       {children}
     </UserAware>
@@ -62,14 +62,14 @@ export const Room = () => {
 
   if (!hasSubmittedEntry && !skipJoinScreen) {
     return (
-      <BaseRoom isRoom={false}>
+      <BaseRoom>
         <Join enterRoom={() => setHasSubmittedEntry(true)} roomId={roomId} />
       </BaseRoom>
     )
   }
 
   return (
-    <BaseRoom isRoom={true}>
+    <BaseRoom>
       <Conference
         initialRoomData={initialRoomData}
         roomId={roomId}

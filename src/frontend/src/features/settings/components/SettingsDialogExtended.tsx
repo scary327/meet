@@ -73,6 +73,12 @@ const tabPanelContainerMobileStyle = css({
   flexGrow: '1',
   marginTop: '1rem',
   minWidth: 0,
+  height: '400px',
+  overflowY: 'auto',
+})
+
+const dialogMobileStyle = css({
+  width: '100vw',
 })
 
 export type SettingsDialogExtended = Pick<
@@ -96,7 +102,13 @@ export const SettingsDialogExtended = (props: SettingsDialogExtended) => {
   const isMobile = useMediaQuery('(max-width: 768px)')
 
   return (
-    <Dialog innerRef={dialogEl} {...props} role="dialog" type="flex">
+    <Dialog
+      innerRef={dialogEl}
+      {...props}
+      role="dialog"
+      type="flex"
+      className={isMobile ? dialogMobileStyle : undefined}
+    >
       <Tabs
         orientation={isMobile ? 'horizontal' : 'vertical'}
         className={isMobile ? tabsStyleMobile : tabsStyle}
