@@ -56,7 +56,10 @@ const ModalContent = styled('div', {
   variants: {
     size: {
       full: {
-        width: 'fit-content',
+        width: '100%',
+        '@media (min-width: 769px)': {
+          width: 'fit-content',
+        },
         maxWidth: '100%',
       },
       large: {
