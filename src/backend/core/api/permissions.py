@@ -45,8 +45,12 @@ class RoomPermissions(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        """Only allow authenticated users for unsafe methods."""
+        """Only allow authenticated users for unsafe methods, except POST (create)."""
         if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # Allow anonymous users to create rooms (POST)
+        if request.method == "POST":
             return True
 
         return request.user.is_authenticated

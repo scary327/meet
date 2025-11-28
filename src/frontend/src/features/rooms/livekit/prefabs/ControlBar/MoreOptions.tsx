@@ -17,13 +17,26 @@ const CONTROL_BAR_BREAKPOINT = 1100
 const NavigationControls = ({
   onPress,
   tooltipType = 'instant',
-}: Partial<ToggleButtonProps>) => (
+  variant = 'sidePanelButtonDark',
+}: Partial<ToggleButtonProps> & { variant?: ToggleButtonProps['variant'] }) => (
   <>
-    <InfoToggle onPress={onPress} tooltipType={tooltipType} variant="sidePanelButtonDark" />
-    <ChatToggle onPress={onPress} tooltipType={tooltipType} variant="sidePanelButtonDark" />
-    <ParticipantsToggle onPress={onPress} tooltipType={tooltipType} variant="sidePanelButtonDark" />
-    <ToolsToggle onPress={onPress} tooltipType={tooltipType} variant="sidePanelButtonDark" />
-    <AdminToggle onPress={onPress} tooltipType={tooltipType} variant="sidePanelButtonDark" />
+    <InfoToggle onPress={onPress} tooltipType={tooltipType} variant={variant} />
+    <ChatToggle onPress={onPress} tooltipType={tooltipType} variant={variant} />
+    <ParticipantsToggle
+      onPress={onPress}
+      tooltipType={tooltipType}
+      variant={variant}
+    />
+    <ToolsToggle
+      onPress={onPress}
+      tooltipType={tooltipType}
+      variant={variant}
+    />
+    <AdminToggle
+      onPress={onPress}
+      tooltipType={tooltipType}
+      variant={variant}
+    />
   </>
 )
 
@@ -59,7 +72,11 @@ export const LateralMenu = () => {
             border: '1px solid #ffffff',
           })}
         >
-          <NavigationControls onPress={handleClose} tooltipType="delayed" />
+          <NavigationControls
+            onPress={handleClose}
+            tooltipType="delayed"
+            variant="sidePanelButton"
+          />
         </Dialog>
       </Popover>
     </DialogTrigger>

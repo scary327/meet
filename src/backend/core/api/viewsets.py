@@ -277,13 +277,16 @@ class RoomViewSet(
         return drf_response.Response(serializer.data)
 
     def perform_create(self, serializer):
-        """Set the current user as owner of the newly created room."""
+        """Set the current user as owner of the newly created room (only if authenticated)."""
         room = serializer.save()
-        models.ResourceAccess.objects.create(
-            resource=room,
-            user=self.request.user,
-            role=models.RoleChoices.OWNER,
-        )
+        
+        # Only create ResourceAccess if user is authenticated
+        if self.request.user.is_authenticated:
+            models.ResourceAccess.objects.create(
+                resource=room,
+                user=self.request.user,
+                role=models.RoleChoices.OWNER,
+            )
 
         if callback_id := self.request.data.get("callback_id"):
             RoomCreation().persist_callback_state(callback_id, room)

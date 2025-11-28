@@ -5,7 +5,6 @@ import { css } from '@/styled-system/css'
 import { navigateTo } from '@/navigation/navigateTo'
 import { Screen } from '@/layout/Screen'
 import { generateRoomId, useCreateRoom } from '@/features/rooms'
-import { authUrl, useUser } from '@/features/auth'
 import { usePersistentUserChoices } from '@/features/rooms/livekit/hooks/usePersistentUserChoices'
 import { Logo } from '@/components/Logo'
 import { CreateName } from '../components/CreateName'
@@ -23,7 +22,6 @@ const nameSchema = z
 
 export const Home = () => {
   // const { t } = useTranslation('home')
-  const { isLoggedIn } = useUser()
 
   const {
     userChoices: { username },
@@ -65,11 +63,6 @@ export const Home = () => {
   }, [])
 
   const onSubmit = async () => {
-    if (!isLoggedIn) {
-      window.location.href = authUrl()
-      return
-    }
-
     const slug = generateRoomId()
     // Use the entered name, or empty string if not valid
     const usernameToUse = isValid ? name : ''
@@ -109,13 +102,11 @@ export const Home = () => {
           padding: '2rem',
         })}
       >
-        {isLoggedIn && (
-          <CreateName
-            value={name}
-            onChange={handleNameChange}
-            error={errorMessage}
-          />
-        )}
+        <CreateName
+          value={name}
+          onChange={handleNameChange}
+          error={errorMessage}
+        />
         <div
           className={css({
             position: 'relative',
@@ -171,7 +162,7 @@ export const Home = () => {
                 },
               })}
             >
-              {isLoggedIn ? 'Создать звонок' : 'Войти чтобы создать звонок'}
+              Создать звонок
             </Button>
           </div>
         </div>

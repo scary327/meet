@@ -261,9 +261,13 @@ export const Field = <T extends object>({
 
   if (type === 'switch') {
     const SWITCH_COMPONENT_WIDTH = '41px'
-    const { gap, ...switchProps } = props as PartialSwitchProps & { gap?: number }
+    const { gap, wrapperProps, ...switchProps } =
+      props as PartialSwitchProps & {
+        gap?: number
+        wrapperProps?: React.ComponentProps<typeof FieldWrapper>
+      }
     return (
-      <FieldWrapper {...switchProps.wrapperProps}>
+      <FieldWrapper {...wrapperProps}>
         <div
           className={css({
             display: 'flex',

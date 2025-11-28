@@ -24,7 +24,7 @@ def reset_cache():
 
 
 def test_api_rooms_create_anonymous():
-    """Anonymous users should not be allowed to create rooms."""
+    """Anonymous users should be able to create rooms without becoming owners."""
     client = APIClient()
 
     response = client.post(
@@ -34,8 +34,12 @@ def test_api_rooms_create_anonymous():
         },
     )
 
-    assert response.status_code == 401
-    assert Room.objects.exists() is False
+    assert response.status_code == 201
+    room = Room.objects.get()
+    assert room.name == "my room"
+    assert room.slug == "my-room"
+    # Anonymous user should not have any resource access
+    assert room.accesses.exists() is False
 
 
 def test_api_rooms_create_authenticated(reset_cache):

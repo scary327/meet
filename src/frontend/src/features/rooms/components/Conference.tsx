@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
 import {
   LiveKitRoom,
   usePersistentUserChoices,
@@ -183,13 +182,12 @@ export const Conference = ({
     return livekit_url
   }, [apiConfig?.livekit])
 
-  const { t } = useTranslation('rooms')
   if (isCreateError) {
     // this error screen should be replaced by a proper waiting room for anonymous user.
     return (
       <ErrorScreen
-        title={t('error.createRoom.heading')}
-        body={t('error.createRoom.body')}
+        title="Требуется аутентификация"
+        body="Эта комната еще не была создана. Пожалуйста, аутентифицируйтесь для создания или дождитесь, пока это сделает аутентифицированный пользователь."
       />
     )
   }
