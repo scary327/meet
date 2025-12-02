@@ -49,7 +49,7 @@ const Effects = ({
   const openDialog = () => setIsDialogOpen(true)
 
   if (!BackgroundProcessorFactory.isSupported() || isMobileBrowser()) {
-    return
+    return null
   }
 
   return (
