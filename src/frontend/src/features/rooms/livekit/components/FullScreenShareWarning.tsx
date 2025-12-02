@@ -73,6 +73,10 @@ export const FullScreenShareWarning = ({
         position: 'absolute',
         height: '100%',
         width: '100%',
+        top: 0,
+        left: 0,
+        zIndex: 10,
+        pointerEvents: 'none',
       })}
       ref={warningContainerRef}
     >
@@ -84,6 +88,12 @@ export const FullScreenShareWarning = ({
             width: '100%',
             backgroundColor: 'rgba(22, 22, 34, 0.9)',
             padding: '2rem',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            pointerEvents: 'auto',
+            zIndex: 11,
           })}
         >
           <div
@@ -92,8 +102,10 @@ export const FullScreenShareWarning = ({
               justifyContent: 'space-between',
               flexDirection: 'column',
               gap: '1rem',
+              maxWidth: '600px',
               md: {
                 flexDirection: 'row',
+                alignItems: 'center',
               },
             })}
           >
@@ -113,6 +125,7 @@ export const FullScreenShareWarning = ({
                 display: 'flex',
                 flexDirection: 'row',
                 gap: '1rem',
+                flexShrink: 0,
               })}
             >
               <Button
@@ -120,6 +133,7 @@ export const FullScreenShareWarning = ({
                 size="sm"
                 style={{
                   height: 'fit-content',
+                  pointerEvents: 'auto',
                 }}
                 onPress={async () => {
                   await handleStopScreenShare()
@@ -128,10 +142,11 @@ export const FullScreenShareWarning = ({
                 {t('stop')}
               </Button>
               <Button
-                variant="primaryTextDark"
+                variant="primary"
                 size="sm"
                 style={{
                   height: 'fit-content',
+                  pointerEvents: 'auto',
                 }}
                 onPress={() => handleDismissWarning()}
               >

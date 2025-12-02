@@ -1,11 +1,10 @@
 {
   "createMeeting": {
     "createButton": "Создать",
-    "joinButton": "Присоединиться с видео",
-    "copyLinkTooltip": "Копировать ссылку",
+    "joinButton": "Присоединиться с помощью Visio",
+    "copyLinkTooltip": "Скопировать ссылку",
     "resetLabel": "Сбросить",
     "participantLimit": "До 150 участников.",
     "popupBlocked": "Всплывающее окно было заблокировано. Пожалуйста, разрешите всплывающие окна для этого сайта."
   }
 }
-
