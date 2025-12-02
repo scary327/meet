@@ -6,7 +6,6 @@ import { Conference } from '../components/Conference'
 import { Join } from '../components/Join'
 import { Permissions } from '../components/Permissions'
 import { useKeyboardShortcuts } from '@/features/shortcuts/useKeyboardShortcuts'
-import { Logo } from '@/components/Logo'
 import {
   isRoomValid,
   normalizeRoomId,
@@ -16,7 +15,6 @@ import { useWakeLock } from '@/utils/useWakeLock.ts'
 const BaseRoom = ({ children }: { children: ReactNode }) => {
   return (
     <UserAware>
-       <Logo />
       <Permissions />
       {children}
     </UserAware>
@@ -33,7 +31,7 @@ export const Room = () => {
   const mode = isLoggedIn && history.state?.create ? 'create' : 'join'
   const skipJoinScreen = isLoggedIn && mode === 'create'
 
-  useWakeLock(hasSubmittedEntry || !!skipJoinScreen);
+  useWakeLock(hasSubmittedEntry || !!skipJoinScreen)
 
   useKeyboardShortcuts()
 

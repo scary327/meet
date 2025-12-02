@@ -13,6 +13,7 @@ import { MoreOptions } from './MoreOptions'
 import { useRef } from 'react'
 import { VideoDeviceControl } from '../../components/controls/Device/VideoDeviceControl'
 import { AudioDevicesControl } from '../../components/controls/Device/AudioDevicesControl'
+import { Logo } from '@/components/Logo'
 
 export function DesktopControlBar({
   onDeviceError,
@@ -35,14 +36,16 @@ export function DesktopControlBar({
     >
       <div
         className={css({
-          display: 'flex',
+          display: { base: 'none', lg: 'flex' },
           justifyContent: 'flex-start',
           flex: '1 1 33%',
           alignItems: 'center',
           gap: '0.5rem',
           marginLeft: '0.5rem',
         })}
-      />
+      >
+        <Logo />
+      </div>
       <div
         className={css({
           flex: '1 1 33%',

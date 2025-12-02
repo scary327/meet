@@ -23,7 +23,7 @@ type ParticipantPlaceholderProps = {
 export const ParticipantPlaceholder = ({
   participant,
 }: ParticipantPlaceholderProps) => {
-  const isSpeaking = useIsSpeaking(participant)
+  // const isSpeaking = useIsSpeaking(participant)
   const imgSrc = useMemo(
     () =>
       getAvatarByUserName(participant.identity || participant.name || 'Guest'),
@@ -48,7 +48,6 @@ export const ParticipantPlaceholder = ({
         style={{
           width: `${avatarSize}px`,
           height: `${avatarSize}px`,
-          animation: isSpeaking ? 'pulse 1s infinite' : undefined,
         }}
       />
     </StyledParticipantPlaceHolder>

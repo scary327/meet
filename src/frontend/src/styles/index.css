@@ -1,4 +1,13 @@
 @import './livekit.css';
+
+@font-face {
+  font-family: 'NAMU';
+  src: url('/NAMU/NAMU-1930.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer reset, base, tokens, recipes, utilities;
 html,
 body,

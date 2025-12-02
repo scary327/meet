@@ -230,6 +230,9 @@ const config: Config = {
             'monospace',
           ],
         },
+        namu: {
+          value: ['NAMU', 'sans-serif'],
+        },
       },
       fontSizes: {
         10: { value: '0.625rem' },

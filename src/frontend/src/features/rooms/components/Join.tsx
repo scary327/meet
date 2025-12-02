@@ -15,6 +15,7 @@ import { Button, Dialog, Text, Form } from '@/primitives'
 import { VStack } from '@/styled-system/jsx'
 import { Heading } from 'react-aria-components'
 import { RiImageCircleAiFill } from '@remixicon/react'
+import { HiveDev } from '@/components/HiveDev'
 import {
   EffectsConfiguration,
   EffectsConfigurationProps,
@@ -471,20 +472,15 @@ export const Join = ({
   }
 
   return (
-    <Screen footer={false}>
+    <Screen>
       <div
         className={css({
-          maxWidth: '1440px',
-          margin: '0 auto',
-          paddingTop: '72px',
-          paddingLeft: '12px',
-          paddingRight: '12px',
           width: '100%',
-          // minHeight: '100vh',
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          flexDirection: 'column',
+          padding: '2rem 1rem',
           gap: '2rem',
         })}
       >
@@ -493,6 +489,7 @@ export const Join = ({
           className={css({
             width: '100%',
             maxWidth: '640px',
+            flexShrink: 0,
           })}
         >
           <div
@@ -604,38 +601,40 @@ export const Join = ({
             </div>
           </div>
 
-          <div className={css({
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '0.5rem',
-            marginTop: '1rem',
-          })}>
-          <ToggleDevice
-            kind="audioinput"
-            context="join"
-            enabled={audioEnabled}
-            toggle={async () => {
-              saveAudioInputEnabled(!audioEnabled)
-              if (audioEnabled) {
-                await audioTrack?.mute()
-              } else {
-                await audioTrack?.unmute()
-              }
-            }}
-          />
-          <ToggleDevice
-            kind="videoinput"
-            context="join"
-            enabled={videoEnabled}
-            toggle={async () => {
-              saveVideoInputEnabled(!videoEnabled)
-              if (videoEnabled) {
-                await videoTrack?.mute()
-              } else {
-                await videoTrack?.unmute()
-              }
-            }}
-          />
+          <div
+            className={css({
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              marginTop: '1rem',
+            })}
+          >
+            <ToggleDevice
+              kind="audioinput"
+              context="join"
+              enabled={audioEnabled}
+              toggle={async () => {
+                saveAudioInputEnabled(!audioEnabled)
+                if (audioEnabled) {
+                  await audioTrack?.mute()
+                } else {
+                  await audioTrack?.unmute()
+                }
+              }}
+            />
+            <ToggleDevice
+              kind="videoinput"
+              context="join"
+              enabled={videoEnabled}
+              toggle={async () => {
+                saveVideoInputEnabled(!videoEnabled)
+                if (videoEnabled) {
+                  await videoTrack?.mute()
+                } else {
+                  await videoTrack?.unmute()
+                }
+              }}
+            />
           </div>
 
           {/* Device selectors */}
@@ -712,12 +711,14 @@ export const Join = ({
           className={css({
             width: '100%',
             maxWidth: '400px',
+            flexShrink: 0,
           })}
         >
           {renderWaitingState()}
         </div>
+
+        <HiveDev />
       </div>
     </Screen>
   )
 }
-

@@ -6,7 +6,7 @@ import { navigateTo } from '@/navigation/navigateTo'
 import { Screen } from '@/layout/Screen'
 import { generateRoomId, useCreateRoom } from '@/features/rooms'
 import { usePersistentUserChoices } from '@/features/rooms/livekit/hooks/usePersistentUserChoices'
-import { Logo } from '@/components/Logo'
+import { HiveDev } from '@/components/HiveDev'
 import { CreateName } from '../components/CreateName'
 // import { AirplaneModel } from '../components/AirplaneModel'
 import purpleCurve from '@/assets/purpleCurve.svg'
@@ -75,9 +75,6 @@ export const Home = () => {
 
   return (
     <Screen>
-      {/* Logo in top left corner */}
-      <Logo />
-
       {/* Airplane 3D model in top right corner */}
       {/*<div*/}
       {/*  className={css({*/}
@@ -177,6 +174,8 @@ export const Home = () => {
             <JoinMeetingDialog />
           </DialogTrigger>
         </div>
+
+        <HiveDev />
       </div>
     </Screen>
   )

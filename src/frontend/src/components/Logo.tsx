@@ -9,19 +9,13 @@ export const Logo = ({ textColor = 'inherit' }: LogoProps) => {
   return (
     <div
       className={css({
-        position: 'fixed',
-        top: '0.25rem',
-        left: '0.75rem',
-        zIndex: 50,
         display: 'flex',
         gap: '8px',
         alignItems: 'center',
+        flexShrink: 0,
       })}
     >
-      <img
-        src={BlackStar}
-        alt="Black Star"
-      />
+      <img src={BlackStar} alt="Black Star" />
       <span
         className={css({
           fontSize: '14px',

@@ -5,7 +5,6 @@ import { Center, HStack, styled, VStack } from '@/styled-system/jsx'
 import { Rating } from '@/features/rooms/components/Rating.tsx'
 import { useLocation, useSearchParams } from 'wouter'
 import { css } from '@/styled-system/css'
-import { Logo } from '@/components/Logo.tsx'
 
 // fixme - duplicated with home, refactor in a proper style
 const Heading = styled('h1', {
@@ -34,7 +33,6 @@ export const FeedbackRoute = () => {
 
   return (
     <Screen layout="centered" footer={false}>
-      <Logo />
       <Center>
         <VStack>
           <Heading>{heading}</Heading>

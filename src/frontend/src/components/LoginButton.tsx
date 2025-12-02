@@ -31,6 +31,7 @@ export const LoginButton = ({ proConnectHint = true }: LoginButtonProps) => {
         fontSize: '24px',
         backgroundColor: 'black',
         color: 'white',
+        display: { base: 'none', md: 'inline-flex' },
         _hover: {
           backgroundColor: '#1a1a1a',
         },

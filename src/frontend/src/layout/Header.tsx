@@ -8,7 +8,8 @@ import { useMatchesRoute } from '@/navigation/useMatchesRoute'
 import { FeedbackBanner } from '@/components/FeedbackBanner'
 import { Menu } from '@/primitives/Menu'
 import { MenuList } from '@/primitives/MenuList'
-import { LoginButton } from '@/components/LoginButton'
+// import { LoginButton } from '@/components/LoginButton'
+import { Logo } from '@/components/Logo'
 
 import { useLoginHint } from '@/hooks/useLoginHint'
 
@@ -90,44 +91,11 @@ export const Header = () => {
           flexShrink: 0,
         })}
       >
-        <HStack gap={0} justify="space-between" alignItems="center">
-          {/* <header>
-            <Stack gap={2.25} direction="row" align="center">
-              <Link
-                className={css({
-                  display: 'flex',
-                  flexDirection: { base: 'column', sm: 'row' },
-                  alignItems: 'start',
-                  gap: { base: '0', sm: '2rem' },
-                  padding: { base: '0.5rem', sm: '1rem' },
-                  _hover: {
-                    backgroundColor: 'greyscale.100',
-                    borderRadius: '4px',
-                  },
-                })}
-                onClick={(event) => {
-                  if (
-                    isRoom &&
-                    !window.confirm(t('leaveRoomPrompt', { ns: 'rooms' }))
-                  ) {
-                    event.preventDefault()
-                  }
-                }}
-                to="/"
-              >
-                {/* this is there only as a hook for custom CSS users who might want to show something before the app logo */}
-          {/* <div
-                  className={`Header-beforeLogo ${css({
-                    display: 'none',
-                  })}`}
-                />
-                <HStack gap={0}>
-                  <Logo />
-                  <BetaBadge />
-                </HStack>
-              </Link>
-            </Stack>
-          </header> */}
+        <HStack gap={2} justify="space-between" alignItems="center">
+          {/* Logo on the left */}
+          <Logo />
+
+          {/* Navigation on the right */}
           <nav style={{ marginLeft: 'auto', position: 'relative' }}>
             <Stack gap={1} direction="row" align="center">
               {isLoggedIn === false &&
@@ -136,7 +104,6 @@ export const Header = () => {
                 !isAccessibility &&
                 !isTermsOfService && (
                   <>
-                    <LoginButton proConnectHint={false} />
                     <LoginHint />
                   </>
                 )}
