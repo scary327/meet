@@ -37,8 +37,6 @@ import { Subtitles } from '@/features/subtitle/component/Subtitles'
 import { CarouselLayout } from '../components/layout/CarouselLayout'
 import { GridLayout } from '../components/layout/GridLayout'
 import { IsIdleDisconnectModal } from '../components/IsIdleDisconnectModal'
-import { Logo } from '@/components/Logo'
-import { css } from '@/styled-system/css'
 
 const LayoutWrapper = styled(
   'div',
@@ -196,21 +194,9 @@ export function VideoConference({ ...props }: VideoConferenceProps) {
             onClose={() => setIsShareErrorVisible(false)}
           />
           <IsIdleDisconnectModal />
-          {/* Mobile Logo */}
-          <div
-            className={css({
-              display: { base: 'flex', lg: 'none' },
-              justifyContent: 'center',
-              position: 'absolute',
-              width: '100%',
-              top: '0.125rem',
-              zIndex: 10,
-            })}
-          >
-            <Logo />
-          </div>
           <div
             style={{
+              marginTop: '10px',
               position: 'absolute',
               inset: isSidePanelOpen
                 ? `var(--lk-grid-gap) calc(358px + 3rem) calc(80px + var(--lk-grid-gap)) 16px`

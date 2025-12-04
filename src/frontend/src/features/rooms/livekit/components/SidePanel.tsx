@@ -71,7 +71,7 @@ const StyledSidePanel = ({
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        margin: '1.5rem 1.5rem 1.5rem 0',
+        margin: 'calc(1.5rem + 10px) 1.5rem 1.5rem 0',
         padding: 0,
         gap: 0,
         right: 0,

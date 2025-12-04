@@ -11,6 +11,8 @@ import {
   normalizeRoomId,
 } from '@/features/rooms/utils/isRoomValid'
 import { useWakeLock } from '@/utils/useWakeLock.ts'
+import { Logo } from '@/components/Logo'
+import { css } from '@/styled-system/css'
 
 const BaseRoom = ({ children }: { children: ReactNode }) => {
   return (
@@ -68,6 +70,15 @@ export const Room = () => {
 
   return (
     <BaseRoom>
+      <div
+        className={css({
+          position: 'absolute',
+          left: '16px',
+          zIndex: '100',
+        })}
+      >
+        <Logo className={css({ height: '34px' })} />
+      </div>
       <Conference
         initialRoomData={initialRoomData}
         roomId={roomId}
